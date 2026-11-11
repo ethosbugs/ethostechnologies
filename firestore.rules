@@ -1,0 +1,32 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Solo la cuenta de administrador (email/contraseña) puede escribir.
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.firebase.sign_in_provider == 'password'
+        && request.auth.token.email == 'ericaguera02@gmail.com';
+    }
+
+    function validGame() {
+      let d = request.resource.data;
+      return d.nombre is string && d.nombre.size() > 0 && d.nombre.size() <= 80
+        && d.url is string && d.url.matches('^https?://.+')
+        && d.get('category', '') is string && d.get('category', '').size() <= 40
+        && d.get('logo', '') is string
+        && d.get('noEmbed', false) is bool;
+    }
+
+    match /games/{gameId} {
+      allow read: if true;
+      allow create, update: if isAdmin() && validGame();
+      allow delete: if isAdmin();
+    }
+
+    // Todo lo demás, cerrado.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
