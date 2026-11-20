@@ -59,6 +59,8 @@ button,input,select{font:inherit;color:inherit;border-radius:0}
 ::selection{background:var(--acc);color:var(--ink)}
 @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
 .blink{animation:blink 1s steps(1) infinite}
+.skip{position:absolute;left:-9999px;top:0;z-index:400;padding:10px 16px;background:var(--acc);color:var(--ink);font:700 14px var(--mono)}
+.skip:focus{left:8px;top:8px}
 
 /* Controles */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;border:2px solid var(--line2);background:transparent;color:var(--txt);
@@ -137,6 +139,7 @@ footer{margin-top:64px;padding:24px 0 40px;border-top:2px solid var(--line);disp
 .grid{display:grid;gap:26px;grid-template-columns:repeat(auto-fill,minmax(255px,1fr))}
 .grid .h{grid-column:1/-1;font:400 11px var(--px);letter-spacing:1px;color:var(--acc);margin-top:8px}
 .card{position:relative;display:block;border:2px solid var(--line2);background:var(--panel);box-shadow:6px 6px 0 var(--shd);cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s}
+.card.open{border-color:var(--acc);box-shadow:6px 6px 0 var(--acc)}
 .anim .card{animation:enter .45s both}
 .card:hover,.card:focus-visible{transform:translate(-3px,-3px);box-shadow:9px 9px 0 var(--shd);border-color:var(--acc)}
 .bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:5px 8px 5px 12px;border-bottom:2px solid var(--line2);font-size:12px;color:var(--dim)}
@@ -245,8 +248,10 @@ footer{margin-top:64px;padding:24px 0 40px;border-top:2px solid var(--line);disp
 </head>
 <body>
 
+<a class="skip" href="#main">Saltar al contenido</a>
+
 <!-- INTRO -->
-<div class="intro" id="intro" aria-hidden="true">
+<div class="intro" id="intro">
   <div class="i-core">
     <div class="i-logo"><i class="i-ring"></i><i class="i-ring r2"></i><div class="i-e" id="iE"></div></div>
     <h2 class="i-title"><span style="--i:0">E</span><span style="--i:1">T</span><span style="--i:2">H</span><span style="--i:3">O</span><span style="--i:4">S</span></h2>
@@ -266,17 +271,17 @@ footer{margin-top:64px;padding:24px 0 40px;border-top:2px solid var(--line);disp
       </div>
       <div class="spacer"></div>
       <div class="acts">
-        <button class="btn sm" id="btnAI" title="Ethos AI">✦ <span class="t">AI</span></button>
-        <button class="btn sm" id="btnMusic" title="Música (M)">♪ <span class="t">Música</span></button>
+        <button class="btn sm" id="btnAI" title="Ethos AI" aria-label="Ethos AI">✦ <span class="t">AI</span></button>
+        <button class="btn sm" id="btnMusic" title="Música (M)" aria-label="Música">♪ <span class="t">Música</span></button>
         <button class="btn sm" id="btnTheme" title="Color del tema" aria-label="Color del tema">◐</button>
-        <a class="btn sm" href="#/admin" data-nav="admin" title="Administración">⚙ <span class="t">Admin</span></a>
+        <a class="btn sm" href="#/admin" data-nav="admin" title="Administración" aria-label="Administración">⚙ <span class="t">Admin</span></a>
       </div>
     </nav>
   </header>
   <div class="themes" id="themes" hidden role="group" aria-label="Colores del tema"></div>
 
   <!-- INICIO -->
-  <main class="view container" data-view="home">
+  <main class="view container" data-view="home" id="main">
     <section class="hero">
       <div class="hero-l">
         <div class="prompt">visitante@ethos:~$ ./jugar --sin-instalar</div>
@@ -296,12 +301,462 @@ footer{margin-top:64px;padding:24px 0 40px;border-top:2px solid var(--line);disp
       </aside>
     </section>
     <div class="sec-h"><h2>&gt; CONTINUAR JUGANDO</h2><a href="#/games">VER TODOS →</a></div>
+    <div class="grid" id="recientes"></div>
+    <div class="sec-h"><h2>&gt; AÑADIDOS RECIENTEMENTE</h2><a href="#/games">VER TODOS →</a></div>
     <div class="grid" id="destacados"></div>
-    <footer><span>Ethos Technologies · v6.0</span><span>M = música · Esc Esc = salir</span></footer>
+    <footer><span>Ethos Technologies · v6.1</span><span>M = música · Esc Esc = salir · ? = ayuda</span></footer>
   </main>
 
   <!-- JUEGOS -->
   <main class="view container" data-view="games" hidden>
-    <div class="page-h"><h2>&gt; JUEGOS</h2><p id="counter">Cargando…</p></div>
+    <div class="page-h"><h2>&gt; JUEGOS</h2><p id="counter" aria-live="polite">Cargando…</p></div>
     <div class="toolbar">
-      <
+      <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input class="input" type="search" id="searchBar" placeholder="Buscar juego…  (pulsa /)" aria-label="Buscar juego"></label>
+      <select class="input" id="sort" aria-label="Ordenar"><option value="az">A → Z</option><option value="new">Más recientes</option></select>
+      <button class="btn" id="btnRandom2">Al azar</button>
+    </div>
+    <div class="chips" id="chips" role="tablist" aria-label="Categorías"></div>
+    <div class="grid" id="lista" aria-live="polite"></div>
+  </main>
+
+  <!-- ADMIN -->
+  <main class="view container" data-view="admin" hidden>
+    <section class="gate" id="gate">
+      <h2>&gt; ACCESO ADMIN</h2>
+      <p>Inicia sesión para gestionar los juegos.</p>
+      <form id="gateForm" style="display:grid;gap:12px">
+        <input class="input" type="email" id="email" placeholder="Email" aria-label="Email" autocomplete="username" value="ericaguera02@gmail.com" required>
+        <input class="input" type="password" id="pass" placeholder="Contraseña" aria-label="Contraseña" autocomplete="current-password" required>
+        <button class="btn primary lg" type="submit" id="loginBtn">Entrar</button>
+        <div class="msg" id="gateMsg" role="alert"></div>
+        <button class="linkbtn" type="button" id="resetPass">¿Olvidaste la contraseña?</button>
+      </form>
+    </section>
+
+    <section id="panel" hidden>
+      <div class="adm-h"><h2>&gt; PANEL DE ADMINISTRACIÓN</h2><button class="btn sm danger" id="logout">Cerrar sesión</button></div>
+      <form class="form" id="form">
+        <input class="input" id="nombre" placeholder="Nombre del juego" required maxlength="80">
+        <input class="input" id="category" list="cats" placeholder="Categoría (ej: Acción)" maxlength="40">
+        <datalist id="cats"></datalist>
+        <input class="input full" id="url" type="url" placeholder="URL del juego (https://…)" required>
+        <input class="input full" id="logo" type="url" placeholder="Link del logo (opcional)">
+        <label class="chk full"><input type="checkbox" id="noembed"> No carga dentro de Ethos (se abrirá en una pestaña nueva)</label>
+        <div class="row full">
+          <button class="btn primary lg" type="submit" id="saveBtn" style="flex:1">Guardar juego</button>
+          <button class="btn lg" type="button" id="cancelBtn" hidden>Cancelar</button>
+        </div>
+      </form>
+      <div class="lst-h"><h3>JUEGOS GUARDADOS (<span id="total">0</span>)</h3><input class="input" type="search" id="filtro" placeholder="Filtrar lista…" aria-label="Filtrar lista"></div>
+      <div id="listaAdmin"></div>
+    </section>
+  </main>
+</div>
+
+<div class="player" id="player" role="dialog" aria-modal="true" aria-label="Juego">
+  <div class="pbar">
+    <strong id="playerTitle"></strong>
+    <button class="btn sm" id="btnMusic2" title="Música (M)">♪ Música</button>
+    <button class="btn sm" id="btnReload">↻ Recargar</button>
+    <button class="btn sm" id="btnFull">⛶ Pantalla completa</button>
+    <button class="btn sm" id="btnBlank">↗ Nueva pestaña</button>
+    <button class="btn sm danger" id="btnMark" hidden title="Marcar: este juego no carga aquí">✕ No carga</button>
+    <button class="btn sm" id="btnPanic" title="Salir ahora (Esc Esc)" aria-label="Salir">▤</button>
+    <button class="btn sm danger" id="btnClose">✕ Cerrar</button>
+  </div>
+  <iframe id="playerFrame" title="Juego" allow="fullscreen; autoplay; gamepad; clipboard-write" referrerpolicy="no-referrer"></iframe>
+</div>
+
+<!-- Panel de música: Ousify -->
+<aside class="music" id="music" aria-label="Música">
+  <div class="mhead">
+    <strong>♪ OUSIFY</strong>
+    <button class="btn sm" id="btnMin" title="Minimizar (la música sigue sonando)" aria-label="Minimizar">—</button>
+    <button class="btn sm" id="btnPop" title="Abrir en ventana aparte" aria-label="Abrir en ventana">↗</button>
+    <button class="btn sm danger" id="btnMClose" title="Cerrar y parar" aria-label="Cerrar">✕</button>
+  </div>
+  <div class="mbody"><iframe id="musicFrame" title="Ousify" allow="autoplay; encrypted-media; fullscreen" referrerpolicy="no-referrer"></iframe></div>
+</aside>
+
+<script>
+/* ============ Firebase ============ */
+firebase.initializeApp({
+  apiKey: "AIzaSyBEtMYOTg4fBGyShbULdGCuW76nwlUIfiI",
+  authDomain: "ethosgames-a1bc1.firebaseapp.com",
+  projectId: "ethosgames-a1bc1",
+  storageBucket: "ethosgames-a1bc1.firebasestorage.app",
+  messagingSenderId: "877649560017",
+  appId: "1:877649560017:web:598a7bc006323627ab60f0"
+});
+const db = firebase.firestore();
+const auth = firebase.auth();
+auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).catch(() => {});
+
+const ADMIN_EMAIL = "ericaguera02@gmail.com";
+const OUSIFY = "https://ousify-main.vercel.app/";
+const PANIC_URL = "https://docs.google.com/document/";
+
+/* ============ Utilidades ============ */
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const safeUrl = u => { try { const x = new URL(String(u || "").trim()); return ["http:", "https:"].includes(x.protocol) ? x.href : ""; } catch { return ""; } };
+const leer = k => { try { return JSON.parse(localStorage.getItem(k)) || []; } catch { return []; } };
+const pad = (n, l) => String(n).padStart(l, "0");
+const norm = s => String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+const slug = s => (String(s || "juego").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 16) || "juego") + ".exe";
+const collator = new Intl.Collator("es", { sensitivity: "base", numeric: true });
+let toastT;
+function toast(msg, err) {
+  let t = $("toast");
+  if (!t) { t = document.createElement("div"); t.id = "toast"; t.setAttribute("role", "status"); document.body.appendChild(t); }
+  t.className = "toast show" + (err ? " err" : ""); t.textContent = msg;
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 2800);
+}
+function fail(err) {
+  console.error(err);
+  toast(err && err.code === "permission-denied" ? "Sin permisos. Inicia sesión como admin y revisa las reglas de Firestore." : "Error. Revisa la conexión.", true);
+}
+const enCampo = () => /INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName);
+
+/* ============ Intro ============ */
+(function () {
+  const h = document.documentElement;
+  if (!h.classList.contains("intro-on")) return;
+  const cells = [];
+  for (let r = 0; r < 7; r++) for (let c = 0; c < 5; c++) if (c === 0 || r === 0 || r === 6 || (r === 3 && c < 4)) cells.push([r, c]);
+  $("iE").innerHTML = cells.map(([r, c], k) => {
+    const a = Math.random() * 6.283, d = 180 + Math.random() * 260;
+    return `<span class="px" style="left:${c * 18}px;top:${r * 18}px;--i:${k};--dx:${Math.round(Math.cos(a) * d)}px;--dy:${Math.round(Math.sin(a) * d)}px;--r:${Math.round(Math.random() * 360 - 180)}deg"></span>`;
+  }).join("");
+  const el = $("intro"); let done = false;
+  const fin = () => {
+    if (done) return; done = true;
+    el.classList.add("out"); h.classList.add("intro-go");
+    setTimeout(() => h.classList.remove("intro-on", "intro-go"), 700);
+  };
+  setTimeout(fin, 3000);
+  el.addEventListener("click", fin);
+  // Solo Enter/Space/Escape cierran la intro (no Tab, no cualquier tecla)
+  addEventListener("keydown", e => {
+    if (["Enter", " ", "Escape"].includes(e.key)) fin();
+  }, { once: true });
+})();
+
+/* ============ Temas ============ */
+function pintaTemas() {
+  $("themes").innerHTML = Object.entries(THEMES).map(([k, t]) =>
+    `<button class="sw ${k === themeKey ? "on" : ""}" data-theme="${k}" title="${esc(t.n)}" aria-label="${esc(t.n)}" style="background:${hsl(t.h, 100, 63)}"></button>`).join("");
+}
+$("btnTheme").onclick = e => { e.stopPropagation(); pintaTemas(); $("themes").hidden = !$("themes").hidden; };
+$("themes").addEventListener("click", e => {
+  const b = e.target.closest("[data-theme]"); if (!b) return;
+  applyTheme(b.dataset.theme, true); pintaTemas();
+});
+document.addEventListener("click", e => { if (!e.target.closest("#themes")) $("themes").hidden = true; });
+
+/* ============ Estado y datos ============ */
+let juegos = [], cat = "ALL", favs = leer("ethos_favs"), recientes = leer("ethos_recent"), error = false, actual = null, unsub = null;
+
+async function cargar() {
+  $("lista").innerHTML = '<div class="skel"></div>'.repeat(6);
+  if (unsub) { unsub(); unsub = null; }
+  try {
+    unsub = db.collection("games").onSnapshot(snap => {
+      juegos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      error = false;
+      for (const id of ["lista", "destacados", "recientes"]) { const el = $(id); if (!el) continue; el.classList.add("anim"); setTimeout(() => el.classList.remove("anim"), 900); }
+      renderTodo();
+    }, e => { console.error(e); error = true; renderTodo(); });
+  } catch (e) { console.error(e); error = true; renderTodo(); }
+}
+function renderTodo() { renderHome(); renderChips(); renderJuegos(); renderAdmin(); }
+
+/* ============ Tarjetas ============ */
+function tarjeta(j, i = 0) {
+  const logo = safeUrl(j.logo), l = (Array.from((j.nombre || "?").trim())[0] || "?").toUpperCase();
+  const abierto = actual && actual.id === j.id;
+  return `<article class="card ${abierto ? "open" : ""}" tabindex="0" data-id="${esc(j.id)}" style="animation-delay:${Math.min(i, 12) * 40}ms">
+    <div class="bar"><span>${esc(slug(j.nombre))}</span><span class="bar-r">${j.noEmbed ? '<span class="ext" title="Se abre en una pestaña nueva">↗</span>' : ""}<button class="fav" data-fav="${esc(j.id)}" aria-label="Favorito">${favs.includes(j.id) ? "★" : "☆"}</button></span></div>
+    <div class="tile ${logo ? "" : "noimg"}">${logo ? `<img src="${esc(logo)}" alt="${esc(j.nombre)}" loading="lazy">` : ""}<span class="ltr">${esc(l)}</span><div class="play"><span>&gt; JUGAR</span></div></div>
+    <div class="foot"><div class="row"><h3>${esc(j.nombre || "Sin nombre")}</h3>${j.category ? `<span class="tag">${esc(j.category)}</span>` : ""}</div><div class="go">&gt; JUGAR</div></div></article>`;
+}
+const vacio = msg => `<p class="empty">${msg}</p>`;
+
+function renderHome() {
+  const cats = new Set(juegos.map(j => j.category).filter(Boolean));
+  $("stJuegos").textContent = error ? "---" : pad(juegos.length, 3);
+  $("stCats").textContent = error ? "--" : pad(cats.size, 2);
+  $("stFavs").textContent = pad(favs.length, 2);
+  // Recientes (continuar jugando)
+  const rec = recientes.map(id => juegos.find(j => j.id === id)).filter(Boolean).slice(0, 4);
+  const secRec = document.getElementById("recientes");
+  const secRecH = secRec ? secRec.previousElementSibling : null;
+  if (secRec) {
+    if (rec.length) { secRec.hidden = false; secRec.innerHTML = rec.map(tarjeta).join(""); if (secRecH) secRecH.hidden = false; }
+    else { secRec.hidden = true; secRec.innerHTML = ""; if (secRecH) secRecH.hidden = true; }
+  }
+  // Afegits recentment
+  const nuevos = [...juegos].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0)).slice(0, 4);
+  $("destacados").innerHTML = error ? '<p class="empty err">No se pudieron cargar los juegos.</p>'
+    : nuevos.length ? nuevos.map(tarjeta).join("") : vacio("Aún no hay juegos. Añade el primero desde Admin.");
+}
+
+function renderChips() {
+  const n = {}; juegos.forEach(j => { if (j.category) n[j.category] = (n[j.category] || 0) + 1; });
+  const items = [["ALL", "Todos", juegos.length], ...Object.keys(n).sort(collator.compare).map(c => [c, c, n[c]])];
+  if (favs.length) items.push(["FAVS", "★ Favoritos", favs.length]);
+  $("chips").innerHTML = items.map(([k, l, c]) => `<button class="chip ${cat === k ? "on" : ""}" data-cat="${esc(k)}" role="tab" aria-selected="${cat === k}">${esc(l)}<small>${c}</small></button>`).join("");
+}
+
+function renderJuegos() {
+  const f = norm($("searchBar").value.trim()), o = $("sort").value;
+  const res = juegos.filter(j => (!f || norm(j.nombre).includes(f)) &&
+      (cat === "ALL" || (cat === "FAVS" ? favs.includes(j.id) : j.category === cat)))
+    .sort((a, b) => o === "new" ? (b.timestamp || 0) - (a.timestamp || 0) : collator.compare(a.nombre || "", b.nombre || ""));
+  let h = "";
+  h += error ? `<div class="empty err">No se pudieron cargar los juegos.<br><br><button class="btn" id="retry">Reintentar</button></div>`
+    : res.length ? res.map(tarjeta).join("") : vacio(juegos.length ? "Ningún juego coincide con tu búsqueda." : "Aún no hay juegos. Añade el primero desde Admin.");
+  $("lista").innerHTML = h;
+  $("counter").textContent = error ? "Sin conexión" : `${res.length} juego${res.length === 1 ? "" : "s"}`;
+}
+
+function onCards(e) {
+  const fv = e.target.closest("[data-fav]");
+  if (fv) {
+    e.stopPropagation();
+    const id = fv.dataset.fav;
+    favs = favs.includes(id) ? favs.filter(x => x !== id) : [...favs, id];
+    localStorage.setItem("ethos_favs", JSON.stringify(favs));
+    if (cat === "FAVS" && !favs.length) cat = "ALL";
+    return renderTodo();
+  }
+  const c = e.target.closest(".card[data-id]");
+  if (c) abrir(juegos.find(j => j.id === c.dataset.id));
+}
+for (const id of ["lista", "destacados", "recientes"]) {
+  const el = $(id); if (!el) continue;
+  el.addEventListener("click", onCards);
+  el.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.classList.contains("card")) e.target.click(); });
+  el.addEventListener("error", e => { const i = e.target; if (i.tagName === "IMG") { const t = i.parentNode; i.remove(); t.classList.add("noimg"); } }, true);
+}
+$("lista").addEventListener("click", e => { if (e.target.id === "retry") cargar(); });
+$("chips").addEventListener("click", e => {
+  const b = e.target.closest("[data-cat]"); if (!b) return;
+  cat = b.dataset.cat; renderChips(); renderJuegos();
+});
+$("searchBar").addEventListener("input", renderJuegos);
+$("sort").addEventListener("change", renderJuegos);
+
+/* ============ Música (Ousify, sense radio encara) ============ */
+let musicOn = false, musicUrl = OUSIFY;
+function cargaMusica(url) {
+  if (url || !musicOn) { musicUrl = url || OUSIFY; $("musicFrame").src = musicUrl; musicOn = true; }
+}
+function pintaMin() { $("btnMin").textContent = $("music").classList.contains("min") ? "▢" : "—"; }
+function musicaToggle() {
+  const m = $("music");
+  if (!m.classList.contains("open")) { m.classList.add("open"); m.classList.remove("min"); cargaMusica(); }
+  else m.classList.toggle("min");
+  pintaMin();
+}
+$("btnMusic").onclick = musicaToggle; $("btnMusic2").onclick = musicaToggle;
+$("btnMin").onclick = () => { $("music").classList.toggle("min"); pintaMin(); };
+$("btnMClose").onclick = () => { $("musicFrame").src = "about:blank"; musicOn = false; $("music").classList.remove("open", "min"); pintaMin(); };
+$("btnPop").onclick = () => {
+  const w = window.open(musicOn ? musicUrl : OUSIFY, "ousify", "width=440,height=700,noopener");
+  if (!w) return toast("Permite las ventanas emergentes para abrir Ousify", true);
+  $("btnMClose").click();
+};
+
+/* ============ Reproductor ============ */
+let focusAntes = null;
+function abrir(j) {
+  const url = j && safeUrl(j.url);
+  if (!url) return toast("La URL de este juego no es válida", true);
+  recientes = [j.id, ...recientes.filter(id => id !== j.id)].slice(0, 8);
+  localStorage.setItem("ethos_recent", JSON.stringify(recientes));
+  if (j.noEmbed) {
+    if (!window.open(url, "_blank", "noopener")) toast("Permite las ventanas emergentes para abrir el juego", true);
+    else toast("Este juego se abre en una pestaña nueva");
+    return renderTodo();
+  }
+  focusAntes = document.activeElement;
+  actual = j;
+  $("playerTitle").textContent = j.nombre || "";
+  $("playerFrame").src = url;
+  $("btnMark").hidden = !logueado();
+  $("player").classList.add("open"); document.body.style.overflow = "hidden";
+  renderTodo();
+  setTimeout(() => $("btnClose").focus(), 80);
+}
+function cerrar(force) {
+  if (!force && actual) {
+    // Confirmació suau només si hi ha joc obert
+    if (!confirm("¿Seguro que quieres salir del juego?")) return;
+  }
+  $("playerFrame").src = "about:blank"; $("player").classList.remove("open"); document.body.style.overflow = ""; actual = null; renderTodo();
+  if (focusAntes && focusAntes.focus) { try { focusAntes.focus(); } catch (e) {} }
+}
+function blank() {
+  const url = $("playerFrame").src, w = window.open("about:blank", "_blank");
+  if (!w) return toast("Permite las ventanas emergentes para abrir el juego", true);
+  w.document.title = $("playerTitle").textContent;
+  w.document.body.style.cssText = "margin:0;background:#000;height:100vh";
+  const f = w.document.createElement("iframe");
+  f.style.cssText = "width:100%;height:100%;border:0"; f.allow = "fullscreen; autoplay; gamepad; clipboard-write"; f.referrerPolicy = "no-referrer"; f.src = url;
+  w.document.body.appendChild(f); cerrar(true);
+}
+function azar() {
+  // Respecta filtres actuals (categoria + búsqueda)
+  const f = norm($("searchBar").value.trim());
+  let pool = juegos.filter(j => safeUrl(j.url));
+  if (cat !== "ALL" && cat !== "FAVS") pool = pool.filter(j => j.category === cat);
+  else if (cat === "FAVS") pool = pool.filter(j => favs.includes(j.id));
+  if (f) pool = pool.filter(j => norm(j.nombre).includes(f));
+  if (!pool.length) return toast("No hay juegos que coincidan con el filtro", true);
+  abrir(pool[Math.floor(Math.random() * pool.length)]);
+}
+$("btnClose").onclick = () => cerrar(false); $("btnBlank").onclick = blank;
+$("btnFull").onclick = () => $("playerFrame").requestFullscreen?.();
+$("btnReload").onclick = () => { const f = $("playerFrame"); f.src = f.src; };
+$("btnRandom").onclick = azar; $("btnRandom2").onclick = azar;
+$("btnAI").onclick = () => window.open("https://script.google.com/macros/s/AKfycbw9TPeZki-pAXzV_S3_OHvpP9fC-5k9yU-UVNfJVSGVor3ls6IvcYvkDGKJg-FH_nwl/exec", "_blank", "noopener");
+$("btnMark").onclick = async () => {
+  if (!logueado() || !actual) return;
+  try {
+    await db.collection("games").doc(actual.id).update({ noEmbed: true });
+    toast("Marcado: desde ahora se abrirá en pestaña nueva"); cerrar(true); await cargar();
+  } catch (err) { fail(err); }
+};
+
+/* Sortida ràpida: no es pot tornar a Ethos */
+function panic() {
+  try { $("playerFrame").src = "about:blank"; $("musicFrame").src = "about:blank"; } catch (e) {}
+  location.replace(PANIC_URL);
+}
+window.addEventListener("beforeunload", () => { /* neteja */ });
+$("btnPanic").onclick = panic;
+let lastEsc = 0;
+addEventListener("keydown", e => {
+  const open = $("player").classList.contains("open");
+  if (e.key === "Escape") {
+    const now = Date.now();
+    if (now - lastEsc < 900) return panic();
+    lastEsc = now;
+    if (open) cerrar(false);
+    return;
+  }
+  if (enCampo() || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.code === "Backquote") return panic();
+  if (e.key === "m" || e.key === "M") return musicaToggle();
+  if (e.key === "/" && !open && $("searchBar").offsetParent) { e.preventDefault(); $("searchBar").focus(); }
+  if (e.key === "?" && !open) toast("Atajos: M = música · / = buscar · Esc Esc = salir · ` = pánico", false);
+});
+
+/* ============ Admin ============ */
+let user = null, editId = null;
+const logueado = () => !!user && (user.email || "").toLowerCase() === ADMIN_EMAIL;
+
+function pintarAdminVista() { $("gate").hidden = logueado(); $("panel").hidden = !logueado(); $("btnMark").hidden = !logueado() || !actual; renderAdmin(); }
+auth.onAuthStateChanged(u => {
+  user = u;
+  if (u && !logueado()) { auth.signOut(); return; }
+  pintarAdminVista();
+});
+
+$("gateForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const m = $("gateMsg"), b = $("loginBtn"); m.textContent = ""; b.disabled = true;
+  try {
+    const cred = await auth.signInWithEmailAndPassword($("email").value.trim(), $("pass").value);
+    $("pass").value = "";
+    if ((cred.user.email || "").toLowerCase() !== ADMIN_EMAIL) m.textContent = "Esta cuenta no tiene permisos de administrador.";
+  } catch (err) {
+    const c = err.code || "";
+    m.textContent = /invalid-credential|wrong-password|user-not-found|invalid-email/.test(c) ? "Email o contraseña incorrectos."
+      : c === "auth/too-many-requests" ? "Demasiados intentos. Espera unos minutos."
+      : c === "auth/operation-not-allowed" ? "Activa Email/Contraseña en Firebase → Authentication."
+      : c === "auth/network-request-failed" ? "Sin conexión." : "No se pudo iniciar sesión.";
+  } finally { b.disabled = false; }
+});
+$("resetPass").onclick = async () => {
+  const em = $("email").value.trim();
+  if (!em) return ($("gateMsg").textContent = "Escribe tu email primero.");
+  try { await auth.sendPasswordResetEmail(em); } catch (e) { console.error(e); }
+  toast("Si la cuenta existe, recibirás un email para restablecer la contraseña");
+};
+$("logout").onclick = () => { auth.signOut(); limpiarForm(); };
+
+function limpiarForm() { $("form").reset(); editId = null; $("cancelBtn").hidden = true; $("saveBtn").textContent = "Guardar juego"; }
+$("cancelBtn").onclick = limpiarForm;
+
+$("form").addEventListener("submit", async e => {
+  e.preventDefault();
+  if (!logueado()) return;
+  const nombre = $("nombre").value.trim(), url = safeUrl($("url").value), category = $("category").value.trim();
+  const lr = $("logo").value.trim(), logo = lr ? safeUrl(lr) : "", noEmbed = $("noembed").checked;
+  if (!nombre || !url) return toast("Nombre y una URL válida (http/https) son obligatorios", true);
+  if (lr && !logo) return toast("El link del logo no es válido", true);
+  $("saveBtn").disabled = true;
+  try {
+    if (editId) await db.collection("games").doc(editId).update({ nombre, url, category, logo, noEmbed });
+    else await db.collection("games").add({ nombre, url, category, logo, noEmbed, timestamp: Date.now() });
+    toast("Juego guardado correctamente"); limpiarForm();
+  } catch (err) { fail(err); }
+  finally { $("saveBtn").disabled = false; }
+});
+
+function renderAdmin() {
+  $("total").textContent = juegos.length;
+  $("cats").innerHTML = [...new Set(juegos.map(j => j.category).filter(Boolean))].map(c => `<option value="${esc(c)}">`).join("");
+  const f = norm($("filtro").value.trim());
+  const items = [...juegos].sort((a, b) => collator.compare(a.nombre || "", b.nombre || "")).filter(j => !f || norm(j.nombre).includes(f));
+  $("listaAdmin").innerHTML = items.length ? items.map(j => `<div class="item"><div class="inf">
+      ${safeUrl(j.logo) ? `<img src="${esc(safeUrl(j.logo))}" alt="" loading="lazy">` : `<div class="noimg"></div>`}
+      <div style="min-width:0"><b>${esc(j.nombre)}</b><small>${esc(j.category || "Sin categoría")}${j.noEmbed ? " · ↗ pestaña nueva" : ""}</small></div></div>
+      <div class="acts"><button class="btn sm" data-blk="${esc(j.id)}" title="Marcar si no carga dentro de Ethos">${j.noEmbed ? "Quitar ↗" : "Marcar ↗"}</button><button class="btn sm" data-edit="${esc(j.id)}">Editar</button><button class="btn sm danger" data-del="${esc(j.id)}">Eliminar</button></div></div>`).join("")
+    : vacio("No hay juegos.");
+}
+$("filtro").addEventListener("input", renderAdmin);
+$("listaAdmin").addEventListener("click", async e => {
+  if (!logueado()) return;
+  const ed = e.target.closest("[data-edit]"), del = e.target.closest("[data-del]"), blk = e.target.closest("[data-blk]");
+  if (blk) {
+    const j = juegos.find(x => x.id === blk.dataset.blk); if (!j) return;
+    try { await db.collection("games").doc(j.id).update({ noEmbed: !j.noEmbed }); toast(j.noEmbed ? "Marca quitada" : "Marcado: se abrirá en pestaña nueva"); }
+    catch (err) { fail(err); }
+  }
+  if (ed) {
+    const j = juegos.find(x => x.id === ed.dataset.edit); if (!j) return;
+    editId = j.id; $("nombre").value = j.nombre || ""; $("url").value = j.url || ""; $("category").value = j.category || ""; $("logo").value = j.logo || ""; $("noembed").checked = !!j.noEmbed;
+    $("cancelBtn").hidden = false; $("saveBtn").textContent = "Actualizar juego"; scrollTo({ top: 0, behavior: "smooth" }); $("nombre").focus();
+  }
+  if (del) {
+    const j = juegos.find(x => x.id === del.dataset.del);
+    if (!j || !confirm(`¿Eliminar "${j.nombre}" permanentemente?`)) return;
+    try { await db.collection("games").doc(j.id).delete(); if (editId === j.id) limpiarForm(); toast("Juego eliminado"); }
+    catch (err) { fail(err); }
+  }
+});
+
+/* ============ Navegación ============ */
+const titulos = { home: "Ethos — Biblioteca de juegos", games: "Juegos — Ethos", admin: "Admin — Ethos" };
+function ruta() {
+  const h = location.hash.replace(/^#/, "");
+  const v = h === "/games" ? "games" : h === "/admin" ? "admin" : "home";
+  document.querySelectorAll(".view").forEach(s => s.hidden = s.dataset.view !== v);
+  document.querySelectorAll("[data-nav]").forEach(a => {
+    const on = a.dataset.nav === v;
+    a.classList.toggle("active", on);
+    if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+  });
+  document.title = titulos[v];
+  if (v === "admin") pintarAdminVista();
+  scrollTo(0, 0);
+}
+addEventListener("hashchange", ruta);
+ruta(); cargar();
+</script>
+</body>
+</html>
