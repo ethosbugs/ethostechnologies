@@ -15,7 +15,8 @@
 <script>
 const THEMES = {
   fosforo:{n:"Fósforo",h:135}, esmeralda:{n:"Esmeralda",h:158}, lima:{n:"Lima",h:84},
-  cian:{n:"Cian",h:184}, ambar:{n:"Ámbar",h:42}, violeta:{n:"Violeta",h:270}, rosa:{n:"Rosa",h:330}
+  cian:{n:"Cian",h:184}, ambar:{n:"Ámbar",h:42}, violeta:{n:"Violeta",h:270}, rosa:{n:"Rosa",h:330},
+  dorado:{n:"Dorado (secreto)",h:45,special:true}
 };
 let themeKey = "fosforo";
 try { const k = localStorage.getItem("ethos_theme"); if (THEMES[k]) themeKey = k; } catch (e) {}
@@ -30,6 +31,17 @@ function applyTheme(k, save) {
   set("--tA", hsl(h, 55, 11)); set("--tB", hsl(h, 55, 15)); set("--shd", hsl(h, 50, 11));
   set("--txt", hsl(h, 100, 94)); set("--mut", hsl(h, 40, 70)); set("--dim", hsl(h, 28, 56)); set("--ink", hsl(h, 90, 5));
   const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = hsl(h, 60, 3.5);
+  // Aplicar estilo "lujoso" si es dorado
+  if (k === "dorado") {
+    document.body.classList.add("lux");
+    set("--bg", "#0a0803"); set("--panel", "#120e05");
+    set("--line", "#5a4a1a"); set("--line2", "#8a6a2a");
+    set("--acc", "#ffd76a"); set("--glow", "rgba(255,215,106,.6)");
+    set("--txt", "#fff8e6"); set("--mut", "#d4c090"); set("--dim", "#a89060"); set("--ink", "#0a0803");
+    set("--tA", "#2a1f08"); set("--tB", "#3a2a0c"); set("--shd", "#2a1f08");
+  } else {
+    document.body.classList.remove("lux");
+  }
   if (save) { try { localStorage.setItem("ethos_theme", k); } catch (e) {} }
 }
 applyTheme(themeKey);
@@ -45,12 +57,15 @@ try {
   --bg:#040905; --panel:#07120a; --line:#1f5a2b; --line2:#2a7a3a; --acc:#4cff6a; --glow:rgba(76,255,106,.55);
   --txt:#e6ffe9; --mut:#8fcf9b; --dim:#6fae7b; --ink:#04150a; --tA:#0b2a12; --tB:#0f3a1a; --shd:#0f2e17; --red:#ff6b81;
   --px:'Press Start 2P',ui-monospace,monospace; --mono:'Space Mono',ui-monospace,Menlo,Consolas,monospace;
+  --theme-transition: background-color .5s ease, color .5s ease, border-color .5s ease, box-shadow .5s ease;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 [hidden]{display:none!important}
 html{scroll-behavior:smooth}
-body{min-height:100vh;background:var(--bg);color:var(--txt);font:400 16px/1.6 var(--mono);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{min-height:100vh;background:var(--bg);color:var(--txt);font:400 16px/1.6 var(--mono);-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:var(--theme-transition)}
 body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.24) 0,rgba(0,0,0,.24) 1px,transparent 1px,transparent 3px)}
+/* Patrón de píxels de fons ultra-subtil */
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.04;background-image:radial-gradient(circle, var(--acc) 1px, transparent 1px);background-size:32px 32px;transition:opacity .5s}
 a{color:inherit;text-decoration:none}
 button,input,select{font:inherit;color:inherit;border-radius:0}
 :focus-visible{outline:2px solid var(--acc);outline-offset:3px}
@@ -62,7 +77,7 @@ button,input,select{font:inherit;color:inherit;border-radius:0}
 
 /* Controles */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;border:2px solid var(--line2);background:transparent;color:var(--txt);
-  padding:9px 14px;font:700 13px var(--mono);letter-spacing:1px;text-transform:uppercase;white-space:nowrap;transition:transform .1s,border-color .15s,color .15s,box-shadow .15s}
+  padding:9px 14px;font:700 13px var(--mono);letter-spacing:1px;text-transform:uppercase;white-space:nowrap;transition:transform .1s,border-color .15s,color .15s,box-shadow .15s,background-color .15s}
 .btn:hover{border-color:var(--acc);color:var(--acc)}
 .btn.primary{background:var(--acc);color:var(--ink);border-color:var(--acc);box-shadow:5px 5px 0 var(--line)}
 .btn.primary:hover{color:var(--ink);transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--line)}
@@ -72,6 +87,8 @@ button,input,select{font:inherit;color:inherit;border-radius:0}
 .btn.lg{padding:15px 24px;font-size:14px}
 .btn.px{font-family:var(--px);font-size:11px;padding:17px 22px;font-weight:400}
 .btn:disabled{opacity:.5;cursor:wait}
+.btn.flash{animation:btnFlash .18s ease}
+@keyframes btnFlash{50%{background:var(--acc);color:var(--ink);box-shadow:0 0 20px var(--glow)}}
 .linkbtn{background:none;border:0;color:var(--dim);font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .linkbtn:hover{color:var(--acc)}
 .input{width:100%;background:var(--panel);border:2px solid var(--line2);padding:11px 14px;font:400 15px var(--mono);color:var(--txt);transition:border-color .15s,box-shadow .15s}
@@ -86,8 +103,7 @@ select.input option{background:var(--bg)}
 .app{position:relative;z-index:1;transition:opacity .8s ease .1s,transform .8s cubic-bezier(.2,.7,.2,1) .1s}
 .intro-on:not(.intro-go) .app{opacity:0;transform:translateY(16px)}
 .container{max-width:1180px;margin:0 auto;padding:0 32px}
-.navbar{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:2px solid var(--line);overflow:hidden}
-/* ✨ Scanline animat a la navbar */
+.navbar{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:2px solid var(--line);overflow:hidden;transition:var(--theme-transition)}
 .navbar::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,var(--acc),transparent);animation:scan 4s linear infinite;opacity:.5;pointer-events:none}
 @keyframes scan{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 .navin{max-width:1180px;margin:0 auto;padding:14px 32px;display:flex;flex-wrap:wrap;align-items:center;gap:16px;position:relative;z-index:1}
@@ -99,7 +115,20 @@ select.input option{background:var(--bg)}
 .links a:hover{color:var(--txt)}
 .links a.active{background:var(--acc);color:var(--ink);font-weight:700}
 .spacer{flex:1}
-.acts{display:flex;gap:8px}
+.acts{display:flex;gap:8px;align-items:center}
+/* Indicador de connexió */
+.conn{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--dim);font-family:var(--px);padding:4px 8px;border:2px solid var(--line);letter-spacing:.5px}
+.conn .dot{width:8px;height:8px;background:var(--acc);box-shadow:0 0 6px var(--glow);animation:pulse 2s ease-in-out infinite}
+.conn.off .dot{background:var(--red);box-shadow:0 0 6px var(--red);animation:blink 1s steps(1) infinite}
+.conn.off{color:var(--red);border-color:var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+/* Equalitzador al botó de música */
+.eq{display:inline-flex;gap:2px;align-items:flex-end;height:12px;margin-left:4px}
+.eq span{width:2px;background:currentColor;animation:eqBar .8s ease-in-out infinite alternate}
+.eq span:nth-child(1){height:40%;animation-delay:0s}
+.eq span:nth-child(2){height:80%;animation-delay:.15s}
+.eq span:nth-child(3){height:60%;animation-delay:.3s}
+@keyframes eqBar{from{transform:scaleY(.3)}to{transform:scaleY(1)}}
 
 .view{animation:enter .45s cubic-bezier(.2,.7,.2,1) both}
 @keyframes enter{from{opacity:0;transform:translateY(12px)}}
@@ -112,15 +141,16 @@ h1{font:400 clamp(22px,4.4vw,40px)/1.5 var(--px);color:var(--txt)}
 h1 em{font-style:normal;color:var(--acc);text-shadow:0 0 18px var(--glow)}
 .lead{margin:30px 0 38px;max-width:520px;font-size:17px;line-height:1.7;color:var(--mut)}
 .cta{display:flex;flex-wrap:wrap;gap:16px}
-/* ✨ Estrelles subtils al HUD */
 .hud{flex:0 1 340px;min-width:260px;border:2px solid var(--line2);background:var(--panel);padding:20px 22px;box-shadow:8px 8px 0 var(--shd);
-  background-image:radial-gradient(circle at 20% 30%,rgba(76,255,106,.08) 1px,transparent 1px),radial-gradient(circle at 70% 60%,rgba(76,255,106,.06) 1px,transparent 1px);
-  background-size:30px 30px,45px 45px}
-.hud-t{font:400 11px var(--px);color:var(--dim);margin-bottom:20px}
+  background-image:radial-gradient(circle at 20% 30%,var(--glow) 1px,transparent 1px),radial-gradient(circle at 70% 60%,var(--glow) 1px,transparent 1px);
+  background-size:30px 30px,45px 45px;transition:var(--theme-transition)}
+.hud-t{font:400 11px var(--px);color:var(--dim);margin-bottom:20px;animation:blink 3s steps(1) infinite}
 .hud-r{display:flex;justify-content:space-between;align-items:baseline;padding:12px 0;border-top:1px dashed var(--line)}
 .hud-r span{font-size:14px;color:var(--mut);text-transform:uppercase}
-.hud-r b{font:400 22px var(--px);color:var(--acc)}
+.hud-r b{font:400 22px var(--px);color:var(--acc);transition:color .3s}
 .hud-s{margin-top:18px;text-align:center;font:400 11px var(--px);color:var(--txt)}
+.hud-r b.counting{animation:countPop .4s ease}
+@keyframes countPop{0%{transform:scale(1)}50%{transform:scale(1.3);color:var(--acc);text-shadow:0 0 12px var(--glow)}100%{transform:scale(1)}}
 .sec-h{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:28px 0 18px;border-top:2px solid var(--line);flex-wrap:wrap}
 .sec-h h2{font:400 clamp(12px,2vw,16px) var(--px);color:var(--txt)}
 .sec-h a{font-size:14px;color:var(--acc)}
@@ -131,43 +161,45 @@ footer .v{font-family:var(--px);font-size:10px;color:var(--acc)}
 .page-h{padding:44px 0 8px}
 .page-h h2{font:400 clamp(16px,3vw,24px) var(--px)}
 .page-h p{color:var(--dim);font-size:14px;margin-top:10px}
-.toolbar{padding:12px;margin:24px 0 18px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;border:2px solid var(--line2);background:var(--panel)}
+.toolbar{padding:12px;margin:24px 0 18px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;border:2px solid var(--line2);background:var(--panel);transition:var(--theme-transition)}
 .search{position:relative;flex:1 1 260px}
 .search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--dim)}
 .search .input{padding-left:42px}
 .toolbar select{width:auto}
 .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
-/* ✨ Chips amb bisell 3D */
 .chip{cursor:pointer;border:2px solid var(--line2);background:transparent;color:var(--mut);padding:6px 13px;font:400 13px var(--mono);letter-spacing:1px;text-transform:uppercase;transition:all .15s;box-shadow:inset 0 -3px 0 var(--line)}
 .chip:hover{color:var(--txt);border-color:var(--acc)}
 .chip.on{background:var(--acc);color:var(--ink);border-color:var(--acc);font-weight:700;box-shadow:inset 0 -3px 0 rgba(0,0,0,.25)}
 .chip small{opacity:.7;margin-left:6px;font-size:.85em}
 .grid{display:grid;gap:26px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
 .grid .h{grid-column:1/-1;font:400 11px var(--px);letter-spacing:1px;color:var(--acc);margin-top:8px}
-/* ✨ Targeta amb vora pixelada interior */
-.card{position:relative;display:block;border:2px solid var(--line2);background:var(--panel);box-shadow:inset 0 0 0 2px var(--line),6px 6px 0 var(--shd);cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s}
-/* ✨ LED parpellejant al joc obert */
+.card{position:relative;display:block;border:2px solid var(--line2);background:var(--panel);box-shadow:inset 0 0 0 2px var(--line),6px 6px 0 var(--shd);cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s;overflow:hidden}
 .card.open{border-color:var(--acc);box-shadow:inset 0 0 0 2px var(--acc),6px 6px 0 var(--acc);animation:ledOn 1.2s steps(2) infinite}
 @keyframes ledOn{0%,49%{opacity:1}50%,100%{opacity:.88}}
 .anim .card{animation:enter .45s both}
 .card:hover,.card:focus-visible{transform:translate(-3px,-3px);box-shadow:inset 0 0 0 2px var(--line),9px 9px 0 var(--shd);border-color:var(--acc)}
-.bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:5px 8px 5px 12px;border-bottom:2px solid var(--line2);font-size:12px;color:var(--dim)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:5px 8px 5px 12px;border-bottom:2px solid var(--line2);font-size:12px;color:var(--dim);position:relative;z-index:2}
 .bar>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .bar-r{display:flex;align-items:center;gap:6px;flex:none}
 .ext{font-size:12px;color:var(--acc);border:1px solid var(--line2);padding:0 6px}
 .fav{width:26px;height:26px;border:0;background:transparent;cursor:pointer;font-size:16px;color:var(--acc);transition:transform .15s}
 .fav:hover{transform:scale(1.25)}
-/* ✨ LOGO QUADRAT 1:1 estil Play Store */
-.tile{position:relative;aspect-ratio:1/1;display:grid;place-items:center;overflow:hidden;background:repeating-linear-gradient(45deg,var(--tA) 0 12px,var(--tB) 12px 24px)}
-.tile img{width:100%;height:100%;object-fit:cover;padding:0;display:block;border-radius:0}
+.tile{position:relative;aspect-ratio:1/1;display:grid;place-items:center;overflow:hidden;background:repeating-linear-gradient(45deg,var(--tA) 0 12px,var(--tB) 12px 24px);transition:background .5s}
+.tile img{width:100%;height:100%;object-fit:cover;padding:0;display:block;border-radius:0;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.card:hover .tile img,.card:focus-visible .tile img{transform:scale(1.06)}
 .tile .ltr{display:none;font:400 54px var(--px);color:var(--acc);text-shadow:0 0 16px var(--glow)}
 .tile.noimg .ltr{display:block}
-.play{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.62);opacity:0;transition:opacity .15s}
+.tile .glitch{animation:ltrGlitch 4s steps(1) infinite}
+@keyframes ltrGlitch{0%,92%,100%{opacity:1;transform:none}93%{opacity:0;transform:translateX(2px)}94%{opacity:1;transform:translateX(-2px) scaleX(1.05)}95%{opacity:1;transform:none}}
+.tile .soon{display:none;font:400 10px var(--px);color:var(--dim);text-align:center;line-height:1.8;letter-spacing:1px}
+.tile.soon-mode .soon{display:block}
+.tile.soon-mode .ltr{display:none}
+.tile.soon-mode{background:repeating-linear-gradient(45deg,var(--line) 0 10px,var(--tA) 10px 20px)}
+.play{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.62);opacity:0;transition:opacity .15s;z-index:2}
 .play span{font:400 12px var(--px);color:var(--acc);text-shadow:0 0 10px var(--glow)}
-/* ✨ Botó JUGAR parpellejant al hover */
 .card:hover .play,.card:focus-visible .play{opacity:1}
 .card:hover .play span,.card:focus-visible .play span{animation:blink 1s steps(1) infinite}
-.foot{padding:13px 14px 15px;display:flex;flex-direction:column;gap:12px}
+.foot{padding:13px 14px 15px;display:flex;flex-direction:column;gap:12px;position:relative;z-index:2}
 .foot .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .foot h3{font:700 16px var(--mono);color:var(--txt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tag{font-size:11px;color:var(--acc);border:1px solid var(--line2);padding:2px 7px;white-space:nowrap;flex:none;text-transform:uppercase}
@@ -182,10 +214,25 @@ footer .v{font-family:var(--px);font-size:10px;color:var(--acc)}
 .player.open{display:flex}
 .pbar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:2px solid var(--line2);background:var(--panel);flex-wrap:wrap}
 .pbar strong{flex:1;font:400 12px var(--px);color:var(--acc);padding-left:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:120px}
+/* Barra d'estat falsa al reproductor */
+.pstat{display:flex;align-items:center;gap:12px;padding:4px 14px;border-bottom:2px solid var(--line);background:var(--bg);font:400 10px var(--px);color:var(--dim);letter-spacing:1px;flex-wrap:wrap}
+.pstat span{display:inline-flex;align-items:center;gap:4px}
+.pstat b{color:var(--acc);font-weight:400}
+.pstat .lvl{display:inline-block;width:60px;height:6px;border:1px solid var(--line2);padding:1px;vertical-align:middle}
+.pstat .lvl i{display:block;height:100%;background:var(--acc);width:0;transition:width .8s ease;box-shadow:0 0 4px var(--glow)}
 .player iframe{flex:1;width:100%;border:0;background:#000}
+/* Loader de càrrega del joc */
+.pbar .loading{display:none;align-items:center;gap:6px;font-size:11px;color:var(--dim);font-family:var(--px)}
+.pbar .loading.on{display:inline-flex}
+.pbar .loading .spinner{width:10px;height:10px;border:2px solid var(--line2);border-top-color:var(--acc);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* Aviso de joc que no respon */
+.pwarn{display:none;position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:5;padding:14px 18px;background:var(--panel);border:2px solid var(--acc);box-shadow:6px 6px 0 var(--shd);font-size:13px;color:var(--txt);max-width:calc(100vw - 40px);text-align:center}
+.pwarn.show{display:block;animation:enter .3s both}
+.pwarn .acts{margin-top:10px;justify-content:center;display:flex;gap:8px;flex-wrap:wrap}
 
-/* Panel de música (Ousify) */
-.music{position:fixed;right:16px;bottom:16px;z-index:150;width:min(380px,calc(100vw - 32px));border:2px solid var(--acc);background:var(--panel);box-shadow:8px 8px 0 var(--shd);display:none}
+/* Panel de música */
+.music{position:fixed;right:16px;bottom:16px;z-index:150;width:min(380px,calc(100vw - 32px));border:2px solid var(--acc);background:var(--panel);box-shadow:8px 8px 0 var(--shd);display:none;transition:var(--theme-transition)}
 .music.open{display:block;animation:enter .3s both}
 .mhead{display:flex;align-items:center;gap:6px;padding:8px 8px 8px 14px;border-bottom:2px solid var(--line2)}
 .mhead strong{flex:1;font:400 11px var(--px);color:var(--acc)}
@@ -195,10 +242,16 @@ footer .v{font-family:var(--px);font-size:10px;color:var(--acc)}
 .music.min .mhead{border-bottom:0}
 
 /* Selector de tema */
-.themes{position:fixed;top:68px;right:24px;z-index:60;padding:14px;display:flex;gap:10px;flex-wrap:wrap;max-width:250px;border:2px solid var(--acc);background:var(--panel);box-shadow:6px 6px 0 var(--shd)}
-.sw{width:30px;height:30px;border:2px solid transparent;cursor:pointer;transition:transform .1s}
-.sw:hover{transform:scale(1.15)}
-.sw.on{border-color:#fff}
+.themes{position:fixed;top:68px;right:24px;z-index:60;padding:14px;display:flex;gap:10px;flex-wrap:wrap;max-width:280px;border:2px solid var(--acc);background:var(--panel);box-shadow:6px 6px 0 var(--shd);transition:var(--theme-transition)}
+.sw{position:relative;width:36px;height:36px;border:2px solid transparent;cursor:pointer;transition:transform .15s,border-color .15s;overflow:hidden;display:grid;place-items:center}
+.sw:hover{transform:scale(1.2)}
+.sw.on{border-color:#fff;box-shadow:0 0 0 2px var(--acc)}
+.sw .sw-label{position:absolute;bottom:100%;left:50%;transform:translate(-50%,-6px);background:var(--panel);border:1px solid var(--acc);color:var(--acc);font:400 8px var(--px);padding:4px 6px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s}
+.sw:hover .sw-label{opacity:1}
+.sw.special{box-shadow:0 0 12px rgba(255,215,106,.8)}
+.sw.special::after{content:"★";position:absolute;color:#fff;font-size:10px;text-shadow:0 0 4px #000}
+.sw.locked{opacity:.35;cursor:not-allowed}
+.sw.locked:hover{transform:none}
 
 /* Admin */
 .gate{max-width:440px;margin:80px auto;padding:32px;border:2px solid var(--line2);background:var(--panel);box-shadow:8px 8px 0 var(--shd);display:grid;gap:14px}
@@ -209,6 +262,12 @@ footer .v{font-family:var(--px);font-size:10px;color:var(--acc)}
 .form{padding:22px;display:grid;gap:12px;grid-template-columns:1fr 1fr;border:2px solid var(--line2);background:var(--panel);box-shadow:8px 8px 0 var(--shd)}
 .form .full{grid-column:1/-1}
 .form .row{display:flex;gap:10px}
+/* Preview del logo a l'admin */
+.logo-preview{display:none;align-items:center;gap:12px;padding:10px;border:2px dashed var(--line2);background:var(--bg)}
+.logo-preview.on{display:flex}
+.logo-preview img{width:48px;height:48px;object-fit:cover;background:var(--tA)}
+.logo-preview .bad{color:var(--red);font-size:12px}
+.logo-preview .ok{color:var(--acc);font-size:12px}
 .lst-h{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:34px 0 14px;flex-wrap:wrap}
 .lst-h h3{font:400 12px var(--px);color:var(--txt)}
 .lst-h .input{max-width:260px}
@@ -223,13 +282,41 @@ footer .v{font-family:var(--px);font-size:10px;color:var(--acc)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .toast.err{border-color:var(--red)}
 
+/* Modal de confirmació (substitueix confirm()) */
+.modal{position:fixed;inset:0;z-index:250;background:rgba(0,0,0,.72);display:none;place-items:center;padding:20px}
+.modal.open{display:grid;animation:fadeIn .2s both}
+@keyframes fadeIn{from{opacity:0}}
+.modal-box{padding:28px;border:2px solid var(--acc);background:var(--panel);box-shadow:10px 10px 0 var(--shd);max-width:420px;width:100%;display:grid;gap:18px;animation:enter .3s both}
+.modal-box h3{font:400 12px/1.6 var(--px);color:var(--acc)}
+.modal-box p{color:var(--mut);font-size:15px;line-height:1.6}
+.modal-box .acts{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+
+/* Ruleta de joc aleatori */
+.roulette{position:fixed;inset:0;z-index:240;background:rgba(0,0,0,.9);display:none;place-items:center;padding:20px}
+.roulette.open{display:grid;animation:fadeIn .3s both}
+.roul-box{display:grid;gap:20px;justify-items:center;max-width:520px;width:100%}
+.roul-label{font:400 12px var(--px);color:var(--acc);letter-spacing:2px;animation:blink 1s steps(1) infinite}
+.roul-stage{position:relative;width:100%;aspect-ratio:1/1;max-width:340px;border:2px solid var(--acc);background:var(--panel);box-shadow:8px 8px 0 var(--shd);overflow:hidden;display:grid;place-items:center}
+.roul-card{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transition:opacity .08s}
+.roul-card.on{opacity:1}
+.roul-card .tile{width:100%;height:100%;aspect-ratio:auto}
+.roul-card .tile .ltr{font-size:72px}
+.roul-card .tile img{object-fit:cover}
+.roul-name{font:700 18px var(--mono);color:var(--txt);text-align:center;min-height:1.4em}
+.roul-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.roul-stage::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(0,0,0,.4) 0%,transparent 15%,transparent 85%,rgba(0,0,0,.4) 100%);z-index:2}
+
 /* Intro: encendido de monitor CRT + E que se arma con píxeles */
 .intro{display:none;position:fixed;inset:0;z-index:300;place-items:center;overflow:hidden;cursor:pointer;background:var(--bg);animation:crtOn .7s cubic-bezier(.2,.7,.2,1) both}
 .intro::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.3) 0,rgba(0,0,0,.3) 1px,transparent 1px,transparent 3px)}
 .intro-on .intro{display:grid}
 .intro.out{animation:crtOff .6s cubic-bezier(.6,0,.9,.4) forwards;pointer-events:none}
+.intro.quick{animation:crtQuick .35s ease both}
+.intro.quick.out{animation:crtQuickOut .35s ease forwards}
 @keyframes crtOn{0%{transform:scale(.15,.004);filter:brightness(6)}40%{transform:scale(1,.004);filter:brightness(5)}100%{transform:none;filter:none}}
 @keyframes crtOff{0%{transform:none;filter:none}55%{transform:scale(1,.005);filter:brightness(5)}100%{transform:scale(0,.005);filter:brightness(5);opacity:0}}
+@keyframes crtQuick{0%{opacity:0;filter:brightness(4)}100%{opacity:1;filter:none}}
+@keyframes crtQuickOut{0%{opacity:1}100%{opacity:0;filter:brightness(3)}}
 .i-core{position:relative;display:grid;justify-items:center;gap:26px}
 .i-logo{position:relative;width:90px;height:126px;margin-bottom:6px}
 .i-e{position:absolute;inset:0;animation:eGlow .8s ease 1.35s both}
@@ -249,12 +336,26 @@ footer .v{font-family:var(--px);font-size:10px;color:var(--acc)}
 @keyframes iBar{from{transform:scaleX(0)}}
 @keyframes iFade{from{opacity:0}}
 .i-start{font:400 11px var(--px);color:var(--txt);animation:iFade .3s ease 2.1s both,blink 1s steps(1) 2.4s infinite}
+/* Mode ràpid: només mostra títol petit */
+.intro.quick .i-logo,.intro.quick .i-tag,.intro.quick .i-bar,.intro.quick .i-start{display:none}
+.intro.quick .i-title{font-size:1.4rem}
+.intro.quick .i-core{gap:10px}
+
+/* Lux: efectes especials per al tema daurat */
+body.lux .mark{filter:drop-shadow(0 0 10px #ffd76a)}
+body.lux h1 em{text-shadow:0 0 24px #ffd76a,0 0 40px rgba(255,215,106,.4)}
+body.lux .btn.primary{box-shadow:5px 5px 0 #5a4a1a,0 0 20px rgba(255,215,106,.3)}
+body.lux .card{background-image:linear-gradient(135deg,rgba(255,215,106,.03),transparent 50%)}
+body.lux .hud{border-color:#8a6a2a;box-shadow:8px 8px 0 #2a1f08,0 0 30px rgba(255,215,106,.08)}
+body.lux .tag{color:#ffd76a;border-color:#8a6a2a}
+body.lux .navbar{border-bottom-color:#5a4a1a}
 
 @media(max-width:760px){
   .navin{gap:8px;padding:10px 14px}.links{margin-left:0}.links a{padding:7px 9px;letter-spacing:1px}.acts .t{display:none}
   .brand>span:last-child{display:none}.hero{padding-top:48px;gap:36px}
   .form{grid-template-columns:1fr}.item{flex-direction:column;align-items:stretch}.item .acts{justify-content:flex-end}
   .container{padding:0 16px}.themes{right:16px}
+  .conn .txt{display:none}
 }
 </style>
 </head>
@@ -283,8 +384,9 @@ footer .v{font-family:var(--px);font-size:10px;color:var(--acc)}
       </div>
       <div class="spacer"></div>
       <div class="acts">
+        <span class="conn" id="conn" title="Estado de conexión"><span class="dot"></span><span class="txt">ONLINE</span></span>
         <button class="btn sm" id="btnAI" title="Ethos AI" aria-label="Ethos AI">✦ <span class="t">AI</span></button>
-        <button class="btn sm" id="btnMusic" title="Música (M)" aria-label="Música">♪ <span class="t">Música</span></button>
+        <button class="btn sm" id="btnMusic" title="Música (M)" aria-label="Música">♪ <span class="t">Música</span><span class="eq" id="eq" hidden><span></span><span></span><span></span></span></button>
         <button class="btn sm" id="btnTheme" title="Color del tema" aria-label="Color del tema">◐</button>
         <a class="btn sm" href="#/admin" data-nav="admin" title="Administración" aria-label="Administración">⚙ <span class="t">Admin</span></a>
       </div>
@@ -306,9 +408,9 @@ footer .v{font-family:var(--px);font-size:10px;color:var(--acc)}
       </div>
       <aside class="hud" aria-label="Estadísticas">
         <div class="hud-t">PLAYER 1 · HUD</div>
-        <div class="hud-r"><span>Juegos</span><b id="stJuegos">---</b></div>
-        <div class="hud-r"><span>Categorías</span><b id="stCats">--</b></div>
-        <div class="hud-r"><span>Favoritos</span><b id="stFavs">00</b></div>
+        <div class="hud-r"><span>Juegos</span><b id="stJuegos" data-num="0">---</b></div>
+        <div class="hud-r"><span>Categorías</span><b id="stCats" data-num="0">--</b></div>
+        <div class="hud-r"><span>Favoritos</span><b id="stFavs" data-num="0">00</b></div>
         <div class="hud-s blink">PRESS START</div>
       </aside>
     </section>
@@ -316,7 +418,7 @@ footer .v{font-family:var(--px);font-size:10px;color:var(--acc)}
     <div class="grid" id="recientes"></div>
     <div class="sec-h"><h2>&gt; AÑADIDOS RECIENTEMENTE</h2><a href="#/games">VER TODOS →</a></div>
     <div class="grid" id="destacados"></div>
-    <footer><span>Ethos Technologies · <span class="v">v6.2</span></span><span>M = música · Esc Esc = salir · ? = ayuda</span></footer>
+    <footer><span>Ethos Technologies · <span class="v">v7.0</span></span><span>M = música · Esc Esc = salir · ? = ayuda</span></footer>
   </main>
 
   <!-- JUEGOS -->
@@ -325,7 +427,7 @@ footer .v{font-family:var(--px);font-size:10px;color:var(--acc)}
     <div class="toolbar">
       <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         <input class="input" type="search" id="searchBar" placeholder="Buscar juego…  (pulsa /)" aria-label="Buscar juego"></label>
-      <select class="input" id="sort" aria-label="Ordenar"><option value="az">A → Z</option><option value="new">Más recientes</option></select>
+      <select class="input" id="sort" aria-label="Ordenar"><option value="fav">Favoritos primero</option><option value="az">A → Z</option><option value="new">Más recientes</option></select>
       <button class="btn" id="btnRandom2">Al azar</button>
     </div>
     <div class="chips" id="chips" role="tablist" aria-label="Categorías"></div>
@@ -354,6 +456,7 @@ footer .v{font-family:var(--px);font-size:10px;color:var(--acc)}
         <datalist id="cats"></datalist>
         <input class="input full" id="url" type="url" placeholder="URL del juego (https://…)" required>
         <input class="input full" id="logo" type="url" placeholder="Link del logo (opcional)">
+        <div class="logo-preview full" id="logoPreview"></div>
         <label class="chk full"><input type="checkbox" id="noembed"> No carga dentro de Ethos (se abrirá en una pestaña nueva)</label>
         <div class="row full">
           <button class="btn primary lg" type="submit" id="saveBtn" style="flex:1">Guardar juego</button>
@@ -369,6 +472,7 @@ footer .v{font-family:var(--px);font-size:10px;color:var(--acc)}
 <div class="player" id="player" role="dialog" aria-modal="true" aria-label="Juego">
   <div class="pbar">
     <strong id="playerTitle"></strong>
+    <span class="loading" id="pLoading"><span class="spinner"></span> CARGANDO…</span>
     <button class="btn sm" id="btnMusic2" title="Música (M)">♪ Música</button>
     <button class="btn sm" id="btnReload">↻ Recargar</button>
     <button class="btn sm" id="btnFull">⛶ Pantalla completa</button>
@@ -377,7 +481,47 @@ footer .v{font-family:var(--px);font-size:10px;color:var(--acc)}
     <button class="btn sm" id="btnPanic" title="Salir ahora (Esc Esc)" aria-label="Salir">▤</button>
     <button class="btn sm danger" id="btnClose">✕ Cerrar</button>
   </div>
+  <div class="pstat">
+    <span>SYS: <b>RUNNING</b></span>
+    <span>MEM: <b id="pMem">OK</b></span>
+    <span>INPUT: <b>ACTIVE</b></span>
+    <span>LATENCY <span class="lvl"><i id="pLat"></i></span></span>
+  </div>
   <iframe id="playerFrame" title="Juego" allow="fullscreen; autoplay; gamepad; clipboard-write" referrerpolicy="no-referrer"></iframe>
+  <div class="pwarn" id="pWarn">
+    <div>Este juego parece que no responde.</div>
+    <div class="acts">
+      <button class="btn sm" id="pwOpen">Abrir en pestaña nueva</button>
+      <button class="btn sm danger" id="pwMark" hidden>Marcar como roto</button>
+      <button class="btn sm" id="pwIgnore">Ignorar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de confirmació -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-box">
+    <h3 id="modalTitle">&gt; CONFIRMAR</h3>
+    <p id="modalText"></p>
+    <div class="acts">
+      <button class="btn" id="modalCancel">Cancelar</button>
+      <button class="btn primary" id="modalOk">Sí, continuar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Ruleta de joc aleatori -->
+<div class="roulette" id="roulette" role="dialog" aria-modal="true" aria-label="Juego al azar">
+  <div class="roul-box">
+    <div class="roul-label" id="roulLabel">&gt; SELECCIONANDO JUEGO…</div>
+    <div class="roul-stage" id="roulStage"></div>
+    <div class="roul-name" id="roulName"></div>
+    <div class="roul-actions" id="roulActions" hidden>
+      <button class="btn primary" id="roulOpen">&gt; JUGAR AHORA</button>
+      <button class="btn" id="roulAgain">↻ Otra vez</button>
+      <button class="btn danger" id="roulClose">✕ Cancelar</button>
+    </div>
+  </div>
 </div>
 
 <!-- Panel de música: Ousify -->
@@ -431,21 +575,56 @@ function fail(err) {
 }
 const enCampo = () => /INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName);
 
-/* ============ Intro ============ */
+/* ============ Modal de confirmació personalitzat ============ */
+let modalResolve = null;
+function confirmar(titulo, texto, okTxt = "Sí, continuar", danger = false) {
+  return new Promise(res => {
+    modalResolve = res;
+    $("modalTitle").textContent = "> " + titulo;
+    $("modalText").textContent = texto;
+    $("modalOk").textContent = okTxt;
+    $("modalOk").className = "btn " + (danger ? "primary danger" : "primary");
+    $("modal").classList.add("open");
+    setTimeout(() => $("modalCancel").focus(), 50);
+  });
+}
+$("modalCancel").onclick = () => { $("modal").classList.remove("open"); if (modalResolve) { modalResolve(false); modalResolve = null; } };
+$("modalOk").onclick = () => { $("modal").classList.remove("open"); if (modalResolve) { modalResolve(true); modalResolve = null; } };
+$("modal").addEventListener("click", e => { if (e.target === $("modal")) $("modalCancel").click(); });
+
+/* ============ Intro (només primera visita / flash ràpid) ============ */
 (function () {
   const h = document.documentElement;
   if (!h.classList.contains("intro-on")) return;
+  const el = $("intro");
+  let quick = false;
+  try { quick = !!localStorage.getItem("ethos_visited"); } catch (e) {}
+  if (quick) {
+    el.classList.add("quick");
+    setTimeout(() => {
+      el.classList.add("out");
+      h.classList.add("intro-go");
+      setTimeout(() => h.classList.remove("intro-on", "intro-go"), 400);
+    }, 500);
+    el.addEventListener("click", () => {
+      el.classList.add("out"); h.classList.add("intro-go");
+      setTimeout(() => h.classList.remove("intro-on", "intro-go"), 400);
+    }, { once: true });
+    try { localStorage.setItem("ethos_visited", "1"); } catch (e) {}
+    return;
+  }
   const cells = [];
   for (let r = 0; r < 7; r++) for (let c = 0; c < 5; c++) if (c === 0 || r === 0 || r === 6 || (r === 3 && c < 4)) cells.push([r, c]);
   $("iE").innerHTML = cells.map(([r, c], k) => {
     const a = Math.random() * 6.283, d = 180 + Math.random() * 260;
     return `<span class="px" style="left:${c * 18}px;top:${r * 18}px;--i:${k};--dx:${Math.round(Math.cos(a) * d)}px;--dy:${Math.round(Math.sin(a) * d)}px;--r:${Math.round(Math.random() * 360 - 180)}deg"></span>`;
   }).join("");
-  const el = $("intro"); let done = false;
+  let done = false;
   const fin = () => {
     if (done) return; done = true;
     el.classList.add("out"); h.classList.add("intro-go");
     setTimeout(() => h.classList.remove("intro-on", "intro-go"), 700);
+    try { localStorage.setItem("ethos_visited", "1"); } catch (e) {}
   };
   setTimeout(fin, 3000);
   el.addEventListener("click", fin);
@@ -454,19 +633,44 @@ const enCampo = () => /INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagNam
   }, { once: true });
 })();
 
-/* ============ Temas ============ */
+/* ============ Temes (amb desbloqueig secret i animació) ============ */
+function temaDesbloquejat(k) {
+  if (THEMES[k] && THEMES[k].special) {
+    try { return localStorage.getItem("ethos_secret_dorado") === "1"; } catch (e) { return false; }
+  }
+  return true;
+}
+function desbloquejarDorado() {
+  try {
+    if (localStorage.getItem("ethos_secret_dorado") === "1") return;
+    localStorage.setItem("ethos_secret_dorado", "1");
+    pintaTemas();
+    toast("★ TEMA SECRETO DESBLOQUEJADO: DORADO");
+    setTimeout(() => applyTheme("dorado", true), 400);
+  } catch (e) {}
+}
 function pintaTemas() {
-  $("themes").innerHTML = Object.entries(THEMES).map(([k, t]) =>
-    `<button class="sw ${k === themeKey ? "on" : ""}" data-theme="${k}" title="${esc(t.n)}" aria-label="${esc(t.n)}" style="background:${hsl(t.h, 100, 63)}"></button>`).join("");
+  $("themes").innerHTML = Object.entries(THEMES).map(([k, t]) => {
+    const unlock = temaDesbloquejat(k);
+    return `<button class="sw ${k === themeKey ? "on" : ""} ${t.special ? "special" : ""} ${unlock ? "" : "locked"}" data-theme="${k}" title="${esc(t.n)}" aria-label="${esc(t.n)}" ${unlock ? "" : "disabled"} style="background:${hsl(t.h, 100, t.special ? 70 : 63)}">${unlock ? `<span class="sw-label">${esc(t.n)}</span>` : ""}</button>`;
+  }).join("");
 }
 $("btnTheme").onclick = e => { e.stopPropagation(); pintaTemas(); $("themes").hidden = !$("themes").hidden; };
 $("themes").addEventListener("click", e => {
-  const b = e.target.closest("[data-theme]"); if (!b) return;
-  applyTheme(b.dataset.theme, true); pintaTemas();
+  const b = e.target.closest("[data-theme]"); if (!b || b.disabled) return;
+  // Animació de transició de tema
+  document.body.style.transition = "opacity .3s ease";
+  document.body.style.opacity = "0.7";
+  setTimeout(() => {
+    applyTheme(b.dataset.theme, true);
+    pintaTemas();
+    document.body.style.opacity = "1";
+    setTimeout(() => { document.body.style.transition = ""; }, 400);
+  }, 150);
 });
 document.addEventListener("click", e => { if (!e.target.closest("#themes")) $("themes").hidden = true; });
 
-/* ============ Estado y datos ============ */
+/* ============ Estat i dades ============ */
 let juegos = [], cat = "ALL", favs = leer("ethos_favs"), recientes = leer("ethos_recent"), error = false, actual = null, unsub = null;
 
 async function cargar() {
@@ -476,29 +680,73 @@ async function cargar() {
     unsub = db.collection("games").onSnapshot(snap => {
       juegos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       error = false;
+      // Guardar còpia per offline
+      try { localStorage.setItem("ethos_cache_games", JSON.stringify(juegos)); } catch (e) {}
       for (const id of ["lista", "destacados", "recientes"]) { const el = $(id); if (!el) continue; el.classList.add("anim"); setTimeout(() => el.classList.remove("anim"), 900); }
       renderTodo();
-    }, e => { console.error(e); error = true; renderTodo(); });
-  } catch (e) { console.error(e); error = true; renderTodo(); }
+    }, e => {
+      console.error(e); error = true;
+      // Intentar carregar de la caché
+      try {
+        const cached = JSON.parse(localStorage.getItem("ethos_cache_games") || "[]");
+        if (cached.length) { juegos = cached; toast("Sin conexión: mostrando la última lista guardada"); }
+      } catch (e2) {}
+      renderTodo();
+    });
+  } catch (e) {
+    console.error(e); error = true;
+    try {
+      const cached = JSON.parse(localStorage.getItem("ethos_cache_games") || "[]");
+      if (cached.length) juegos = cached;
+    } catch (e2) {}
+    renderTodo();
+  }
 }
 function renderTodo() { renderHome(); renderChips(); renderJuegos(); renderAdmin(); }
 
-/* ============ Tarjetas ============ */
+/* ============ Animació de comptar números ============ */
+function animarNum(el, target, len) {
+  const old = parseInt(el.dataset.num || "0", 10);
+  if (old === target) return;
+  el.dataset.num = target;
+  const dur = 600, start = performance.now();
+  el.classList.add("counting");
+  function tick(now) {
+    const p = Math.min((now - start) / dur, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    el.textContent = pad(Math.round(old + (target - old) * ease), len);
+    if (p < 1) requestAnimationFrame(tick);
+    else { el.textContent = pad(target, len); el.classList.remove("counting"); }
+  }
+  requestAnimationFrame(tick);
+}
+
+/* ============ Targetes ============ */
 function tarjeta(j, i = 0) {
   const logo = safeUrl(j.logo), l = (Array.from((j.nombre || "?").trim())[0] || "?").toUpperCase();
   const abierto = actual && actual.id === j.id;
+  const esFav = favs.includes(j.id);
+  const nombre = j.nombre && j.nombre.trim() ? j.nombre : "?";
+  let tileClass = "tile", tileContent = "";
+  if (logo) {
+    tileContent = `<img src="${esc(logo)}" alt="${esc(nombre)}" loading="lazy" onerror="this.parentNode.classList.add('soon-mode');this.remove()">`;
+  } else {
+    tileClass += " soon-mode";
+    tileContent = `<span class="soon">&gt; LOGO<br>COMING SOON</span>`;
+  }
   return `<article class="card ${abierto ? "open" : ""}" tabindex="0" data-id="${esc(j.id)}" style="animation-delay:${Math.min(i, 12) * 40}ms">
-    <div class="bar"><span>${esc(slug(j.nombre))}</span><span class="bar-r">${j.noEmbed ? '<span class="ext" title="Se abre en una pestaña nueva">↗</span>' : ""}<button class="fav" data-fav="${esc(j.id)}" aria-label="Favorito">${favs.includes(j.id) ? "★" : "☆"}</button></span></div>
-    <div class="tile ${logo ? "" : "noimg"}">${logo ? `<img src="${esc(logo)}" alt="${esc(j.nombre)}" loading="lazy">` : ""}<span class="ltr">${esc(l)}</span><div class="play"><span>&gt; JUGAR</span></div></div>
-    <div class="foot"><div class="row"><h3>${esc(j.nombre || "Sin nombre")}</h3>${j.category ? `<span class="tag">${esc(j.category)}</span>` : ""}</div><div class="go">&gt; JUGAR</div></div></article>`;
+    <div class="bar"><span>${esc(slug(j.nombre || "juego"))}</span><span class="bar-r">${j.noEmbed ? '<span class="ext" title="Se abre en una pestaña nueva">↗</span>' : ""}<button class="fav" data-fav="${esc(j.id)}" aria-label="Favorito">${esFav ? "★" : "☆"}</button></span></div>
+    <div class="${tileClass}">${tileContent}<div class="play"><span>&gt; JUGAR</span></div></div>
+    <div class="foot"><div class="row"><h3>${esc(nombre)}</h3>${j.category ? `<span class="tag">${esc(j.category)}</span>` : ""}</div><div class="go">&gt; JUGAR</div></div></article>`;
 }
 const vacio = msg => `<p class="empty">${msg}</p>`;
 
 function renderHome() {
   const cats = new Set(juegos.map(j => j.category).filter(Boolean));
-  $("stJuegos").textContent = error ? "---" : pad(juegos.length, 3);
-  $("stCats").textContent = error ? "--" : pad(cats.size, 2);
-  $("stFavs").textContent = pad(favs.length, 2);
+  animarNum($("stJuegos"), error ? 0 : juegos.length, 3);
+  animarNum($("stCats"), error ? 0 : cats.size, 2);
+  animarNum($("stFavs"), favs.length, 2);
+  if (error && !juegos.length) { $("stJuegos").textContent = "---"; $("stCats").textContent = "--"; }
   const rec = recientes.map(id => juegos.find(j => j.id === id)).filter(Boolean).slice(0, 4);
   const secRec = document.getElementById("recientes");
   const secRecH = secRec ? secRec.previousElementSibling : null;
@@ -507,7 +755,7 @@ function renderHome() {
     else { secRec.hidden = true; secRec.innerHTML = ""; if (secRecH) secRecH.hidden = true; }
   }
   const nuevos = [...juegos].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0)).slice(0, 4);
-  $("destacados").innerHTML = error ? '<p class="empty err">No se pudieron cargar los juegos.</p>'
+  $("destacados").innerHTML = error && !juegos.length ? '<p class="empty err">No se pudieron cargar los juegos.</p>'
     : nuevos.length ? nuevos.map(tarjeta).join("") : vacio("Aún no hay juegos. Añade el primero desde Admin.");
 }
 
@@ -520,14 +768,27 @@ function renderChips() {
 
 function renderJuegos() {
   const f = norm($("searchBar").value.trim()), o = $("sort").value;
-  const res = juegos.filter(j => (!f || norm(j.nombre).includes(f)) &&
-      (cat === "ALL" || (cat === "FAVS" ? favs.includes(j.id) : j.category === cat)))
-    .sort((a, b) => o === "new" ? (b.timestamp || 0) - (a.timestamp || 0) : collator.compare(a.nombre || "", b.nombre || ""));
+  // Cercador: també per categoria
+  const res = juegos.filter(j => {
+    const matchTxt = !f || norm(j.nombre).includes(f) || norm(j.category || "").includes(f);
+    const matchCat = cat === "ALL" || (cat === "FAVS" ? favs.includes(j.id) : j.category === cat);
+    return matchTxt && matchCat;
+  });
+  // Ordenació (favorits primer per defecte)
+  res.sort((a, b) => {
+    if (o === "fav") {
+      const fa = favs.includes(a.id) ? 1 : 0, fb = favs.includes(b.id) ? 1 : 0;
+      if (fa !== fb) return fb - fa;
+      return collator.compare(a.nombre || "", b.nombre || "");
+    }
+    if (o === "new") return (b.timestamp || 0) - (a.timestamp || 0);
+    return collator.compare(a.nombre || "", b.nombre || "");
+  });
   let h = "";
-  h += error ? `<div class="empty err">No se pudieron cargar los juegos.<br><br><button class="btn" id="retry">Reintentar</button></div>`
+  h += error && !juegos.length ? `<div class="empty err">No se pudieron cargar los juegos.<br><br><button class="btn" id="retry">Reintentar</button></div>`
     : res.length ? res.map(tarjeta).join("") : vacio(juegos.length ? "Ningún juego coincide con tu búsqueda." : "Aún no hay juegos. Añade el primero desde Admin.");
   $("lista").innerHTML = h;
-  $("counter").textContent = error ? "Sin conexión" : `${res.length} juego${res.length === 1 ? "" : "s"}`;
+  $("counter").textContent = error && !juegos.length ? "Sin conexión" : `${res.length} juego${res.length === 1 ? "" : "s"}`;
 }
 
 function onCards(e) {
@@ -547,20 +808,35 @@ for (const id of ["lista", "destacados", "recientes"]) {
   const el = $(id); if (!el) continue;
   el.addEventListener("click", onCards);
   el.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.classList.contains("card")) e.target.click(); });
-  el.addEventListener("error", e => { const i = e.target; if (i.tagName === "IMG") { const t = i.parentNode; i.remove(); t.classList.add("noimg"); } }, true);
+  el.addEventListener("error", e => { const i = e.target; if (i.tagName === "IMG") { const t = i.parentNode; i.remove(); t.classList.add("soon-mode"); } }, true);
 }
 $("lista").addEventListener("click", e => { if (e.target.id === "retry") cargar(); });
 $("chips").addEventListener("click", e => {
   const b = e.target.closest("[data-cat]"); if (!b) return;
   cat = b.dataset.cat; renderChips(); renderJuegos();
 });
-$("searchBar").addEventListener("input", renderJuegos);
+$("searchBar").addEventListener("input", e => {
+  // Easter egg: escriure "ethos" desbloqueja el tema daurat
+  if (norm(e.target.value).trim() === "ethos") desbloquejarDorado();
+  renderJuegos();
+});
 $("sort").addEventListener("change", renderJuegos);
 
-/* ============ Música (Ousify, sense radio encara) ============ */
+/* ============ Indicador de connexió ============ */
+function updateConn() {
+  const c = $("conn");
+  if (navigator.onLine) { c.classList.remove("off"); c.querySelector(".txt").textContent = "ONLINE"; }
+  else { c.classList.add("off"); c.querySelector(".txt").textContent = "OFFLINE"; }
+}
+addEventListener("online", updateConn);
+addEventListener("offline", updateConn);
+updateConn();
+
+/* ============ Música ============ */
 let musicOn = false, musicUrl = OUSIFY;
 function cargaMusica(url) {
   if (url || !musicOn) { musicUrl = url || OUSIFY; $("musicFrame").src = musicUrl; musicOn = true; }
+  $("eq").hidden = false;
 }
 function pintaMin() { $("btnMin").textContent = $("music").classList.contains("min") ? "▢" : "—"; }
 function musicaToggle() {
@@ -568,18 +844,21 @@ function musicaToggle() {
   if (!m.classList.contains("open")) { m.classList.add("open"); m.classList.remove("min"); cargaMusica(); }
   else m.classList.toggle("min");
   pintaMin();
+  $("eq").hidden = !m.classList.contains("open");
 }
 $("btnMusic").onclick = musicaToggle; $("btnMusic2").onclick = musicaToggle;
 $("btnMin").onclick = () => { $("music").classList.toggle("min"); pintaMin(); };
-$("btnMClose").onclick = () => { $("musicFrame").src = "about:blank"; musicOn = false; $("music").classList.remove("open", "min"); pintaMin(); };
+$("btnMClose").onclick = () => { $("musicFrame").src = "about:blank"; musicOn = false; $("music").classList.remove("open", "min"); pintaMin(); $("eq").hidden = true; };
 $("btnPop").onclick = () => {
   const w = window.open(musicOn ? musicUrl : OUSIFY, "ousify", "width=440,height=700,noopener");
   if (!w) return toast("Permite las ventanas emergentes para abrir Ousify", true);
+  // Tancar el panell intern perquè només soni a la finestra nova
   $("btnMClose").click();
+  toast("Ousify abierto en ventana nueva");
 };
 
 /* ============ Reproductor ============ */
-let focusAntes = null;
+let focusAntes = null, warnTimer = null, noRespTimer = null;
 function abrir(j) {
   const url = j && safeUrl(j.url);
   if (!url) return toast("La URL de este juego no es válida", true);
@@ -595,15 +874,45 @@ function abrir(j) {
   $("playerTitle").textContent = j.nombre || "";
   $("playerFrame").src = url;
   $("btnMark").hidden = !logueado();
+  $("pWarn").classList.remove("show");
+  $("pLoading").classList.add("on");
   $("player").classList.add("open"); document.body.style.overflow = "hidden";
+  // Simulació de latència
+  let lat = 0; const latEl = $("pLat");
+  const latTick = setInterval(() => { lat = Math.min(100, lat + 15 + Math.random() * 20); latEl.style.width = lat + "%"; if (lat >= 100) clearInterval(latTick); }, 200);
+  // Detecció de "no respon" als 7 segons
+  clearTimeout(noRespTimer);
+  noRespTimer = setTimeout(() => {
+    if (actual && actual.id === j.id && $("player").classList.contains("open")) {
+      $("pWarn").classList.add("show");
+      $("pwMark").hidden = !logueado();
+    }
+  }, 7000);
+  // Quan l'iframe carrega, amagar el loader i el warning
+  const onLoad = () => {
+    $("pLoading").classList.remove("on");
+    clearTimeout(noRespTimer);
+    $("pWarn").classList.remove("show");
+    $("playerFrame").removeEventListener("load", onLoad);
+  };
+  $("playerFrame").addEventListener("load", onLoad);
   renderTodo();
   setTimeout(() => $("btnClose").focus(), 80);
 }
 function cerrar(force) {
   if (!force && actual) {
-    if (!confirm("¿Seguro que quieres salir del juego?")) return;
+    confirmar("SALIR DEL JUEGO", "¿Seguro que quieres salir del juego?", "Sí, salir", true).then(ok => {
+      if (ok) doCerrar();
+    });
+    return;
   }
-  $("playerFrame").src = "about:blank"; $("player").classList.remove("open"); document.body.style.overflow = ""; actual = null; renderTodo();
+  doCerrar();
+}
+function doCerrar() {
+  clearTimeout(noRespTimer);
+  $("playerFrame").src = "about:blank"; $("player").classList.remove("open"); document.body.style.overflow = ""; actual = null;
+  $("pWarn").classList.remove("show");
+  renderTodo();
   if (focusAntes && focusAntes.focus) { try { focusAntes.focus(); } catch (e) {} }
 }
 function blank() {
@@ -613,27 +922,26 @@ function blank() {
   w.document.body.style.cssText = "margin:0;background:#000;height:100vh";
   const f = w.document.createElement("iframe");
   f.style.cssText = "width:100%;height:100%;border:0"; f.allow = "fullscreen; autoplay; gamepad; clipboard-write"; f.referrerPolicy = "no-referrer"; f.src = url;
-  w.document.body.appendChild(f); cerrar(true);
-}
-function azar() {
-  const f = norm($("searchBar").value.trim());
-  let pool = juegos.filter(j => safeUrl(j.url));
-  if (cat !== "ALL" && cat !== "FAVS") pool = pool.filter(j => j.category === cat);
-  else if (cat === "FAVS") pool = pool.filter(j => favs.includes(j.id));
-  if (f) pool = pool.filter(j => norm(j.nombre).includes(f));
-  if (!pool.length) return toast("No hay juegos que coincidan con el filtro", true);
-  abrir(pool[Math.floor(Math.random() * pool.length)]);
+  w.document.body.appendChild(f); doCerrar();
 }
 $("btnClose").onclick = () => cerrar(false); $("btnBlank").onclick = blank;
 $("btnFull").onclick = () => $("playerFrame").requestFullscreen?.();
-$("btnReload").onclick = () => { const f = $("playerFrame"); f.src = f.src; };
-$("btnRandom").onclick = azar; $("btnRandom2").onclick = azar;
+$("btnReload").onclick = () => { const f = $("playerFrame"); f.src = f.src; $("pLoading").classList.add("on"); setTimeout(() => $("pLoading").classList.remove("on"), 1500); };
 $("btnAI").onclick = () => window.open("https://script.google.com/macros/s/AKfycbw9TPeZki-pAXzV_S3_OHvpP9fC-5k9yU-UVNfJVSGVor3ls6IvcYvkDGKJg-FH_nwl/exec", "_blank", "noopener");
 $("btnMark").onclick = async () => {
   if (!logueado() || !actual) return;
   try {
     await db.collection("games").doc(actual.id).update({ noEmbed: true });
-    toast("Marcado: desde ahora se abrirá en pestaña nueva"); cerrar(true);
+    toast("Marcado: desde ahora se abrirá en pestaña nueva"); doCerrar();
+  } catch (err) { fail(err); }
+};
+$("pwOpen").onclick = blank;
+$("pwIgnore").onclick = () => { $("pWarn").classList.remove("show"); clearTimeout(noRespTimer); };
+$("pwMark").onclick = async () => {
+  if (!logueado() || !actual) return;
+  try {
+    await db.collection("games").doc(actual.id).update({ noEmbed: true });
+    toast("Marcado como roto"); $("pWarn").classList.remove("show"); doCerrar();
   } catch (err) { fail(err); }
 };
 
@@ -659,6 +967,64 @@ addEventListener("keydown", e => {
   if (e.key === "/" && !open && $("searchBar").offsetParent) { e.preventDefault(); $("searchBar").focus(); }
   if (e.key === "?" && !open) toast("Atajos: M = música · / = buscar · Esc Esc = salir · ` = pánico", false);
 });
+
+/* ============ Ruleta de joc aleatori ============ */
+let roulTarget = null;
+function azar() {
+  const f = norm($("searchBar").value.trim());
+  let pool = juegos.filter(j => safeUrl(j.url));
+  if (cat !== "ALL" && cat !== "FAVS") pool = pool.filter(j => j.category === cat);
+  else if (cat === "FAVS") pool = pool.filter(j => favs.includes(j.id));
+  if (f) pool = pool.filter(j => norm(j.nombre).includes(f) || norm(j.category || "").includes(f));
+  if (!pool.length) return toast("No hay juegos que coincidan con el filtro", true);
+  roulTarget = pool;
+  mostrarRuleta();
+}
+function mostrarRuleta() {
+  const r = $("roulette"), stage = $("roulStage");
+  r.classList.add("open");
+  $("roulActions").hidden = true;
+  $("roulLabel").textContent = "> SELECCIONANDO JUEGO…";
+  $("roulName").textContent = "";
+  stage.innerHTML = "";
+  // Fes 8 targetes que aniran canviant
+  const pool = roulTarget;
+  const totalSteps = 28 + Math.floor(Math.random() * 8);
+  let step = 0;
+  const finalJoc = pool[Math.floor(Math.random() * pool.length)];
+  const interval = 80;
+  const cardEl = document.createElement("div");
+  cardEl.className = "roul-card on";
+  stage.appendChild(cardEl);
+  function pintaJoc(j) {
+    const logo = safeUrl(j.logo);
+    const l = (Array.from((j.nombre || "?").trim())[0] || "?").toUpperCase();
+    if (logo) cardEl.innerHTML = `<div class="tile"><img src="${esc(logo)}" alt="${esc(j.nombre || "")}" onerror="this.parentNode.classList.add('soon-mode');this.remove()"></div>`;
+    else cardEl.innerHTML = `<div class="tile soon-mode"><span class="soon">&gt; LOGO<br>COMING SOON</span></div>`;
+    $("roulName").textContent = j.nombre || "?";
+  }
+  function tick() {
+    if (step >= totalSteps) {
+      pintaJoc(finalJoc);
+      $("roulLabel").textContent = "> ¡SELECCIONADO!";
+      $("roulActions").hidden = false;
+      roulTarget = finalJoc;
+      return;
+    }
+    const j = pool[Math.floor(Math.random() * pool.length)];
+    pintaJoc(j);
+    // Easing: comença ràpid, acaba lent
+    step++;
+    const p = step / totalSteps;
+    const delay = interval + Math.pow(p, 3) * 280;
+    setTimeout(tick, delay);
+  }
+  tick();
+}
+$("btnRandom").onclick = azar; $("btnRandom2").onclick = azar;
+$("roulOpen").onclick = () => { $("roulette").classList.remove("open"); if (roulTarget) abrir(roulTarget); };
+$("roulAgain").onclick = () => { if (roulTarget) mostrarRuleta(); };
+$("roulClose").onclick = () => { $("roulette").classList.remove("open"); };
 
 /* ============ Admin ============ */
 let user = null, editId = null;
@@ -694,8 +1060,23 @@ $("resetPass").onclick = async () => {
 };
 $("logout").onclick = () => { auth.signOut(); limpiarForm(); };
 
-function limpiarForm() { $("form").reset(); editId = null; $("cancelBtn").hidden = true; $("saveBtn").textContent = "Guardar juego"; }
+function limpiarForm() { $("form").reset(); editId = null; $("cancelBtn").hidden = true; $("saveBtn").textContent = "Guardar juego"; $("logoPreview").classList.remove("on"); $("logoPreview").innerHTML = ""; }
 $("cancelBtn").onclick = limpiarForm;
+
+// Preview del logo
+let logoTimer;
+$("logo").addEventListener("input", () => {
+  clearTimeout(logoTimer);
+  logoTimer = setTimeout(() => {
+    const v = $("logo").value.trim();
+    const p = $("logoPreview");
+    if (!v) { p.classList.remove("on"); p.innerHTML = ""; return; }
+    const url = safeUrl(v);
+    if (!url) { p.classList.add("on"); p.innerHTML = `<span class="bad">⚠ URL no válida</span>`; return; }
+    p.classList.add("on");
+    p.innerHTML = `<img src="${esc(url)}" alt="preview" onerror="this.style.display='none';this.parentNode.querySelector('.txt').innerHTML='<span class=bad>⚠ Esta imagen no se puede cargar</span>'" onload="this.style.display='';this.parentNode.querySelector('.txt').innerHTML='<span class=ok>✓ Logo cargado correctamente</span>'"><span class="txt"></span>`;
+  }, 400);
+});
 
 $("form").addEventListener("submit", async e => {
   e.preventDefault();
@@ -720,7 +1101,7 @@ function renderAdmin() {
   const items = [...juegos].sort((a, b) => collator.compare(a.nombre || "", b.nombre || "")).filter(j => !f || norm(j.nombre).includes(f));
   $("listaAdmin").innerHTML = items.length ? items.map(j => `<div class="item"><div class="inf">
       ${safeUrl(j.logo) ? `<img src="${esc(safeUrl(j.logo))}" alt="" loading="lazy">` : `<div class="noimg"></div>`}
-      <div style="min-width:0"><b>${esc(j.nombre)}</b><small>${esc(j.category || "Sin categoría")}${j.noEmbed ? " · ↗ pestaña nueva" : ""}</small></div></div>
+      <div style="min-width:0"><b>${esc(j.nombre || "?")}</b><small>${esc(j.category || "Sin categoría")}${j.noEmbed ? " · ↗ pestaña nueva" : ""}</small></div></div>
       <div class="acts"><button class="btn sm" data-blk="${esc(j.id)}" title="Marcar si no carga dentro de Ethos">${j.noEmbed ? "Quitar ↗" : "Marcar ↗"}</button><button class="btn sm" data-edit="${esc(j.id)}">Editar</button><button class="btn sm danger" data-del="${esc(j.id)}">Eliminar</button></div></div>`).join("")
     : vacio("No hay juegos.");
 }
@@ -736,17 +1117,29 @@ $("listaAdmin").addEventListener("click", async e => {
   if (ed) {
     const j = juegos.find(x => x.id === ed.dataset.edit); if (!j) return;
     editId = j.id; $("nombre").value = j.nombre || ""; $("url").value = j.url || ""; $("category").value = j.category || ""; $("logo").value = j.logo || ""; $("noembed").checked = !!j.noEmbed;
+    if (j.logo) { const url = safeUrl(j.logo); if (url) { const p = $("logoPreview"); p.classList.add("on"); p.innerHTML = `<img src="${esc(url)}"><span class="txt"><span class="ok">✓ Logo actual</span></span>`; } }
     $("cancelBtn").hidden = false; $("saveBtn").textContent = "Actualizar juego"; scrollTo({ top: 0, behavior: "smooth" }); $("nombre").focus();
   }
   if (del) {
     const j = juegos.find(x => x.id === del.dataset.del);
-    if (!j || !confirm(`¿Eliminar "${j.nombre}" permanentemente?`)) return;
+    if (!j) return;
+    const ok = await confirmar("ELIMINAR JUEGO", `¿Eliminar "${j.nombre}" permanentemente? Esta acción no se puede deshacer.`, "Sí, eliminar", true);
+    if (!ok) return;
     try { await db.collection("games").doc(j.id).delete(); if (editId === j.id) limpiarForm(); toast("Juego eliminado"); }
     catch (err) { fail(err); }
   }
 });
 
-/* ============ Navegación ============ */
+/* ============ Feedback visual als botons ============ */
+document.addEventListener("click", e => {
+  const b = e.target.closest(".btn");
+  if (!b || b.disabled) return;
+  if (b.classList.contains("primary")) return; // els primary ja tenen efecte propi
+  b.classList.remove("flash"); void b.offsetWidth; b.classList.add("flash");
+  setTimeout(() => b.classList.remove("flash"), 200);
+});
+
+/* ============ Navegació ============ */
 const titulos = { home: "Ethos — Biblioteca de juegos", games: "Juegos — Ethos", admin: "Admin — Ethos" };
 function ruta() {
   const h = location.hash.replace(/^#/, "");
