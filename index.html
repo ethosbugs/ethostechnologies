@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#040905">
-<title>Ethos — Biblioteca de juegos [ADMIN]</title>
+<title>Ethos — Biblioteca de juegos</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' rx='16' fill='%234cff6a'/%3E%3Cpath d='M22.5 15.5H57.5V22.5H29.5V36.5H50.5V43.5H29.5V57.5H57.5V64.5H22.5Z' fill='%2304150a'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script>
-const ADMIN_MODE = true;
+const ADMIN_MODE = false;
 const THEMES = {
   fosforo:{n:"Fósforo",h:135}, esmeralda:{n:"Esmeralda",h:158}, lima:{n:"Lima",h:84},
   cian:{n:"Cian",h:184}, ambar:{n:"Ámbar",h:42}, violeta:{n:"Violeta",h:270}, rosa:{n:"Rosa",h:330},
@@ -77,6 +77,7 @@ button,input,select{font:inherit;color:inherit;border-radius:0}
 .skip{position:absolute;left:-9999px;top:0;z-index:400;padding:10px 16px;background:var(--acc);color:var(--ink);font:700 14px var(--mono)}
 .skip:focus{left:8px;top:8px}
 
+/* Cursors */
 body[data-cursor="crosshair"]{cursor:crosshair}
 body[data-cursor="snowflake"],body[data-cursor="snowflake"] *{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Ctext y='26' font-size='26'%3E%E2%9D%84%EF%B8%8F%3C/text%3E%3C/svg%3E") 16 16, auto !important}
 body[data-cursor="candycane"],body[data-cursor="candycane"] *{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Ctext y='26' font-size='26'%3E%F0%9F%8D%AC%3C/text%3E%3C/svg%3E") 16 16, auto !important}
@@ -130,7 +131,7 @@ select.input{cursor:pointer}
 .profile-btn{display:inline-flex;align-items:center;gap:8px;cursor:pointer;padding:4px 10px 4px 4px;border:2px solid var(--line2);background:var(--panel);transition:all .15s}
 .profile-btn:hover{border-color:var(--acc)}
 .p-icon{width:32px;height:32px;display:grid;place-items:center;background:var(--tA);font-size:18px;border:1px solid var(--line2);overflow:hidden}
-.p-icon svg{width:24px;height:24px}
+.p-icon svg{width:24px;height:24px;fill:var(--acc)}
 .p-info{display:flex;flex-direction:column;align-items:flex-start;line-height:1.2}
 .p-name{font-size:12px;font-weight:700;color:var(--txt);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .p-title{font-size:9px;font-family:var(--px);letter-spacing:.5px}
@@ -267,7 +268,7 @@ body.card-christmas .card::before{content:"";position:absolute;inset:0;z-index:3
 .profile-modal .modal-box{max-width:560px}
 .profile-head{display:flex;align-items:center;gap:16px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px dashed var(--line)}
 .profile-head .big-icon{width:64px;height:64px;display:grid;place-items:center;background:var(--tA);border:2px solid var(--acc);font-size:36px;overflow:hidden}
-.profile-head .big-icon svg{width:48px;height:48px}
+.profile-head .big-icon svg{width:48px;height:48px;fill:var(--acc)}
 .icon-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:10px 0}
 .icon-grid button{aspect-ratio:1;display:grid;place-items:center;cursor:pointer;background:var(--tA);border:2px solid var(--line2);transition:all .1s}
 .icon-grid button svg{width:24px;height:24px;fill:var(--txt)}
@@ -331,25 +332,9 @@ body.card-christmas .card::before{content:"";position:absolute;inset:0;z-index:3
 .challenge .c-info small{font-size:11px;color:var(--dim)}
 .challenge .c-xp{font:400 10px var(--px);color:var(--gold2)}
 
-/* ANIMACION TITULO NAVIDAD */
-.title-xmas {
-  background: linear-gradient(90deg, #fff 0%, #a0c8ff 25%, #fff 50%, #a0c8ff 75%, #fff 100%);
-  background-size: 200% auto;
-  color: transparent;
-  -webkit-background-clip: text;
-  background-clip: text;
-  animation: snowFlow 3s linear infinite;
-  font-weight: bold;
-}
+.title-xmas { background: linear-gradient(90deg, #fff 0%, #a0c8ff 25%, #fff 50%, #a0c8ff 75%, #fff 100%); background-size: 200% auto; color: transparent; -webkit-background-clip: text; background-clip: text; animation: snowFlow 3s linear infinite; font-weight: bold; }
 @keyframes snowFlow { to { background-position: 200% center; } }
-.title-gold {
-  background: linear-gradient(90deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-  background-size: 200% auto;
-  color: transparent;
-  -webkit-background-clip: text;
-  background-clip: text;
-  font-weight: bold;
-}
+.title-gold { background: linear-gradient(90deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c); background-size: 200% auto; color: transparent; -webkit-background-clip: text; background-clip: text; font-weight: bold; }
 
 .intro{display:none;position:fixed;inset:0;z-index:300;place-items:center;overflow:hidden;cursor:pointer;background:var(--bg)}
 .intro-on .intro{display:grid}
@@ -496,7 +481,7 @@ body.lux .hud{box-shadow:8px 8px 0 #2a1508,0 0 30px rgba(255,207,90,.08)}
     <div class="grid" id="recientes"></div>
     <div class="sec-h"><h2>&gt; AÑADIDOS RECIENTEMENTE</h2><a href="#/games">VER TODOS →</a></div>
     <div class="grid" id="destacados"></div>
-    <footer><span>Ethos Technologies · <span class="v">v8.0 ADMIN</span></span><span>M = música · Esc Esc = salir · ? = ayuda</span></footer>
+    <footer><span>Ethos Technologies · <span class="v">v8.0 JUGADOR</span></span><span>M = música · Esc Esc = salir · ? = ayuda</span></footer>
   </main>
 
   <main class="view container" data-view="games" hidden>
@@ -557,7 +542,6 @@ body.lux .hud{box-shadow:8px 8px 0 #2a1508,0 0 30px rgba(255,207,90,.08)}
   <div class="pbar">
     <strong id="playerTitle"></strong>
     <span class="loading" id="pLoading"><span class="spinner"></span> CARGANDO…</span>
-    <!-- Perfil visible mientras juegas -->
     <div class="profile-btn" id="btnProfileInGame" style="padding:4px 8px;margin-left:auto;cursor:pointer">
       <span class="p-icon" id="profileIconInGame"></span>
       <span class="p-info"><span class="p-name" id="profileNameInGame">Jugador</span><span class="p-title" id="profileTitleInGame">NOVATO</span></span>
@@ -676,24 +660,16 @@ const collator = new Intl.Collator("es", { sensitivity: "base", numeric: true })
 let toastT;
 function toast(msg, err, gold) {
   let t = $("toast");
-  if (!t) { 
-    t = document.createElement("div"); 
-    t.id = "toast"; 
-    document.body.appendChild(t); 
-  }
+  if (!t) { t = document.createElement("div"); t.id = "toast"; document.body.appendChild(t); }
   t.className = "toast show" + (err ? " err" : "") + (gold ? " gold" : ""); 
   t.textContent = msg;
-  clearTimeout(toastT); 
-  toastT = setTimeout(() => t.classList.remove("show"), 2800);
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 2800);
 }
 
-function fail(err) {
-  console.error(err);
-  toast(err && err.code === "permission-denied" ? "Sin permisos." : "Error. Revisa la conexión.", true);
-}
+function fail(err) { console.error(err); toast(err && err.code === "permission-denied" ? "Sin permisos." : "Error. Revisa la conexión.", true); }
 const enCampo = () => /INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName);
 
-/* ============ Iconos SVG ============ */
+/* ============ Iconos SVG Personalizados ============ */
 const SVG_ICONS = {
   gamepad: '<svg viewBox="0 0 24 24"><path d="M7 6h10a5 5 0 0 1 5 5v2a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5v-2a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2a3 3 0 0 0-3-3H7zm1 3a1 1 0 0 1 1 1v1h1a1 1 0 1 1 0 2H9v1a1 1 0 1 1-2 0v-1H6a1 1 0 1 1 0-2h1v-1a1 1 0 0 1 1-1zm7 2a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm2 2a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>',
   star: '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',
@@ -721,6 +697,7 @@ const TITLES = {
   elegido:{n:"ELEGIDO",color:"#ffd76a",desc:"Descubre el tema dorado secreto"},
   toque_dorado:{n:"TOQUE DORADO",color:"#ffd76a",desc:"Usa el tema dorado"}
 };
+
 const ITEMS = {
   "intro.flash":{n:"Intro Flash",cat:"intros",price:50,icon:"⚡",desc:"Intro CRT rápida de 0.4s"},
   "intro.logo":{n:"Intro Logo",cat:"intros",price:60,icon:"◆",desc:"Solo el logo E, sin texto"},
@@ -813,14 +790,6 @@ const ACHIEVEMENTS = {
 };
 
 /* ============ Estado ============ */
-const ADMIN_VERSION = "v8-admin-2";
-try {
-  if (localStorage.getItem("ethos_admin_version") !== ADMIN_VERSION) {
-    localStorage.removeItem("ethos_gstate");
-    localStorage.setItem("ethos_admin_version", ADMIN_VERSION);
-  }
-} catch (e) {}
-
 const defaultState = () => ({
   coins: 0, xp: 0, streak: { last: null, count: 0 }, achievements: {}, inventory: [],
   equipped: { intro: "crt", cursor: null, theme: null, badge: null, cardEffect: null, sound: null, santaHat: false },
@@ -829,15 +798,6 @@ const defaultState = () => ({
 });
 let gstate = defaultState();
 try { const s = localStorage.getItem("ethos_gstate"); if (s) gstate = Object.assign(gstate, JSON.parse(s)); } catch (e) {}
-
-if (ADMIN_MODE) {
-  gstate.coins = 1000099; gstate.xp = 999999;
-  gstate.streak = { last: new Date().toDateString(), count: 30 };
-  Object.keys(ACHIEVEMENTS).forEach(k => gstate.achievements[k] = true);
-  Object.keys(ITEMS).forEach(k => { if (!gstate.inventory.includes(k)) gstate.inventory.push(k); });
-  Object.keys(TITLES).forEach(k => gstate.achievements["title_" + k] = true);
-  gstate.pass.premium = true;
-}
 
 function saveState() { try { localStorage.setItem("ethos_gstate", JSON.stringify(gstate)); } catch (e) {} }
 function addCoins(n) { gstate.coins = Math.max(0, gstate.coins + n); saveState(); updateCoinsUI(); if (n > 0) toast("+" + n + " 🪙", false, true); }
@@ -853,16 +813,67 @@ function updateCoinsUI() {
   if ($("shopCoins")) $("shopCoins").textContent = s;
 }
 
+/* ============ Sistema de Sonido ============ */
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
+function playBeep() {
+  if (gstate.equipped.sound !== "beep") return;
+  try {
+    if (!audioCtx) audioCtx = new AudioContext();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'square'; osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.1);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+  } catch(e) {}
+}
+function playJingle() {
+  if (gstate.equipped.sound !== "jingle") return;
+  try {
+    if (!audioCtx) audioCtx = new AudioContext();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(2400, audioCtx.currentTime + 0.2);
+    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.3);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+  } catch(e) {}
+}
+function playClickSound() {
+  if (gstate.equipped.sound === "beep") playBeep();
+  else if (gstate.equipped.sound === "jingle") playJingle();
+  else if (gstate.equipped.sound === "sleigh") {
+    try {
+      if (!audioCtx) audioCtx = new AudioContext();
+      for(let i=0; i<3; i++){
+        setTimeout(() => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle'; osc.frequency.setValueAtTime(2000 + Math.random()*500, audioCtx.currentTime);
+          gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.05);
+          osc.connect(gain); gain.connect(audioCtx.destination);
+          osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+        }, i * 60);
+      }
+    } catch(e) {}
+  }
+}
+document.addEventListener("click", e => { if (e.target.closest(".btn")) playClickSound(); });
+
 /* ============ Streak ============ */
 function checkStreak() {
-  const today = new Date().toDateString();
-  const last = gstate.streak.last;
+  const today = new Date().toDateString(), last = gstate.streak.last;
   if (last === today) return;
   const yesterday = new Date(Date.now() - 86400000).toDateString();
   if (last === yesterday) gstate.streak.count++; else gstate.streak.count = 1;
   gstate.streak.last = today;
-  const baseCoins = Math.min(25, 5 * gstate.streak.count);
-  addCoins(baseCoins);
+  addCoins(Math.min(25, 5 * gstate.streak.count));
   addXP(50 + 20 * Math.min(gstate.streak.count, 30));
   if (gstate.streak.count === 7) { addCoins(50); unlockTitle("maratonista"); unlockAchievement("streak_7"); }
   if (gstate.streak.count === 30) { addCoins(200); unlockTitle("constante"); }
@@ -872,96 +883,76 @@ function checkStreak() {
 function updateStreakUI() { $("stRacha").textContent = gstate.streak.count + "d"; }
 function showStreakModal() {
   if (!gstate.streak.count) return;
-  const streak = gstate.streak.count;
-  const next = streak < 7 ? 7 - streak : streak < 30 ? 30 - streak : 0;
+  const streak = gstate.streak.count, next = streak < 7 ? 7 - streak : streak < 30 ? 30 - streak : 0;
   const nextStr = next > 0 ? "Próxima recompensa en " + next + " días" : "¡Racha máxima!";
   openModal("RACHA", "Día " + streak + " seguido\n+" + Math.min(25, 5 * streak) + " 🪙 ganadas\n" + nextStr, [{t:"RECOGER", cb:closeModal, primary:true}]);
 }
 
 /* ============ Perfil ============ */
 function renderProfileButton() {
-  const p = gstate.profile;
-  const t = TITLES[p.title] || TITLES.novato;
-  
+  const p = gstate.profile, t = TITLES[p.title] || TITLES.novato;
   const iconSvg = SVG_ICONS[p.icon] || SVG_ICONS.gamepad;
-  
   ["profileIcon", "profileIconInGame"].forEach(id => { if ($(id)) $(id).innerHTML = iconSvg; });
   ["profileName", "profileNameInGame"].forEach(id => { if ($(id)) $(id).textContent = p.name; });
   ["profileTitle", "profileTitleInGame"].forEach(id => { 
-    if ($(id)) { 
-      $(id).textContent = t.n; 
-      $(id).className = "p-title " + (t.cls || ""); 
-      $(id).style.color = t.cls ? "" : t.color; 
-    } 
+    if ($(id)) { $(id).textContent = t.n; $(id).className = "p-title " + (t.cls || ""); $(id).style.color = t.cls ? "" : t.color; } 
   });
 }
-
 function renderProfileModal() {
-  const p = gstate.profile;
-  const t = TITLES[p.title] || TITLES.novato;
-  
+  const p = gstate.profile, t = TITLES[p.title] || TITLES.novato;
   $("profileBigIcon").innerHTML = SVG_ICONS[p.icon] || SVG_ICONS.gamepad;
   $("profileBigName").textContent = p.name;
   $("profileBigTitle").textContent = t.n;
   $("profileBigTitle").className = t.cls || "";
   $("profileBigTitle").style.color = t.cls ? "" : t.color;
-
   $("iconGrid").innerHTML = ICONS.map(ic => "<button data-icon='" + ic + "' class='" + (p.icon === ic ? "on" : "") + "'>" + SVG_ICONS[ic] + "</button>").join("");
-  
   $("nameInput").value = p.name;
   const daysSinceChange = p.nameLastChange ? Math.floor((Date.now() - p.nameLastChange) / 86400000) : 999;
   if (daysSinceChange < 7) {
-    $("nameInput").disabled = true; $("btnSaveName").disabled = true;
-    $("nameLockMsg").textContent = "⏳ Cambio disponible en " + (7 - daysSinceChange) + " día(s)";
+    $("nameInput").disabled = true; $("btnSaveName").disabled = true; $("nameLockMsg").textContent = "⏳ Cambio disponible en " + (7 - daysSinceChange) + " día(s)";
   } else {
-    $("nameInput").disabled = false; $("btnSaveName").disabled = false;
-    $("nameLockMsg").textContent = "✓ Puedes cambiar tu nombre";
+    $("nameInput").disabled = false; $("btnSaveName").disabled = false; $("nameLockMsg").textContent = "✓ Puedes cambiar tu nombre";
   }
-
   $("titleGrid").innerHTML = Object.entries(TITLES).map(([id, tt]) => {
-    const has = hasTitle(id);
-    const on = p.title === id;
+    const has = hasTitle(id), on = p.title === id;
     return "<button data-title='" + id + "' class='" + (on?"on":"") + " " + (has?"":"locked") + " " + (tt.cls || "") + "' style='color:" + (tt.cls ? "" : (has?tt.color:"var(--dim)")) + "' title='" + esc(tt.desc) + "'>" + (has?tt.n:"🔒 ???") + "</button>";
   }).join("");
 }
-
 $("btnProfile").onclick = () => { renderProfileModal(); $("profileModal").classList.add("open"); };
 if ($("btnProfileInGame")) $("btnProfileInGame").onclick = () => { renderProfileModal(); $("profileModal").classList.add("open"); };
 $("profileX").onclick = () => $("profileModal").classList.remove("open");
-
-$("iconGrid").addEventListener("click", e => {
-  const b = e.target.closest("[data-icon]"); if (!b) return;
-  gstate.profile.icon = b.dataset.icon; saveState(); renderProfileButton(); renderProfileModal();
-});
-
+$("iconGrid").addEventListener("click", e => { const b = e.target.closest("[data-icon]"); if (!b) return; gstate.profile.icon = b.dataset.icon; saveState(); renderProfileButton(); renderProfileModal(); });
 $("btnSaveName").onclick = () => {
-  const n = $("nameInput").value.trim();
-  if (!n || n.length > 16) return toast("Nombre inválido (1-16 caracteres)", true);
-  gstate.profile.name = n; gstate.profile.nameLastChange = Date.now();
-  saveState(); renderProfileButton(); renderProfileModal(); toast("Nombre actualizado");
+  const n = $("nameInput").value.trim(); if (!n || n.length > 16) return toast("Nombre inválido", true);
+  gstate.profile.name = n; gstate.profile.nameLastChange = Date.now(); saveState(); renderProfileButton(); renderProfileModal(); toast("Nombre actualizado");
 };
-
 $("titleGrid").addEventListener("click", e => {
   const b = e.target.closest("[data-title]"); if (!b || b.classList.contains("locked")) return;
   gstate.profile.title = b.dataset.title; saveState(); renderProfileButton(); renderProfileModal();
 });
 
-/* ============ Effects ============ */
+/* ============ EQUIPAR EFECTOS ============ */
 function applyAllEffects() {
-  const e = gstate.equipped;
-  document.body.dataset.cursor = e.cursor || "";
-  document.body.classList.toggle("card-christmas", e.cardEffect === "card_christmas");
-  document.body.classList.toggle("santa-hat", e.santaHat);
-  if (e.theme && THEMES[e.theme]) applyTheme(e.theme, false);
+  const eq = gstate.equipped;
+  document.body.dataset.cursor = eq.cursor || "";
+  document.body.classList.toggle("card-christmas", eq.cardEffect === "card_christmas");
+  document.body.classList.toggle("santa-hat", eq.santaHat);
+  if (eq.theme && THEMES[eq.theme]) applyTheme(eq.theme, false);
+  // Aplicar badge al lado del nombre
+  const badge = eq.badge ? ITEMS["badge." + eq.badge] : null;
+  ["profileName", "profileNameInGame"].forEach(id => {
+    if ($(id)) {
+      const txt = gstate.profile.name;
+      if (badge) $(id).innerHTML = txt + " <span style='font-size:14px'>" + badge.icon + "</span>";
+      else $(id).textContent = txt;
+    }
+  });
 }
 
 /* ============ Tienda ============ */
 function renderShop() {
   updateCoinsUI();
-  const cats = [
-    {id:"intros",n:"Intros"}, {id:"cursors",n:"Cursores"}, {id:"themes",n:"Temas"},
-    {id:"sounds",n:"Sonidos"}, {id:"badges",n:"Badges"}, {id:"christmas",n:"Navidad ❄"}, {id:"owned",n:"Mis items"}
-  ];
+  const cats = [{id:"intros",n:"Intros"}, {id:"cursors",n:"Cursores"}, {id:"themes",n:"Temas"}, {id:"sounds",n:"Sonidos"}, {id:"badges",n:"Badges"}, {id:"christmas",n:"Navidad ❄"}, {id:"owned",n:"Mis items"}];
   if (!$("shopTabs").innerHTML) {
     $("shopTabs").innerHTML = cats.map(c => "<button data-cat='" + c.id + "' class='" + (c.id === "christmas" ? "on" : "") + "'>" + c.n + "</button>").join("");
     $("shopTabs").addEventListener("click", e => {
@@ -972,25 +963,23 @@ function renderShop() {
   }
   renderShopItems("christmas");
 }
-
 function renderShopItems(cat) {
   let items = cat === "owned" ? Object.entries(ITEMS).filter(([id]) => hasItem(id)) : Object.entries(ITEMS).filter(([id, it]) => it.cat === cat);
   items = items.map(([id, it]) => Object.assign({id}, it));
-  
   if (!items.length) { $("shopGrid").innerHTML = "<p class='empty'>No hay items en esta categoría.</p>"; return; }
   
   $("shopGrid").innerHTML = items.map(it => {
     const owned = hasItem(it.id);
     const canAfford = gstate.coins >= it.price;
     const isEquippable = /^(intro|cursor|badge|theme)/.test(it.id) || it.id === "santa_hat" || it.id === "card_christmas" || /^(sound)/.test(it.id);
+    
+    // Comprobar si está equipado
+    const eq = gstate.equipped;
     const equipped = (
-      gstate.equipped.intro === it.id.replace("intro.","") ||
-      gstate.equipped.cursor === it.id.replace("cursor.","") ||
-      gstate.equipped.badge === it.id.replace("badge.","") ||
-      gstate.equipped.theme === it.id.replace("theme.","") ||
-      gstate.equipped.sound === it.id.replace("sound.","") ||
-      gstate.equipped.cardEffect === it.id ||
-      (it.id === "santa_hat" && gstate.equipped.santaHat)
+      eq.intro === it.id.replace("intro.","") || eq.cursor === it.id.replace("cursor.","") || 
+      eq.badge === it.id.replace("badge.","") || eq.theme === it.id.replace("theme.","") || 
+      eq.sound === it.id.replace("sound.","") || eq.cardEffect === it.id || 
+      (it.id === "santa_hat" && eq.santaHat)
     );
     
     let action = "";
@@ -1001,7 +990,6 @@ function renderShopItems(cat) {
     } else {
       action = "<button class='btn sm " + (canAfford?"primary":"") + "' data-buy='" + it.id + "' " + (canAfford?"":"disabled") + ">COMPRAR</button>";
     }
-    
     return "<div class='shop-item'><div class='icon'>" + it.icon + "</div><h4>" + esc(it.n) + "</h4><p>" + esc(it.desc) + "</p><div class='price'><b>" + (owned?"✓":it.price+" 🪙") + "</b>" + action + "</div></div>";
   }).join("");
 }
@@ -1026,7 +1014,10 @@ $("shopGrid").addEventListener("click", e => {
     else if (it.id.startsWith("sound.")) eObj.sound = id.replace("sound.", "");
     else if (id === "santa_hat") eObj.santaHat = !eObj.santaHat;
     else if (id === "card_christmas") eObj.cardEffect = eObj.cardEffect === id ? null : id;
-    saveState(); applyAllEffects(); toast("✓ " + it.n + " equipado/activado", false, true);
+    
+    saveState(); 
+    applyAllEffects(); 
+    toast("✓ " + it.n + " equipado", false, true);
     renderShopItems($("shopTabs").querySelector(".on").dataset.cat);
   }
 });
@@ -1035,17 +1026,7 @@ $("shopGrid").addEventListener("click", e => {
 function renderPass() {
   const lvl = passLevel(), prog = passXPProgress();
   let premiumStr = gstate.pass.premium ? "<span style='color:var(--gold2);font-family:var(--px);font-size:10px'>✓ PREMIUM ACTIVO</span>" : "<button class='btn gold sm' id='btnBuyPremium'>⭐ Desbloquear Premium (800 🪙)</button>";
-  
-  $("passHeader").innerHTML = 
-    "<h2>❄ TEMPORADA 1 — NAVIDAD</h2>" +
-    "<div class='sub'>Progreso del pase. Nivel máximo 30.</div>" +
-    "<div class='pass-progress'><div class='pass-level'>NIVEL " + lvl + "</div>" +
-    "<div class='pass-bar'><b style='width:" + prog.pct + "%'></b></div>" +
-    "<div style='font-size:12px;color:var(--dim);min-width:70px'>" + prog.cur + " / " + prog.max + " XP</div></div>" +
-    "<div style='display:flex;gap:10px;flex-wrap:wrap;margin-top:8px'>" + premiumStr +
-    "<span style='font-size:11px;color:var(--dim)'>XP total: " + gstate.xp.toLocaleString("es") + "</span>" +
-    "<span style='font-size:11px;color:var(--gold);margin-left:auto;font-family:var(--px)'>🪙 " + gstate.coins.toLocaleString("es") + "</span></div>";
-
+  $("passHeader").innerHTML = "<h2>❄ TEMPORADA 1 — NAVIDAD</h2><div class='sub'>Progreso del pase. Nivel máximo 30.</div><div class='pass-progress'><div class='pass-level'>NIVEL " + lvl + "</div><div class='pass-bar'><b style='width:" + prog.pct + "%'></b></div><div style='font-size:12px;color:var(--dim);min-width:70px'>" + prog.cur + " / " + prog.max + " XP</div></div><div style='display:flex;gap:10px;flex-wrap:wrap;margin-top:8px'>" + premiumStr + "<span style='font-size:11px;color:var(--dim)'>XP total: " + gstate.xp.toLocaleString("es") + "</span><span style='font-size:11px;color:var(--gold);margin-left:auto;font-family:var(--px)'>🪙 " + gstate.coins.toLocaleString("es") + "</span></div>";
   if (!gstate.pass.premium && $("btnBuyPremium")) {
     $("btnBuyPremium").onclick = () => {
       if (gstate.coins < 800) return toast("Monedas insuficientes", true);
@@ -1053,24 +1034,18 @@ function renderPass() {
       saveState(); updateCoinsUI(); renderPass(); toast("⭐ Premium desbloqueado", false, true);
     };
   }
-
   const weekNum = getWeekNumber() % 4 + 1, challenges = WEEKLY_CHALLENGES[weekNum] || WEEKLY_CHALLENGES[1];
   $("passChallenges").innerHTML = "<h3>&gt; RETOS DE LA SEMANA</h3>" + challenges.map(c => {
     const done = gstate.weekly.completed.includes(c.id);
     return "<div class='challenge " + (done?"done":"") + "'><span class='chk-icon'>" + (done?"✓":"○") + "</span><div class='c-info'><b>" + esc(c.t) + "</b><small>" + (c.type === "easy"?"Fácil":c.type === "medium"?"Medio":"Difícil") + "</small></div><span class='c-xp'>+" + c.xp + " XP</span>" + (!done ? "<button class='btn sm' data-challenge='" + c.id + "'>COMPLETAR</button>" : "") + "</div>";
   }).join("");
-
   let rows = "";
   for (let i = 1; i <= 30; i++) {
     const reached = lvl >= i;
-    rows += "<div class='pass-row " + (reached?"reached":"") + "'><div class='lvl'>" + i + "</div>" +
-      renderReward(PASS_REWARDS[i].free, i, "free", reached, gstate.pass.claimedFree.includes(i)) +
-      renderReward(PASS_REWARDS[i].prem, i, "prem", reached, gstate.pass.claimedPrem.includes(i)) +
-    "<div></div></div>";
+    rows += "<div class='pass-row " + (reached?"reached":"") + "'><div class='lvl'>" + i + "</div>" + renderReward(PASS_REWARDS[i].free, i, "free", reached, gstate.pass.claimedFree.includes(i)) + renderReward(PASS_REWARDS[i].prem, i, "prem", reached, gstate.pass.claimedPrem.includes(i)) + "<div></div></div>";
   }
   $("passTracks").innerHTML = rows;
 }
-
 function renderReward(r, lvl, track, reached, claimed) {
   const isPrem = track === "prem", isPremLocked = isPrem && !gstate.pass.premium;
   let icon = "🎁", name = "Recompensa";
@@ -1079,29 +1054,20 @@ function renderReward(r, lvl, track, reached, claimed) {
   else if (r.type === "roulette") { icon = "🎰"; name = "Ruleta " + (r.tier === "common" ? "común" : r.tier === "uncommon" ? "poco común" : r.tier === "rare" ? "rara" : "legendaria"); }
   else if (r.type === "item") { const it = ITEMS[r.id]; if (it) { icon = it.icon; name = it.n; } }
   else if (r.type === "title") { const tt = TITLES[r.id]; if (tt) { icon = "🏆"; name = "Título: " + tt.n; } }
-  
   let btn = "";
-  if (claimed) btn = "<button disabled>✓ RECLAMADO</button>";
-  else if (!reached) btn = "<button disabled>🔒 Nv." + lvl + "</button>";
-  else if (isPremLocked) btn = "<button disabled>⭐ Premium</button>";
-  else btn = "<button data-claim='" + lvl + "' data-track='" + track + "'>RECLAMAR</button>";
-  
+  if (claimed) btn = "<button disabled>✓ RECLAMADO</button>"; else if (!reached) btn = "<button disabled>🔒 Nv." + lvl + "</button>"; else if (isPremLocked) btn = "<button disabled>⭐ Premium</button>"; else btn = "<button data-claim='" + lvl + "' data-track='" + track + "'>RECLAMAR</button>";
   return "<div class='pass-reward " + (isPrem?"premium":"free") + " " + (claimed?"claimed":"") + "'><span class='r-label'>" + (isPrem?"PREMIUM":"GRATIS") + "</span><span class='r-icon'>" + icon + "</span><span class='r-name'>" + esc(name) + "</span>" + btn + "</div>";
 }
-
 $("passChallenges").addEventListener("click", e => {
   const b = e.target.closest("[data-challenge]"); if (!b) return;
-  const id = b.dataset.challenge, weekNum = getWeekNumber() % 4 + 1;
-  const ch = (WEEKLY_CHALLENGES[weekNum] || []).find(x => x.id === id);
+  const id = b.dataset.challenge, weekNum = getWeekNumber() % 4 + 1, ch = (WEEKLY_CHALLENGES[weekNum] || []).find(x => x.id === id);
   if (!ch || gstate.weekly.completed.includes(id)) return;
   gstate.weekly.completed.push(id); addXP(ch.xp); saveState(); renderPass(); toast("+" + ch.xp + " XP · Reto completado");
 });
-
 $("passTracks").addEventListener("click", e => {
   const b = e.target.closest("[data-claim]"); if (!b) return;
   claimReward(parseInt(b.dataset.claim), b.dataset.track);
 });
-
 function claimReward(lvl, track) {
   const r = track === "free" ? PASS_REWARDS[lvl].free : PASS_REWARDS[lvl].prem;
   const isPrem = track === "prem", claimedArr = isPrem ? gstate.pass.claimedPrem : gstate.pass.claimedFree;
@@ -1124,48 +1090,29 @@ function claimReward(lvl, track) {
 function openPassRoulette(tier, cb) {
   const r = $("roulette"), wheel = $("roulWheel");
   wheel.style.transition = "none"; wheel.style.transform = "rotate(0deg)";
-  
-  const pool = ROULETTE_POOLS[tier];
-  const totalW = pool.reduce((s,x) => s + x.weight, 0);
+  const pool = ROULETTE_POOLS[tier], totalW = pool.reduce((s,x) => s + x.weight, 0);
   let rand = Math.random() * totalW, chosen = pool[0];
   for (const it of pool) { if (rand < it.weight) { chosen = it; break; } rand -= it.weight; }
   
-  const slices = 8; // 8 porciones visuales
-  wheel.innerHTML = "";
+  const slices = 8; wheel.innerHTML = "";
   for(let i=0; i<slices; i++) {
-    const deg = (360 / slices) * i;
-    const el = document.createElement("div");
-    el.className = "roul-slice";
-    el.style.transform = "rotate(" + deg + "deg)";
-    el.style.background = i % 2 === 0 ? "var(--tA)" : "var(--panel)";
-    el.textContent = i+1;
-    wheel.appendChild(el);
+    const el = document.createElement("div"); el.className = "roul-slice";
+    el.style.transform = "rotate(" + ((360 / slices) * i) + "deg)";
+    el.style.background = i % 2 === 0 ? "var(--tA)" : "var(--panel)"; el.textContent = i+1; wheel.appendChild(el);
   }
   
-  $("roulLabel").textContent = "> GIRANDO RULETA " + tier.toUpperCase() + "…";
-  $("roulName").textContent = "";
-  $("roulActions").hidden = true;
-  r.classList.add("open");
+  $("roulLabel").textContent = "> GIRANDO RULETA " + tier.toUpperCase() + "…"; $("roulName").textContent = ""; $("roulActions").hidden = true; r.classList.add("open");
+  const spins = 5 + Math.floor(Math.random() * 3), targetDeg = (360 * spins) + (Math.floor(Math.random() * slices) * (360/slices));
   
-  const spins = 5 + Math.floor(Math.random() * 3);
-  const targetDeg = (360 * spins) + (Math.floor(Math.random() * slices) * (360/slices));
+  setTimeout(() => { wheel.style.transition = "transform 4s cubic-bezier(.17,.67,.12,1)"; wheel.style.transform = "rotate(" + targetDeg + "deg)"; }, 50);
   
   setTimeout(() => {
-    wheel.style.transition = "transform 4s cubic-bezier(.17,.67,.12,1)";
-    wheel.style.transform = "rotate(" + targetDeg + "deg)";
-  }, 50);
-  
-  setTimeout(() => {
-    $("roulLabel").textContent = "> ¡GANASTE!";
-    $("roulName").textContent = rewardName(chosen);
-    $("roulActions").hidden = false;
-    $("roulOpen").textContent = "✓ ACEPTAR";
+    $("roulLabel").textContent = "> ¡GANASTE!"; $("roulName").textContent = rewardName(chosen);
+    $("roulActions").hidden = false; $("roulOpen").textContent = "✓ ACEPTAR";
     $("roulOpen").onclick = () => { r.classList.remove("open"); applyReward(chosen); if(cb)cb(); };
-    $("roulAgain").hidden = true;
-    $("roulClose").hidden = true;
+    $("roulAgain").hidden = true; $("roulClose").hidden = true;
   }, 4200);
 }
-
 function rewardName(r) {
   if (r.type === "coins") return r.amount + " monedas";
   if (r.type === "xp") return r.amount + " XP";
@@ -1180,23 +1127,15 @@ function applyReward(r) {
     if (hasItem(r.id)) { addCoins(100); toast("Duplicado → +100 🪙"); }
     else { gstate.inventory.push(r.id); toast("✓ " + ITEMS[r.id].n, false, true); }
   }
-  else if (r.type === "title") {
-    if (hasTitle(r.id)) { addCoins(200); } else { unlockTitle(r.id); }
-  }
+  else if (r.type === "title") { if (hasTitle(r.id)) { addCoins(200); } else { unlockTitle(r.id); } }
   saveState(); updateCoinsUI(); renderPass();
 }
 
 /* ============ Intros ============ */
 function buildIntro() {
-  const type = gstate.equipped.intro || "crt";
-  const el = $("intro");
+  const type = gstate.equipped.intro || "crt", el = $("intro");
   el.className = "intro"; el.innerHTML = ""; el.onclick = null;
-  
-  const finish = () => {
-    el.classList.add("out");
-    document.documentElement.classList.add("intro-go");
-    setTimeout(() => document.documentElement.classList.remove("intro-on", "intro-go"), 700);
-  };
+  const finish = () => { el.classList.add("out"); document.documentElement.classList.add("intro-go"); setTimeout(() => document.documentElement.classList.remove("intro-on", "intro-go"), 700); };
   
   if (type === "none") { document.documentElement.classList.remove("intro-on"); return; }
   if (type === "flash") { el.classList.add("flash"); el.innerHTML = "<div class='i-core'><h2 class='i-title'><span>E</span><span>T</span><span>H</span><span>O</span><span>S</span></h2></div>"; setTimeout(finish, 900); return; }
@@ -1233,11 +1172,9 @@ function buildIntro() {
   
   el.classList.add("crt");
   el.innerHTML = "<div class='i-core'><div class='i-logo'><div class='i-e' id='iE'></div></div><h2 class='i-title'><span style='--i:0'>E</span><span style='--i:1'>T</span><span style='--i:2'>H</span><span style='--i:3'>O</span><span style='--i:4'>S</span></h2><p class='i-tag'>&gt; sistema de entretenimiento</p><div class='i-bar'><b></b></div><p class='i-start'>PRESS START</p></div>";
-  renderELogo($("iE"));
-  setTimeout(finish, 3000); el.onclick = finish;
+  renderELogo($("iE")); setTimeout(finish, 3000); el.onclick = finish;
   addEventListener("keydown", e => { if (["Enter", " ", "Escape"].includes(e.key)) finish(); }, { once: true });
 }
-
 function renderELogo(target) {
   if (!target) return;
   const cells = [];
@@ -1412,8 +1349,7 @@ function blank() {
   const f = w.document.createElement("iframe"); f.style.cssText = "width:100%;height:100%;border:0"; f.allow = "fullscreen; autoplay; gamepad; clipboard-write"; f.src = url;
   w.document.body.appendChild(f); doCerrar();
 }
-$("btnClose").onclick = () => cerrar(false);
-$("btnBlank").onclick = blank;
+$("btnClose").onclick = () => cerrar(false); $("btnBlank").onclick = blank;
 $("btnFull").onclick = () => $("playerFrame").requestFullscreen && $("playerFrame").requestFullscreen();
 $("btnReload").onclick = () => { const f = $("playerFrame"); f.src = f.src; };
 $("pwOpen").onclick = blank;
@@ -1422,14 +1358,10 @@ $("pwMark").onclick = async () => { if (!logueado() || !actual) return; try { aw
 $("btnMark").onclick = async () => { if (!logueado() || !actual) return; try { await db.collection("games").doc(actual.id).update({ noEmbed: true }); toast("Marcado roto"); doCerrar(); } catch (err) { fail(err); } };
 function panic() { try { $("playerFrame").src = "about:blank"; $("musicFrame").src = "about:blank"; } catch (e) {} location.replace(PANIC_URL); }
 $("btnPanic").onclick = panic;
-
 let lastEsc = 0;
 addEventListener("keydown", e => {
   const open = $("player").classList.contains("open");
-  if (e.key === "Escape") {
-    const now = Date.now(); if (now - lastEsc < 900) return panic(); lastEsc = now;
-    if (open) cerrar(false); return;
-  }
+  if (e.key === "Escape") { const now = Date.now(); if (now - lastEsc < 900) return panic(); lastEsc = now; if (open) cerrar(false); return; }
   if (enCampo() || e.ctrlKey || e.metaKey || e.altKey) return;
   if (e.code === "Backquote") return panic();
   if (e.key === "m" || e.key === "M") return musicaToggle();
@@ -1449,21 +1381,16 @@ function azar() {
 function mostrarRuleta() {
   const r = $("roulette"), wheel = $("roulWheel");
   wheel.style.transition = "none"; wheel.style.transform = "rotate(0deg)"; r.classList.add("open");
-  
   $("roulActions").hidden = true; $("roulLabel").textContent = "> SELECCIONANDO JUEGO…"; $("roulName").textContent = "";
   const pool = roulPool; roulTarget = pool[Math.floor(Math.random() * pool.length)];
-  
   const slices = 8; wheel.innerHTML = "";
   for(let i=0; i<slices; i++) {
     const el = document.createElement("div"); el.className = "roul-slice";
     el.style.transform = "rotate(" + ((360 / slices) * i) + "deg)";
     el.style.background = i % 2 === 0 ? "var(--tA)" : "var(--panel)"; el.textContent = i+1; wheel.appendChild(el);
   }
-  
   const spins = 5 + Math.floor(Math.random() * 3), targetDeg = (360 * spins) + (Math.floor(Math.random() * slices) * (360/slices));
-  
   setTimeout(() => { wheel.style.transition = "transform 4s cubic-bezier(.17,.67,.12,1)"; wheel.style.transform = "rotate(" + targetDeg + "deg)"; }, 50);
-  
   setTimeout(() => {
     $("roulLabel").textContent = "> ¡SELECCIONADO!"; $("roulActions").hidden = false;
     $("roulName").textContent = roulTarget.nombre || "?";
