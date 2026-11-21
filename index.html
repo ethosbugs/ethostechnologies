@@ -21,7 +21,7 @@ dorado:{n:"★ Dorado (secreto)",h:35,special:true,lux:true}
 };
 let themeKey = "fosforo";
 try { const k = localStorage.getItem("ethos_theme"); if (THEMES[k]) themeKey = k; } catch (e) {}
-const hsl = (h, s, l, a) => hsl(${h} ${s}% ${l}%${a != null ? " / " + a : ""});
+const hsl = (h, s, l, a) => "hsl(" + h + " " + s + "% " + l + "%" + (a != null ? " / " + a : "") + ")";
 function applyTheme(k, save) {
 const t = THEMES[k]; if (!t) return;
 themeKey = k;
@@ -674,21 +674,34 @@ const OUSIFY = "https://ousify-main.vercel.app/";
 const PANIC_URL = "https://docs.google.com/document/";
 
 /* ============ Utils ============ */
-const $ = id =&gt; document.getElementById(id); const esc = s =&gt; String(s ?? "").replace(/[&&lt;&gt;"']/g, c =&gt; ({"&":"&amp;","&lt;":"&lt;","&gt;":"&gt;",'"':"&quot;","'":"&#39;"}[c])); const safeUrl = u =&gt; { try { const x = new URL(String(u || "").trim()); return ["http:", "https:"].includes(x.protocol) ? x.href : ""; } catch { return ""; } }; const leer = k =&gt; { try { return JSON.parse(localStorage.getItem(k)) || []; } catch { return []; } }; const pad = (n, l) =&gt; String(n).padStart(l, "0"); const norm = s =&gt; String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); const slug = s =&gt; (String(s || "juego").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 16) || "juego") + ".exe";
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const safeUrl = u => { try { const x = new URL(String(u || "").trim()); return ["http:", "https:"].includes(x.protocol) ? x.href : ""; } catch { return ""; } };
+const leer = k => { try { return JSON.parse(localStorage.getItem(k)) || []; } catch { return []; } };
+const pad = (n, l) => String(n).padStart(l, "0");
+const norm = s => String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+const slug = s => (String(s || "juego").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 16) || "juego") + ".exe";
 const collator = new Intl.Collator("es", { sensitivity: "base", numeric: true });
+
 let toastT;
 function toast(msg, err, gold) {
-let t = `$("toast");
-if (!t) { t = document.createElement("div"); t.id = "toast"; document.body.appendChild(t); }
-t.className = "toast show" + (err ? " err" : "") + (gold ? " gold" : ""); t.textContent = msg;
-clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 2800);
+  let t = $("toast");
+  if (!t) { 
+    t = document.createElement("div"); 
+    t.id = "toast"; 
+    document.body.appendChild(t); 
+  }
+  t.className = "toast show" + (err ? " err" : "") + (gold ? " gold" : ""); 
+  t.textContent = msg;
+  clearTimeout(toastT); 
+  toastT = setTimeout(() => t.classList.remove("show"), 2800);
 }
+
 function fail(err) {
-console.error(err);
-toast(err && err.code === "permission-denied" ? "Sin permisos." : "Error. Revisa la conexión.", true);
+  console.error(err);
+  toast(err && err.code === "permission-denied" ? "Sin permisos." : "Error. Revisa la conexión.", true);
 }
 const enCampo = () => /INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName);
-
 /* ============ Definiciones de datos ============ */
 const ICONS = ["🎮","🕹️","🎯","🎲","🏆","⭐","💎","🔥","❄️","🎅","🦌","⛄","🧝","🎁","🍪","🎄","🕯️","🔔","🥂","🎉","👾","🤖","💀","🌙","☀️","🎨","⚔️","🛡️","👑","🍀"];
 const TITLES = {
