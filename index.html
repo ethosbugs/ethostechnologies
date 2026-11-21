@@ -95,11 +95,10 @@ body.santa-hat .brand .mark::after{content:"🎅";position:absolute;top:-14px;ri
 .btn.danger:hover{border-color:var(--red);color:var(--red)}
 .btn.sm{padding:6px 11px;font-size:12px}
 .btn.lg{padding:15px 24px;font-size:14px}
-.btn.px{font-family:var(--px);font-size:11px;padding:17px 22px;font-weight:400}
+.btn.px{font-family:var(--px);font-size:11px;padding:15px 20px;font-weight:400;flex:1;justify-content:center;max-width:200px}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1a0f00;border-color:var(--gold);box-shadow:5px 5px 0 #4a2f0a}
-.linkbtn{background:none;border:0;color:var(--dim);font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
-.linkbtn:hover{color:var(--acc)}
+
 .input{width:100%;background:var(--panel);border:2px solid var(--line2);padding:11px 14px;font:400 15px var(--mono);color:var(--txt)}
 .input:focus{outline:none;border-color:var(--acc);box-shadow:0 0 14px var(--glow)}
 select.input{cursor:pointer}
@@ -128,11 +127,10 @@ select.input{cursor:pointer}
 .conn.off{color:var(--red);border-color:var(--red)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
 
-.coins-btn{display:inline-flex;align-items:center;gap:6px;cursor:pointer;padding:6px 12px;border:2px solid var(--gold);background:rgba(255,215,106,.08);color:var(--gold);font:700 13px var(--mono);letter-spacing:1px;transition:all .15s}
-.coins-btn:hover{background:rgba(255,215,106,.2);box-shadow:0 0 12px rgba(255,215,106,.4)}
 .profile-btn{display:inline-flex;align-items:center;gap:8px;cursor:pointer;padding:4px 10px 4px 4px;border:2px solid var(--line2);background:var(--panel);transition:all .15s}
 .profile-btn:hover{border-color:var(--acc)}
-.p-icon{width:32px;height:32px;display:grid;place-items:center;background:var(--tA);font-size:18px;border:1px solid var(--line2)}
+.p-icon{width:32px;height:32px;display:grid;place-items:center;background:var(--tA);font-size:18px;border:1px solid var(--line2);overflow:hidden}
+.p-icon svg{width:24px;height:24px}
 .p-info{display:flex;flex-direction:column;align-items:flex-start;line-height:1.2}
 .p-name{font-size:12px;font-weight:700;color:var(--txt);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .p-title{font-size:9px;font-family:var(--px);letter-spacing:.5px}
@@ -153,7 +151,7 @@ select.input{cursor:pointer}
 h1{font:400 clamp(22px,4.4vw,40px)/1.5 var(--px);color:var(--txt)}
 h1 em{font-style:normal;color:var(--acc);text-shadow:0 0 18px var(--glow)}
 .lead{margin:30px 0 38px;max-width:520px;font-size:17px;line-height:1.7;color:var(--mut)}
-.cta{display:flex;flex-wrap:wrap;gap:16px}
+.cta{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
 .hud{flex:0 1 340px;min-width:260px;border:2px solid var(--line2);background:var(--panel);padding:20px 22px;box-shadow:8px 8px 0 var(--shd)}
 .hud-t{font:400 11px var(--px);color:var(--dim);margin-bottom:20px;animation:blink 3s steps(1) infinite}
 .hud-r{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-top:1px dashed var(--line)}
@@ -214,12 +212,12 @@ body.card-christmas .card::before{content:"";position:absolute;inset:0;z-index:3
 .player{position:fixed;inset:0;z-index:100;background:#000;display:none;flex-direction:column}
 .player.open{display:flex}
 .pbar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:2px solid var(--line2);background:var(--panel);flex-wrap:wrap}
-.pbar strong{flex:1;font:400 12px var(--px);color:var(--acc);min-width:120px}
-.pbar .loading{display:none;align-items:center;gap:6px;font-size:11px;color:var(--dim);font-family:var(--px)}
+.pbar strong{font:400 12px var(--px);color:var(--acc);min-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pbar .loading{display:none;align-items:center;gap:6px;font-size:11px;color:var(--dim);font-family:var(--px);flex:1}
 .pbar .loading.on{display:inline-flex}
 .pbar .loading .spinner{width:10px;height:10px;border:2px solid var(--line2);border-top-color:var(--acc);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.pstat{display:flex;align-items:center;gap:12px;padding:4px 14px;border-bottom:2px solid var(--line);background:var(--bg);font:400 10px var(--px);color:var(--dim);letter-spacing:1px;flex-wrap:wrap}
+.pstat{display:flex;align-items:center;gap:12px;padding:4px 14px;border-bottom:2px solid var(--line);background:var(--bg);font:400 10px var(--px);color:var(--dim);letter-spacing:1px;flex-wrap:wrap;flex:1}
 .pstat b{color:var(--acc);font-weight:400}
 .pstat .lvl{display:inline-block;width:60px;height:6px;border:1px solid var(--line2);padding:1px;vertical-align:middle}
 .pstat .lvl i{display:block;height:100%;background:var(--acc);width:0;transition:width .8s;box-shadow:0 0 4px var(--glow)}
@@ -253,23 +251,31 @@ body.card-christmas .card::before{content:"";position:absolute;inset:0;z-index:3
 .modal-box .acts{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:16px}
 .modal-close{position:absolute;top:10px;right:10px;background:transparent;border:2px solid var(--line2);color:var(--txt);padding:4px 8px;cursor:pointer}
 
-.roulette{position:fixed;inset:0;z-index:240;background:rgba(0,0,0,.92);display:none;place-items:center;padding:20px}
+/* RULETA VISUAL */
+.roulette{position:fixed;inset:0;z-index:240;background:rgba(0,0,0,.95);display:none;place-items:center;padding:20px}
 .roulette.open{display:grid}
-.roul-box{display:grid;gap:20px;justify-items:center;max-width:520px;width:100%}
+.roul-box{display:grid;gap:24px;justify-items:center;max-width:520px;width:100%}
 .roul-label{font:400 12px var(--px);color:var(--acc);letter-spacing:2px;animation:blink 1s steps(1) infinite}
-.roul-stage{position:relative;width:100%;aspect-ratio:1/1;max-width:320px;border:2px solid var(--acc);background:var(--panel);box-shadow:8px 8px 0 var(--shd);display:grid;place-items:center;font-size:70px}
-.roul-name{font:700 18px var(--mono);color:var(--txt);text-align:center;min-height:1.4em}
+.roul-wheel-container{position:relative;width:300px;height:300px;margin:0 auto}
+.roul-pointer{position:absolute;top:50%;right:-15px;transform:translateY(-50%);width:0;height:0;border-top:15px solid transparent;border-bottom:15px solid transparent;border-right:25px solid var(--red);z-index:10;filter:drop-shadow(0 0 4px rgba(0,0,0,.8))}
+.roul-wheel{width:100%;height:100%;border-radius:50%;border:6px solid var(--line2);position:relative;overflow:hidden;box-shadow:inset 0 0 20px rgba(0,0,0,.8),0 0 20px var(--glow);transition:transform 4s cubic-bezier(.17,.67,.12,1)}
+.roul-slice{position:absolute;width:50%;height:50%;transform-origin:100% 100%;background:var(--panel);border:1px solid var(--line);display:flex;align-items:center;justify-content:flex-start;padding-left:20px;font:700 14px var(--mono);color:var(--txt);clip-path:polygon(0 0, 100% 0, 100% 100%, 0 0);left:0;top:0}
+.roul-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;background:var(--acc);border-radius:50%;border:4px solid var(--line2);z-index:5;box-shadow:0 0 15px var(--glow)}
+.roul-name{font:700 22px var(--mono);color:var(--txt);text-align:center;min-height:1.4em;text-shadow:0 0 10px var(--glow)}
 .roul-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
 
 .profile-modal .modal-box{max-width:560px}
 .profile-head{display:flex;align-items:center;gap:16px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px dashed var(--line)}
-.profile-head .big-icon{width:64px;height:64px;display:grid;place-items:center;background:var(--tA);border:2px solid var(--acc);font-size:36px}
+.profile-head .big-icon{width:64px;height:64px;display:grid;place-items:center;background:var(--tA);border:2px solid var(--acc);font-size:36px;overflow:hidden}
+.profile-head .big-icon svg{width:48px;height:48px}
 .icon-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:10px 0}
-.icon-grid button{aspect-ratio:1;font-size:22px;cursor:pointer;background:var(--tA);border:2px solid var(--line2);transition:all .1s}
+.icon-grid button{aspect-ratio:1;display:grid;place-items:center;cursor:pointer;background:var(--tA);border:2px solid var(--line2);transition:all .1s}
+.icon-grid button svg{width:24px;height:24px;fill:var(--txt)}
 .icon-grid button:hover{border-color:var(--acc);transform:scale(1.1)}
 .icon-grid button.on{border-color:var(--acc);background:var(--acc);color:var(--ink)}
+.icon-grid button.on svg{fill:var(--ink)}
 .title-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px;margin:10px 0}
-.title-grid button{padding:8px;cursor:pointer;background:transparent;border:2px solid var(--line2);font:400 11px var(--px);letter-spacing:.5px;transition:all .1s}
+.title-grid button{padding:8px;cursor:pointer;background:transparent;border:2px solid var(--line2);font:400 11px var(--px);letter-spacing:.5px;transition:all .1s;text-align:center}
 .title-grid button:hover{border-color:var(--acc)}
 .title-grid button.on{background:var(--acc);color:var(--ink);border-color:var(--acc)}
 .title-grid button.locked{opacity:.4;cursor:not-allowed}
@@ -291,13 +297,15 @@ body.card-christmas .card::before{content:"";position:absolute;inset:0;z-index:3
 .shop-item .price button{padding:6px 10px;font-size:11px}
 .shop-item .price button.owned{background:rgba(76,255,106,.2);color:var(--acc);border-color:var(--acc);cursor:default}
 
-.pass-header{padding:24px;border:2px solid var(--acc);background:linear-gradient(135deg,var(--panel),var(--bg));box-shadow:8px 8px 0 var(--shd);margin:24px 0;display:grid;gap:14px}
+.pass-header{padding:24px;border:2px solid var(--acc);background:linear-gradient(135deg,var(--panel),var(--bg));box-shadow:8px 8px 0 var(--shd);margin:24px 0;display:grid;gap:14px;position:relative;overflow:hidden}
+.pass-header::before {content:"";position:absolute;inset:0;background:url('https://www.transparenttextures.com/patterns/stardust.png');opacity:0.3;animation:stars 10s linear infinite}
+@keyframes stars {0% {background-position: 0 0} 100% {background-position: 100px 100px}}
 .pass-header h2{font:400 18px/1.4 var(--px);color:var(--acc);letter-spacing:1px}
 .pass-header .sub{font-size:13px;color:var(--mut)}
-.pass-progress{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.pass-progress{display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:relative;z-index:2}
 .pass-bar{flex:1;min-width:200px;height:20px;border:2px solid var(--line2);background:var(--bg);position:relative;overflow:hidden}
 .pass-bar b{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--gold));box-shadow:0 0 10px var(--glow);transition:width .6s}
-.pass-level{font:400 13px var(--px);color:var(--acc);padding:4px 10px;border:2px solid var(--acc)}
+.pass-level{font:400 13px var(--px);color:var(--acc);padding:4px 10px;border:2px solid var(--acc);position:relative;z-index:2}
 .pass-tracks{display:grid;gap:6px;margin:24px 0}
 .pass-row{display:grid;grid-template-columns:60px 1fr 1fr 1fr;gap:8px;align-items:center;padding:10px;border:2px solid var(--line2);background:var(--panel);transition:all .15s}
 .pass-row.reached{border-color:var(--acc);background:rgba(76,255,106,.05)}
@@ -322,6 +330,26 @@ body.card-christmas .card::before{content:"";position:absolute;inset:0;z-index:3
 .challenge .c-info b{font-size:13px;display:block}
 .challenge .c-info small{font-size:11px;color:var(--dim)}
 .challenge .c-xp{font:400 10px var(--px);color:var(--gold2)}
+
+/* ANIMACION TITULO NAVIDAD */
+.title-xmas {
+  background: linear-gradient(90deg, #fff 0%, #a0c8ff 25%, #fff 50%, #a0c8ff 75%, #fff 100%);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: snowFlow 3s linear infinite;
+  font-weight: bold;
+}
+@keyframes snowFlow { to { background-position: 200% center; } }
+.title-gold {
+  background: linear-gradient(90deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  font-weight: bold;
+}
 
 .intro{display:none;position:fixed;inset:0;z-index:300;place-items:center;overflow:hidden;cursor:pointer;background:var(--bg)}
 .intro-on .intro{display:grid}
@@ -432,14 +460,12 @@ body.lux .hud{box-shadow:8px 8px 0 #2a1508,0 0 30px rgba(255,207,90,.08)}
       <div class="spacer"></div>
       <div class="acts">
         <span class="conn" id="conn"><span class="dot"></span><span class="txt">ONLINE</span></span>
-        <button class="coins-btn" id="btnCoins" title="Tus monedas">🪙 <span id="coinsDisplay">0</span></button>
         <button class="profile-btn" id="btnProfile" title="Tu perfil">
-          <span class="p-icon" id="profileIcon">🎮</span>
+          <span class="p-icon" id="profileIcon"></span>
           <span class="p-info"><span class="p-name" id="profileName">Jugador</span><span class="p-title" id="profileTitle">NOVATO</span></span>
         </button>
         <button class="btn sm" id="btnMusic" title="Música (M)">♪<span class="eq" id="eq" hidden><span></span><span></span><span></span></span></button>
         <button class="btn sm" id="btnTheme" title="Tema">◐</button>
-        <a class="btn sm" href="#/admin" data-nav="admin" title="Admin">⚙<span class="t"> Admin</span></a>
       </div>
     </nav>
   </header>
@@ -463,7 +489,6 @@ body.lux .hud{box-shadow:8px 8px 0 #2a1508,0 0 30px rgba(255,207,90,.08)}
         <div class="hud-r"><span>Categorías</span><b id="stCats">--</b></div>
         <div class="hud-r"><span>Favoritos</span><b id="stFavs">00</b></div>
         <div class="hud-r"><span>Racha</span><b id="stRacha">0d</b></div>
-        <div class="hud-r"><span>Monedas</span><b id="stCoins">0</b></div>
         <div class="hud-s blink">PRESS START</div>
       </aside>
     </section>
@@ -494,7 +519,7 @@ body.lux .hud{box-shadow:8px 8px 0 #2a1508,0 0 30px rgba(255,207,90,.08)}
   </main>
 
   <main class="view container" data-view="shop" hidden>
-    <div class="page-h"><h2>&gt; TIENDA</h2><p>Gasta tus monedas en personalizaciones permanentes.</p></div>
+    <div class="page-h"><h2>&gt; TIENDA</h2><p>Gasta tus monedas en personalizaciones permanentes. 🪙 <span id="shopCoins" style="color:var(--gold);font-family:var(--px);font-size:16px;margin-left:8px">0</span></p></div>
     <div class="shop-tabs" id="shopTabs"></div>
     <div class="shop-grid" id="shopGrid"></div>
   </main>
@@ -532,6 +557,11 @@ body.lux .hud{box-shadow:8px 8px 0 #2a1508,0 0 30px rgba(255,207,90,.08)}
   <div class="pbar">
     <strong id="playerTitle"></strong>
     <span class="loading" id="pLoading"><span class="spinner"></span> CARGANDO…</span>
+    <!-- Perfil visible mientras juegas -->
+    <div class="profile-btn" id="btnProfileInGame" style="padding:4px 8px;margin-left:auto;cursor:pointer">
+      <span class="p-icon" id="profileIconInGame"></span>
+      <span class="p-info"><span class="p-name" id="profileNameInGame">Jugador</span><span class="p-title" id="profileTitleInGame">NOVATO</span></span>
+    </div>
     <button class="btn sm" id="btnMusic2">♪ Música</button>
     <button class="btn sm" id="btnReload">↻</button>
     <button class="btn sm" id="btnFull">⛶ Full</button>
@@ -569,10 +599,10 @@ body.lux .hud{box-shadow:8px 8px 0 #2a1508,0 0 30px rgba(255,207,90,.08)}
     <button class="modal-close" id="profileX">✕</button>
     <h3>&gt; TU PERFIL</h3>
     <div class="profile-head">
-      <div class="big-icon" id="profileBigIcon">🎮</div>
+      <div class="big-icon" id="profileBigIcon"></div>
       <div>
         <div style="font:700 18px var(--mono);color:var(--txt)" id="profileBigName">Jugador</div>
-        <div style="font:400 10px var(--px);color:var(--acc);margin-top:4px" id="profileBigTitle">NOVATO</div>
+        <div style="font:400 10px var(--px);margin-top:4px" id="profileBigTitle">NOVATO</div>
       </div>
     </div>
     <label class="field-label">ICONO</label>
@@ -591,7 +621,11 @@ body.lux .hud{box-shadow:8px 8px 0 #2a1508,0 0 30px rgba(255,207,90,.08)}
 <div class="roulette" id="roulette">
   <div class="roul-box">
     <div class="roul-label" id="roulLabel">&gt; SELECCIONANDO JUEGO…</div>
-    <div class="roul-stage" id="roulStage"></div>
+    <div class="roul-wheel-container">
+      <div class="roul-pointer"></div>
+      <div class="roul-wheel" id="roulWheel"></div>
+      <div class="roul-center"></div>
+    </div>
     <div class="roul-name" id="roulName"></div>
     <div class="roul-actions" id="roulActions" hidden>
       <button class="btn primary" id="roulOpen">&gt; JUGAR AHORA</button>
@@ -659,8 +693,20 @@ function fail(err) {
 }
 const enCampo = () => /INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName);
 
-/* ============ Definiciones de datos ============ */
-const ICONS = ["🎮","🕹️","🎯","🎲","🏆","⭐","💎","🔥","❄️","🎅","🦌","⛄","🧝","🎁","🍪","🎄","🕯️","🔔","🥂","🎉","👾","🤖","💀","🌙","☀️","🎨","⚔️","🛡️","👑","🍀"];
+/* ============ Iconos SVG ============ */
+const SVG_ICONS = {
+  gamepad: '<svg viewBox="0 0 24 24"><path d="M7 6h10a5 5 0 0 1 5 5v2a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5v-2a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2a3 3 0 0 0-3-3H7zm1 3a1 1 0 0 1 1 1v1h1a1 1 0 1 1 0 2H9v1a1 1 0 1 1-2 0v-1H6a1 1 0 1 1 0-2h1v-1a1 1 0 0 1 1-1zm7 2a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm2 2a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>',
+  star: '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',
+  diamond: '<svg viewBox="0 0 24 24"><path d="M12 2L2 9l10 13 10-13L12 2zm0 2.5L18.5 9 12 19 5.5 9 12 4.5z"/></svg>',
+  crown: '<svg viewBox="0 0 24 24"><path d="M2 18h20v2H2v-2zm1.5-3l3.5-8 5 6 5-6 3.5 8H3.5z"/></svg>',
+  skull: '<svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zm-2 9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm4 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm-3 2.5h2v1h-2v-1z"/></svg>',
+  alien: '<svg viewBox="0 0 24 24"><path d="M12 2C7.58 2 4 5.58 4 10c0 3 1.5 5.5 3 7l-1 5h12l-1-5c1.5-1.5 3-4 3-7 0-4.42-3.58-8-8-8zm-3 9a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm6 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>',
+  reindeer: '<svg viewBox="0 0 24 24"><path d="M12 2C9 2 7 4 7 7c0 1.5.5 2.5 1 3.5C6 12 4 14 4 17c0 2 1 4 3 4 1.5 0 2.5-1 3-2.5.5 1.5 1.5 2.5 3 2.5s2.5-1 3-2.5c.5 1.5 1.5 2.5 3 2.5 2 0 3-2 3-4 0-3-2-5-4-6.5.5-1 1-2 1-3.5 0-3-2-5-5-5zm-4 14a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm8 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>',
+  ghost: '<svg viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9v10l3-3 3 3 3-3 3 3 3-3 3 3V11a9 9 0 0 0-9-9zm-3 7a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm6 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"/></svg>',
+  robot: '<svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2v1h3a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3h3V4a2 2 0 0 1 2-2zM8 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-4 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg>'
+};
+const ICONS = Object.keys(SVG_ICONS);
+
 const TITLES = {
   novato:{n:"NOVATO",color:"#8fcf9b",desc:"Por defecto"},
   gamer:{n:"GAMER",color:"#4cff6a",desc:"Abre 10 juegos"},
@@ -670,8 +716,8 @@ const TITLES = {
   leyenda:{n:"LEYENDA",color:"#ffd76a",desc:"Racha 100 días"},
   coleccionista:{n:"COLECCIONISTA",color:"#a78bfa",desc:"10 items"},
   coleccionista_elite:{n:"COLECCIONISTA ÉLITE",color:"#a78bfa",desc:"30 items"},
-  navideno:{n:"NAVIDEÑO",color:"#ff6b6b",desc:"Completa nivel 30 del pase Navidad"},
-  rey_invierno:{n:"REY DEL INVIERNO",color:"#ffd76a",desc:"Completa pase Navidad Premium"},
+  navideno:{n:"NAVIDEÑO",color:"#ff6b6b",desc:"Completa nivel 30 del pase Navidad",cls:"title-xmas"},
+  rey_invierno:{n:"REY DEL INVIERNO",color:"#ffd76a",desc:"Completa pase Navidad Premium",cls:"title-gold"},
   elegido:{n:"ELEGIDO",color:"#ffd76a",desc:"Descubre el tema dorado secreto"},
   toque_dorado:{n:"TOQUE DORADO",color:"#ffd76a",desc:"Usa el tema dorado"}
 };
@@ -709,6 +755,7 @@ const ITEMS = {
   "theme.christmas_green":{n:"Tema Navidad Verde",cat:"themes",price:0,icon:"🌲",desc:"Verde pino navideño",pass:true},
   "theme.christmas_gold":{n:"Tema Navidad Oro",cat:"themes",price:0,icon:"✨",desc:"Oro navideño exclusivo",pass:true,legend:true}
 };
+
 const PASS_REWARDS = {
   1: { free:{type:"coins",amount:30}, prem:{type:"item",id:"intro.sleigh"} },
   2: { free:{type:"roulette",tier:"common"}, prem:{type:"coins",amount:50} },
@@ -741,42 +788,21 @@ const PASS_REWARDS = {
   29:{ free:{type:"coins",amount:200}, prem:{type:"coins",amount:200} },
   30:{ free:{type:"title",id:"navideno"}, prem:{type:"item",id:"intro.legend_christmas"} }
 };
+
 const ROULETTE_POOLS = {
-  common: [
-    {type:"coins",amount:50,weight:40},
-    {type:"xp",amount:30,weight:25},
-    {type:"roulette_coins",amount:25,weight:20},
-    {type:"coins",amount:75,weight:10},
-    {type:"xp",amount:50,weight:5}
-  ],
-  uncommon: [
-    {type:"coins",amount:100,weight:35},
-    {type:"xp",amount:75,weight:25},
-    {type:"item",id:"sound.beep",weight:15},
-    {type:"coins",amount:150,weight:15},
-    {type:"item",id:"cursor.snowflake",weight:10}
-  ],
-  rare: [
-    {type:"coins",amount:250,weight:35},
-    {type:"item",id:"cursor.candycane",weight:20},
-    {type:"item",id:"sound.sleigh",weight:20},
-    {type:"item",id:"cursor.gift",weight:15},
-    {type:"xp",amount:200,weight:10}
-  ],
-  legendary: [
-    {type:"item",id:"badge.star",weight:30},
-    {type:"coins",amount:500,weight:25},
-    {type:"item",id:"theme.christmas_gold",weight:20},
-    {type:"item",id:"intro.legend_christmas",weight:15},
-    {type:"title",id:"rey_invierno",weight:10}
-  ]
+  common: [{type:"coins",amount:50,weight:40},{type:"xp",amount:30,weight:25},{type:"roulette_coins",amount:25,weight:20},{type:"coins",amount:75,weight:10},{type:"xp",amount:50,weight:5}],
+  uncommon: [{type:"coins",amount:100,weight:35},{type:"xp",amount:75,weight:25},{type:"item",id:"sound.beep",weight:15},{type:"coins",amount:150,weight:15},{type:"item",id:"cursor.snowflake",weight:10}],
+  rare: [{type:"coins",amount:250,weight:35},{type:"item",id:"cursor.candycane",weight:20},{type:"item",id:"sound.sleigh",weight:20},{type:"item",id:"cursor.gift",weight:15},{type:"xp",amount:200,weight:10}],
+  legendary: [{type:"item",id:"badge.star",weight:30},{type:"coins",amount:500,weight:25},{type:"item",id:"theme.christmas_gold",weight:20},{type:"item",id:"intro.legend_christmas",weight:15},{type:"title",id:"rey_invierno",weight:10}]
 };
+
 const WEEKLY_CHALLENGES = {
   1:[{id:"w1c1",t:"Entra 5 días esta semana",xp:200,type:"easy"},{id:"w1c2",t:"Abre 10 juegos diferentes",xp:300,type:"medium"},{id:"w1c3",t:"Mantén la racha 7 días",xp:500,type:"hard"}],
   2:[{id:"w2c1",t:"Usa Ousify al menos una vez",xp:200,type:"easy"},{id:"w2c2",t:"Marca 3 favoritos nuevos",xp:300,type:"medium"},{id:"w2c3",t:"Abre 20 juegos diferentes",xp:500,type:"hard"}],
   3:[{id:"w3c1",t:"Visita la tienda",xp:200,type:"easy"},{id:"w3c2",t:"Usa Ousify 3 veces",xp:300,type:"medium"},{id:"w3c3",t:"Explora 5 categorías",xp:500,type:"hard"}],
   4:[{id:"w4c1",t:"Explora una categoría nueva",xp:200,type:"easy"},{id:"w4c2",t:"Mantén la racha 5 días",xp:300,type:"medium"},{id:"w4c3",t:"Completa la semana entera",xp:500,type:"hard"}]
 };
+
 const ACHIEVEMENTS = {
   first_fav:{n:"Primer favorito",xp:0,coins:15},
   games_10:{n:"10 juegos abiertos",xp:0,coins:25},
@@ -787,7 +813,7 @@ const ACHIEVEMENTS = {
 };
 
 /* ============ Estado ============ */
-const ADMIN_VERSION = "v8-admin-1";
+const ADMIN_VERSION = "v8-admin-2";
 try {
   if (localStorage.getItem("ethos_admin_version") !== ADMIN_VERSION) {
     localStorage.removeItem("ethos_gstate");
@@ -796,25 +822,16 @@ try {
 } catch (e) {}
 
 const defaultState = () => ({
-  coins: 0,
-  xp: 0,
-  streak: { last: null, count: 0 },
-  achievements: {},
-  inventory: [],
+  coins: 0, xp: 0, streak: { last: null, count: 0 }, achievements: {}, inventory: [],
   equipped: { intro: "crt", cursor: null, theme: null, badge: null, cardEffect: null, sound: null, santaHat: false },
-  profile: { name: "Jugador", icon: "🎮", title: "novato", nameLastChange: 0 },
-  pass: { premium: false, claimedFree: [], claimedPrem: [] },
-  weekly: { week: "", completed: [] }
+  profile: { name: "Jugador", icon: "gamepad", title: "novato", nameLastChange: 0 },
+  pass: { premium: false, claimedFree: [], claimedPrem: [] }, weekly: { week: "", completed: [] }
 });
 let gstate = defaultState();
-try {
-  const s = localStorage.getItem("ethos_gstate");
-  if (s) gstate = Object.assign(gstate, JSON.parse(s));
-} catch (e) {}
+try { const s = localStorage.getItem("ethos_gstate"); if (s) gstate = Object.assign(gstate, JSON.parse(s)); } catch (e) {}
 
 if (ADMIN_MODE) {
-  gstate.coins = 999999;
-  gstate.xp = 999999;
+  gstate.coins = 1000099; gstate.xp = 999999;
   gstate.streak = { last: new Date().toDateString(), count: 30 };
   Object.keys(ACHIEVEMENTS).forEach(k => gstate.achievements[k] = true);
   Object.keys(ITEMS).forEach(k => { if (!gstate.inventory.includes(k)) gstate.inventory.push(k); });
@@ -822,48 +839,18 @@ if (ADMIN_MODE) {
   gstate.pass.premium = true;
 }
 
-function saveState() {
-  try { localStorage.setItem("ethos_gstate", JSON.stringify(gstate)); } catch (e) {}
-}
-function addCoins(n) { 
-  gstate.coins = Math.max(0, gstate.coins + n); 
-  saveState(); 
-  updateCoinsUI(); 
-  if (n > 0) toast("+" + n + " 🪙", false, true); 
-}
-function addXP(n) { 
-  gstate.xp = Math.max(0, gstate.xp + n); 
-  saveState(); 
-  renderPass(); 
-  if (n > 0) toast("+" + n + " XP"); 
-}
+function saveState() { try { localStorage.setItem("ethos_gstate", JSON.stringify(gstate)); } catch (e) {} }
+function addCoins(n) { gstate.coins = Math.max(0, gstate.coins + n); saveState(); updateCoinsUI(); if (n > 0) toast("+" + n + " 🪙", false, true); }
+function addXP(n) { gstate.xp = Math.max(0, gstate.xp + n); saveState(); renderPass(); if (n > 0) toast("+" + n + " XP"); }
 function hasItem(id) { return gstate.inventory.includes(id); }
 function hasTitle(id) { return !!gstate.achievements["title_" + id]; }
-function unlockTitle(id) { 
-  if (!hasTitle(id)) { 
-    gstate.achievements["title_" + id] = true; 
-    saveState(); 
-    toast("🏆 Título desbloqueado: " + TITLES[id].n, false, true); 
-  } 
-}
-function unlockAchievement(id) {
-  if (gstate.achievements[id]) return;
-  gstate.achievements[id] = true;
-  const a = ACHIEVEMENTS[id];
-  if (a.coins) addCoins(a.coins);
-  if (a.xp) addXP(a.xp);
-  saveState();
-  renderAllGamification();
-}
+function unlockTitle(id) { if (!hasTitle(id)) { gstate.achievements["title_" + id] = true; saveState(); toast("🏆 Título desbloqueado: " + TITLES[id].n, false, true); } }
+function unlockAchievement(id) { if (gstate.achievements[id]) return; gstate.achievements[id] = true; const a = ACHIEVEMENTS[id]; if (a.coins) addCoins(a.coins); if (a.xp) addXP(a.xp); saveState(); renderAllGamification(); }
 function passLevel() { return Math.min(30, Math.floor(gstate.xp / 500)); }
-function passXPProgress() {
-  const lvl = passLevel();
-  if (lvl >= 30) return { cur: 500, max: 500, pct: 100 };
-  return { cur: gstate.xp % 500, max: 500, pct: (gstate.xp % 500) / 5 };
-}
+function passXPProgress() { const lvl = passLevel(); if (lvl >= 30) return { cur: 500, max: 500, pct: 100 }; return { cur: gstate.xp % 500, max: 500, pct: (gstate.xp % 500) / 5 }; }
 function updateCoinsUI() {
-  $("coinsDisplay").textContent = gstate.coins.toLocaleString("es");
-  $("stCoins").textContent = gstate.coins.toLocaleString("es");
+  const s = gstate.coins.toLocaleString("es");
+  if ($("shopCoins")) $("shopCoins").textContent = s;
 }
 
 /* ============ Streak ============ */
@@ -872,11 +859,7 @@ function checkStreak() {
   const last = gstate.streak.last;
   if (last === today) return;
   const yesterday = new Date(Date.now() - 86400000).toDateString();
-  if (last === yesterday) {
-    gstate.streak.count++;
-  } else {
-    gstate.streak.count = 1;
-  }
+  if (last === yesterday) gstate.streak.count++; else gstate.streak.count = 1;
   gstate.streak.last = today;
   const baseCoins = Math.min(25, 5 * gstate.streak.count);
   addCoins(baseCoins);
@@ -884,13 +867,9 @@ function checkStreak() {
   if (gstate.streak.count === 7) { addCoins(50); unlockTitle("maratonista"); unlockAchievement("streak_7"); }
   if (gstate.streak.count === 30) { addCoins(200); unlockTitle("constante"); }
   if (gstate.streak.count === 100) unlockTitle("leyenda");
-  saveState();
-  updateStreakUI();
-  showStreakModal();
+  saveState(); updateStreakUI(); showStreakModal();
 }
-function updateStreakUI() {
-  $("stRacha").textContent = gstate.streak.count + "d";
-}
+function updateStreakUI() { $("stRacha").textContent = gstate.streak.count + "d"; }
 function showStreakModal() {
   if (!gstate.streak.count) return;
   const streak = gstate.streak.count;
@@ -903,68 +882,68 @@ function showStreakModal() {
 function renderProfileButton() {
   const p = gstate.profile;
   const t = TITLES[p.title] || TITLES.novato;
-  $("profileIcon").textContent = p.icon;
-  $("profileName").textContent = p.name;
-  $("profileTitle").textContent = t.n;
-  $("profileTitle").style.color = t.color;
+  
+  const iconSvg = SVG_ICONS[p.icon] || SVG_ICONS.gamepad;
+  
+  ["profileIcon", "profileIconInGame"].forEach(id => { if ($(id)) $(id).innerHTML = iconSvg; });
+  ["profileName", "profileNameInGame"].forEach(id => { if ($(id)) $(id).textContent = p.name; });
+  ["profileTitle", "profileTitleInGame"].forEach(id => { 
+    if ($(id)) { 
+      $(id).textContent = t.n; 
+      $(id).className = "p-title " + (t.cls || ""); 
+      $(id).style.color = t.cls ? "" : t.color; 
+    } 
+  });
 }
+
 function renderProfileModal() {
   const p = gstate.profile;
   const t = TITLES[p.title] || TITLES.novato;
-  $("profileBigIcon").textContent = p.icon;
+  
+  $("profileBigIcon").innerHTML = SVG_ICONS[p.icon] || SVG_ICONS.gamepad;
   $("profileBigName").textContent = p.name;
   $("profileBigTitle").textContent = t.n;
-  $("profileBigTitle").style.color = t.color;
+  $("profileBigTitle").className = t.cls || "";
+  $("profileBigTitle").style.color = t.cls ? "" : t.color;
 
-  $("iconGrid").innerHTML = ICONS.map(ic => "<button data-icon='" + esc(ic) + "' class='" + (p.icon === ic ? "on" : "") + "'>" + ic + "</button>").join("");
+  $("iconGrid").innerHTML = ICONS.map(ic => "<button data-icon='" + ic + "' class='" + (p.icon === ic ? "on" : "") + "'>" + SVG_ICONS[ic] + "</button>").join("");
   
   $("nameInput").value = p.name;
   const daysSinceChange = p.nameLastChange ? Math.floor((Date.now() - p.nameLastChange) / 86400000) : 999;
   if (daysSinceChange < 7) {
-    $("nameInput").disabled = true;
-    $("btnSaveName").disabled = true;
+    $("nameInput").disabled = true; $("btnSaveName").disabled = true;
     $("nameLockMsg").textContent = "⏳ Cambio disponible en " + (7 - daysSinceChange) + " día(s)";
   } else {
-    $("nameInput").disabled = false;
-    $("btnSaveName").disabled = false;
+    $("nameInput").disabled = false; $("btnSaveName").disabled = false;
     $("nameLockMsg").textContent = "✓ Puedes cambiar tu nombre";
   }
 
   $("titleGrid").innerHTML = Object.entries(TITLES).map(([id, tt]) => {
     const has = hasTitle(id);
     const on = p.title === id;
-    return "<button data-title='" + id + "' class='" + (on?"on":"") + " " + (has?"":"locked") + "' style='color:" + (has?tt.color:"var(--dim)") + "' title='" + esc(tt.desc) + "'>" + (has?tt.n:"🔒 ???") + "</button>";
+    return "<button data-title='" + id + "' class='" + (on?"on":"") + " " + (has?"":"locked") + " " + (tt.cls || "") + "' style='color:" + (tt.cls ? "" : (has?tt.color:"var(--dim)")) + "' title='" + esc(tt.desc) + "'>" + (has?tt.n:"🔒 ???") + "</button>";
   }).join("");
 }
 
 $("btnProfile").onclick = () => { renderProfileModal(); $("profileModal").classList.add("open"); };
+if ($("btnProfileInGame")) $("btnProfileInGame").onclick = () => { renderProfileModal(); $("profileModal").classList.add("open"); };
 $("profileX").onclick = () => $("profileModal").classList.remove("open");
 
 $("iconGrid").addEventListener("click", e => {
   const b = e.target.closest("[data-icon]"); if (!b) return;
-  gstate.profile.icon = b.dataset.icon;
-  saveState();
-  renderProfileButton();
-  renderProfileModal();
+  gstate.profile.icon = b.dataset.icon; saveState(); renderProfileButton(); renderProfileModal();
 });
 
 $("btnSaveName").onclick = () => {
   const n = $("nameInput").value.trim();
   if (!n || n.length > 16) return toast("Nombre inválido (1-16 caracteres)", true);
-  gstate.profile.name = n;
-  gstate.profile.nameLastChange = Date.now();
-  saveState();
-  renderProfileButton();
-  renderProfileModal();
-  toast("Nombre actualizado");
+  gstate.profile.name = n; gstate.profile.nameLastChange = Date.now();
+  saveState(); renderProfileButton(); renderProfileModal(); toast("Nombre actualizado");
 };
 
 $("titleGrid").addEventListener("click", e => {
   const b = e.target.closest("[data-title]"); if (!b || b.classList.contains("locked")) return;
-  gstate.profile.title = b.dataset.title;
-  saveState();
-  renderProfileButton();
-  renderProfileModal();
+  gstate.profile.title = b.dataset.title; saveState(); renderProfileButton(); renderProfileModal();
 });
 
 /* ============ Effects ============ */
@@ -978,6 +957,7 @@ function applyAllEffects() {
 
 /* ============ Tienda ============ */
 function renderShop() {
+  updateCoinsUI();
   const cats = [
     {id:"intros",n:"Intros"}, {id:"cursors",n:"Cursores"}, {id:"themes",n:"Temas"},
     {id:"sounds",n:"Sonidos"}, {id:"badges",n:"Badges"}, {id:"christmas",n:"Navidad ❄"}, {id:"owned",n:"Mis items"}
@@ -994,30 +974,25 @@ function renderShop() {
 }
 
 function renderShopItems(cat) {
-  let items;
-  if (cat === "owned") {
-    items = Object.entries(ITEMS).filter(([id]) => hasItem(id)).map(([id, it]) => Object.assign({id}, it));
-  } else {
-    items = Object.entries(ITEMS).filter(([id, it]) => it.cat === cat).map(([id, it]) => Object.assign({id}, it));
-  }
-  if (!items.length) {
-    $("shopGrid").innerHTML = "<p class='empty'>No hay items en esta categoría.</p>";
-    return;
-  }
+  let items = cat === "owned" ? Object.entries(ITEMS).filter(([id]) => hasItem(id)) : Object.entries(ITEMS).filter(([id, it]) => it.cat === cat);
+  items = items.map(([id, it]) => Object.assign({id}, it));
+  
+  if (!items.length) { $("shopGrid").innerHTML = "<p class='empty'>No hay items en esta categoría.</p>"; return; }
   
   $("shopGrid").innerHTML = items.map(it => {
     const owned = hasItem(it.id);
     const canAfford = gstate.coins >= it.price;
     const isEquippable = /^(intro|cursor|badge|theme)/.test(it.id) || it.id === "santa_hat" || it.id === "card_christmas" || /^(sound)/.test(it.id);
     const equipped = (
-      gstate.equipped.intro === it.id ||
-      gstate.equipped.cursor === it.id ||
-      gstate.equipped.badge === it.id ||
-      gstate.equipped.theme === it.id ||
-      gstate.equipped.sound === it.id ||
+      gstate.equipped.intro === it.id.replace("intro.","") ||
+      gstate.equipped.cursor === it.id.replace("cursor.","") ||
+      gstate.equipped.badge === it.id.replace("badge.","") ||
+      gstate.equipped.theme === it.id.replace("theme.","") ||
+      gstate.equipped.sound === it.id.replace("sound.","") ||
       gstate.equipped.cardEffect === it.id ||
       (it.id === "santa_hat" && gstate.equipped.santaHat)
     );
+    
     let action = "";
     if (owned) {
       if (equipped) action = "<button class='btn primary owned' disabled>✓ EQUIPADO</button>";
@@ -1027,119 +1002,81 @@ function renderShopItems(cat) {
       action = "<button class='btn sm " + (canAfford?"primary":"") + "' data-buy='" + it.id + "' " + (canAfford?"":"disabled") + ">COMPRAR</button>";
     }
     
-    return "<div class='shop-item'>" +
-      "<div class='icon'>" + it.icon + "</div>" +
-      "<h4>" + esc(it.n) + "</h4>" +
-      "<p>" + esc(it.desc) + "</p>" +
-      "<div class='price'><b>" + (owned?"✓":it.price+" 🪙") + "</b>" + action + "</div>" +
-    "</div>";
+    return "<div class='shop-item'><div class='icon'>" + it.icon + "</div><h4>" + esc(it.n) + "</h4><p>" + esc(it.desc) + "</p><div class='price'><b>" + (owned?"✓":it.price+" 🪙") + "</b>" + action + "</div></div>";
   }).join("");
 }
 
 $("shopGrid").addEventListener("click", e => {
-  const buy = e.target.closest("[data-buy]");
-  const eq = e.target.closest("[data-equip]");
+  const buy = e.target.closest("[data-buy]"), eq = e.target.closest("[data-equip]");
   if (buy) {
     const id = buy.dataset.buy, it = ITEMS[id];
-    if (!it || hasItem(id)) return;
-    if (gstate.coins < it.price) return toast("Monedas insuficientes", true);
-    gstate.coins -= it.price;
-    gstate.inventory.push(id);
-    saveState();
-    updateCoinsUI();
-    toast("✓ Compraste: " + it.n, false, true);
+    if (!it || hasItem(id) || gstate.coins < it.price) return;
+    gstate.coins -= it.price; gstate.inventory.push(id);
+    saveState(); updateCoinsUI(); toast("✓ Compraste: " + it.n, false, true);
     renderShopItems($("shopTabs").querySelector(".on").dataset.cat);
   }
   if (eq) {
     const id = eq.dataset.equip, it = ITEMS[id];
     if (!it || !hasItem(id)) return;
-    const e = gstate.equipped;
-    if (it.id.startsWith("intro.")) e.intro = id.replace("intro.", "");
-    else if (it.id.startsWith("cursor.")) e.cursor = id.replace("cursor.", "");
-    else if (it.id.startsWith("theme.")) {
-      const tk = id.replace("theme.", "");
-      if (THEMES[tk]) { applyTheme(tk, true); e.theme = tk; }
-    } else if (it.id.startsWith("badge.")) e.badge = id.replace("badge.", "");
-    else if (it.id.startsWith("sound.")) e.sound = id.replace("sound.", "");
-    else if (id === "santa_hat") e.santaHat = !e.santaHat;
-    else if (id === "card_christmas") e.cardEffect = e.cardEffect === id ? null : id;
-    saveState();
-    applyAllEffects();
-    toast("✓ " + it.n + " equipado/activado", false, true);
+    const eObj = gstate.equipped;
+    if (it.id.startsWith("intro.")) eObj.intro = id.replace("intro.", "");
+    else if (it.id.startsWith("cursor.")) eObj.cursor = id.replace("cursor.", "");
+    else if (it.id.startsWith("theme.")) { const tk = id.replace("theme.", ""); if (THEMES[tk]) { applyTheme(tk, true); eObj.theme = tk; } }
+    else if (it.id.startsWith("badge.")) eObj.badge = id.replace("badge.", "");
+    else if (it.id.startsWith("sound.")) eObj.sound = id.replace("sound.", "");
+    else if (id === "santa_hat") eObj.santaHat = !eObj.santaHat;
+    else if (id === "card_christmas") eObj.cardEffect = eObj.cardEffect === id ? null : id;
+    saveState(); applyAllEffects(); toast("✓ " + it.n + " equipado/activado", false, true);
     renderShopItems($("shopTabs").querySelector(".on").dataset.cat);
   }
 });
 
 /* ============ Pase ============ */
 function renderPass() {
-  const lvl = passLevel();
-  const prog = passXPProgress();
+  const lvl = passLevel(), prog = passXPProgress();
   let premiumStr = gstate.pass.premium ? "<span style='color:var(--gold2);font-family:var(--px);font-size:10px'>✓ PREMIUM ACTIVO</span>" : "<button class='btn gold sm' id='btnBuyPremium'>⭐ Desbloquear Premium (800 🪙)</button>";
   
   $("passHeader").innerHTML = 
     "<h2>❄ TEMPORADA 1 — NAVIDAD</h2>" +
     "<div class='sub'>Progreso del pase. Nivel máximo 30.</div>" +
-    "<div class='pass-progress'>" +
-      "<div class='pass-level'>NIVEL " + lvl + "</div>" +
-      "<div class='pass-bar'><b style='width:" + prog.pct + "%'></b></div>" +
-      "<div style='font-size:12px;color:var(--dim);min-width:70px'>" + prog.cur + " / " + prog.max + " XP</div>" +
-    "</div>" +
-    "<div style='display:flex;gap:10px;flex-wrap:wrap;margin-top:8px'>" +
-      premiumStr +
-      "<span style='font-size:11px;color:var(--dim)'>XP total: " + gstate.xp.toLocaleString("es") + "</span>" +
-    "</div>";
+    "<div class='pass-progress'><div class='pass-level'>NIVEL " + lvl + "</div>" +
+    "<div class='pass-bar'><b style='width:" + prog.pct + "%'></b></div>" +
+    "<div style='font-size:12px;color:var(--dim);min-width:70px'>" + prog.cur + " / " + prog.max + " XP</div></div>" +
+    "<div style='display:flex;gap:10px;flex-wrap:wrap;margin-top:8px'>" + premiumStr +
+    "<span style='font-size:11px;color:var(--dim)'>XP total: " + gstate.xp.toLocaleString("es") + "</span>" +
+    "<span style='font-size:11px;color:var(--gold);margin-left:auto;font-family:var(--px)'>🪙 " + gstate.coins.toLocaleString("es") + "</span></div>";
 
-  if (!gstate.pass.premium) {
-    const btn = $("btnBuyPremium");
-    if (btn) btn.onclick = () => {
+  if (!gstate.pass.premium && $("btnBuyPremium")) {
+    $("btnBuyPremium").onclick = () => {
       if (gstate.coins < 800) return toast("Monedas insuficientes", true);
       gstate.coins -= 800; gstate.pass.premium = true;
-      saveState(); updateCoinsUI(); renderPass();
-      toast("⭐ Premium desbloqueado", false, true);
+      saveState(); updateCoinsUI(); renderPass(); toast("⭐ Premium desbloqueado", false, true);
     };
   }
 
-  const weekNum = getWeekNumber() % 4 + 1;
-  const challenges = WEEKLY_CHALLENGES[weekNum] || WEEKLY_CHALLENGES[1];
+  const weekNum = getWeekNumber() % 4 + 1, challenges = WEEKLY_CHALLENGES[weekNum] || WEEKLY_CHALLENGES[1];
   $("passChallenges").innerHTML = "<h3>&gt; RETOS DE LA SEMANA</h3>" + challenges.map(c => {
     const done = gstate.weekly.completed.includes(c.id);
-    return "<div class='challenge " + (done?"done":"") + "'>" +
-      "<span class='chk-icon'>" + (done?"✓":"○") + "</span>" +
-      "<div class='c-info'><b>" + esc(c.t) + "</b><small>" + (c.type === "easy"?"Fácil":c.type === "medium"?"Medio":"Difícil") + "</small></div>" +
-      "<span class='c-xp'>+" + c.xp + " XP</span>" +
-      (!done ? "<button class='btn sm' data-challenge='" + c.id + "'>COMPLETAR</button>" : "") +
-    "</div>";
+    return "<div class='challenge " + (done?"done":"") + "'><span class='chk-icon'>" + (done?"✓":"○") + "</span><div class='c-info'><b>" + esc(c.t) + "</b><small>" + (c.type === "easy"?"Fácil":c.type === "medium"?"Medio":"Difícil") + "</small></div><span class='c-xp'>+" + c.xp + " XP</span>" + (!done ? "<button class='btn sm' data-challenge='" + c.id + "'>COMPLETAR</button>" : "") + "</div>";
   }).join("");
 
   let rows = "";
   for (let i = 1; i <= 30; i++) {
-    const rewards = PASS_REWARDS[i];
     const reached = lvl >= i;
-    const freeClaimed = gstate.pass.claimedFree.includes(i);
-    const premClaimed = gstate.pass.claimedPrem.includes(i);
-    rows += "<div class='pass-row " + (reached?"reached":"") + "'>" +
-      "<div class='lvl'>" + i + "</div>" +
-      renderReward(rewards.free, i, "free", reached, freeClaimed) +
-      renderReward(rewards.prem, i, "prem", reached, premClaimed) +
-      "<div></div>" +
-    "</div>";
+    rows += "<div class='pass-row " + (reached?"reached":"") + "'><div class='lvl'>" + i + "</div>" +
+      renderReward(PASS_REWARDS[i].free, i, "free", reached, gstate.pass.claimedFree.includes(i)) +
+      renderReward(PASS_REWARDS[i].prem, i, "prem", reached, gstate.pass.claimedPrem.includes(i)) +
+    "<div></div></div>";
   }
   $("passTracks").innerHTML = rows;
 }
 
 function renderReward(r, lvl, track, reached, claimed) {
-  const isPrem = track === "prem";
-  const isPremLocked = isPrem && !gstate.pass.premium;
-  const label = isPrem ? "PREMIUM" : "GRATIS";
+  const isPrem = track === "prem", isPremLocked = isPrem && !gstate.pass.premium;
   let icon = "🎁", name = "Recompensa";
-  
   if (r.type === "coins") { icon = "🪙"; name = r.amount + " monedas"; }
   else if (r.type === "xp") { icon = "✨"; name = r.amount + " XP"; }
-  else if (r.type === "roulette") { 
-    icon = "🎰"; 
-    const tierName = r.tier === "common" ? "común" : r.tier === "uncommon" ? "poco común" : r.tier === "rare" ? "rara" : "legendaria";
-    name = "Ruleta " + tierName; 
-  }
+  else if (r.type === "roulette") { icon = "🎰"; name = "Ruleta " + (r.tier === "common" ? "común" : r.tier === "uncommon" ? "poco común" : r.tier === "rare" ? "rara" : "legendaria"); }
   else if (r.type === "item") { const it = ITEMS[r.id]; if (it) { icon = it.icon; name = it.n; } }
   else if (r.type === "title") { const tt = TITLES[r.id]; if (tt) { icon = "🏆"; name = "Título: " + tt.n; } }
   
@@ -1149,114 +1086,86 @@ function renderReward(r, lvl, track, reached, claimed) {
   else if (isPremLocked) btn = "<button disabled>⭐ Premium</button>";
   else btn = "<button data-claim='" + lvl + "' data-track='" + track + "'>RECLAMAR</button>";
   
-  return "<div class='pass-reward " + (isPrem?"premium":"free") + " " + (claimed?"claimed":"") + "'>" +
-    "<span class='r-label'>" + label + "</span>" +
-    "<span class='r-icon'>" + icon + "</span>" +
-    "<span class='r-name'>" + esc(name) + "</span>" +
-    btn +
-  "</div>";
+  return "<div class='pass-reward " + (isPrem?"premium":"free") + " " + (claimed?"claimed":"") + "'><span class='r-label'>" + (isPrem?"PREMIUM":"GRATIS") + "</span><span class='r-icon'>" + icon + "</span><span class='r-name'>" + esc(name) + "</span>" + btn + "</div>";
 }
 
 $("passChallenges").addEventListener("click", e => {
   const b = e.target.closest("[data-challenge]"); if (!b) return;
-  const id = b.dataset.challenge;
-  if (gstate.weekly.completed.includes(id)) return;
-  const weekNum = getWeekNumber() % 4 + 1;
+  const id = b.dataset.challenge, weekNum = getWeekNumber() % 4 + 1;
   const ch = (WEEKLY_CHALLENGES[weekNum] || []).find(x => x.id === id);
-  if (!ch) return;
-  gstate.weekly.completed.push(id);
-  addXP(ch.xp);
-  saveState();
-  renderPass();
-  toast("+" + ch.xp + " XP · Reto completado");
+  if (!ch || gstate.weekly.completed.includes(id)) return;
+  gstate.weekly.completed.push(id); addXP(ch.xp); saveState(); renderPass(); toast("+" + ch.xp + " XP · Reto completado");
 });
 
 $("passTracks").addEventListener("click", e => {
   const b = e.target.closest("[data-claim]"); if (!b) return;
-  const lvl = parseInt(b.dataset.claim);
-  const track = b.dataset.track;
-  claimReward(lvl, track);
+  claimReward(parseInt(b.dataset.claim), b.dataset.track);
 });
 
 function claimReward(lvl, track) {
-  const rewards = PASS_REWARDS[lvl];
-  const r = track === "free" ? rewards.free : rewards.prem;
-  const isPrem = track === "prem";
-  if (isPrem && !gstate.pass.premium) return toast("Necesitas premium", true);
-  const claimedArr = isPrem ? gstate.pass.claimedPrem : gstate.pass.claimedFree;
-  if (claimedArr.includes(lvl)) return;
+  const r = track === "free" ? PASS_REWARDS[lvl].free : PASS_REWARDS[lvl].prem;
+  const isPrem = track === "prem", claimedArr = isPrem ? gstate.pass.claimedPrem : gstate.pass.claimedFree;
+  if ((isPrem && !gstate.pass.premium) || claimedArr.includes(lvl)) return;
   
   if (r.type === "coins") addCoins(r.amount);
   else if (r.type === "xp") addXP(r.amount);
   else if (r.type === "item") {
-    if (hasItem(r.id)) {
-      addCoins(100);
-      toast("Ya tenías \"" + ITEMS[r.id].n + "\". Recibes 100 🪙 de compensación");
-    } else {
-      gstate.inventory.push(r.id);
-      addCoins(0);
-      toast("✓ Desbloqueado: " + ITEMS[r.id].n, false, true);
-    }
+    if (hasItem(r.id)) { addCoins(100); toast("Ya tenías \"" + ITEMS[r.id].n + "\". Recibes 100 🪙"); }
+    else { gstate.inventory.push(r.id); toast("✓ Desbloqueado: " + ITEMS[r.id].n, false, true); }
   } else if (r.type === "title") {
-    if (hasTitle(r.id)) { addCoins(200); toast("Título duplicado → +200 🪙"); }
-    else { unlockTitle(r.id); addCoins(0); }
+    if (hasTitle(r.id)) { addCoins(200); toast("Título duplicado → +200 🪙"); } else unlockTitle(r.id);
   } else if (r.type === "roulette") {
-    claimedArr.push(lvl);
-    saveState();
-    renderPass();
-    openPassRoulette(r.tier, () => {});
-    return;
+    claimedArr.push(lvl); saveState(); renderPass(); openPassRoulette(r.tier, () => {}); return;
   }
-  claimedArr.push(lvl);
-  saveState();
-  renderPass();
-  updateCoinsUI();
+  claimedArr.push(lvl); saveState(); renderPass(); updateCoinsUI();
 }
 
+/* ============ RULETA VISUAL ============ */
 function openPassRoulette(tier, cb) {
+  const r = $("roulette"), wheel = $("roulWheel");
+  wheel.style.transition = "none"; wheel.style.transform = "rotate(0deg)";
+  
   const pool = ROULETTE_POOLS[tier];
   const totalW = pool.reduce((s,x) => s + x.weight, 0);
-  const rolls = 20 + Math.floor(Math.random() * 10);
-  let r = Math.random() * totalW, chosen = pool[0];
-  for (const it of pool) { if (r < it.weight) { chosen = it; break; } r -= it.weight; }
+  let rand = Math.random() * totalW, chosen = pool[0];
+  for (const it of pool) { if (rand < it.weight) { chosen = it; break; } rand -= it.weight; }
   
-  const stage = $("roulStage"), name = $("roulName"), label = $("roulLabel"), actions = $("roulActions");
-  stage.style.fontSize = "70px";
-  actions.hidden = true;
-  label.textContent = "> GIRANDO RULETA " + tier.toUpperCase() + "…";
-  let step = 0;
-  
-  function tick() {
-    if (step >= rolls) {
-      stage.textContent = rewardIcon(chosen);
-      name.textContent = rewardName(chosen);
-      label.textContent = "> ¡GANASTE!";
-      applyReward(chosen);
-      actions.hidden = false;
-      $("roulOpen").textContent = "✓ ACEPTAR";
-      $("roulOpen").onclick = () => { $("roulette").classList.remove("open"); if (cb) cb(); };
-      $("roulAgain").hidden = true;
-      $("roulClose").hidden = true;
-      return;
-    }
-    const randomItem = pool[Math.floor(Math.random() * pool.length)];
-    stage.textContent = rewardIcon(randomItem);
-    name.textContent = rewardName(randomItem);
-    step++;
-    const p = step / rolls;
-    setTimeout(tick, 60 + Math.pow(p, 3) * 350);
+  const slices = 8; // 8 porciones visuales
+  wheel.innerHTML = "";
+  for(let i=0; i<slices; i++) {
+    const deg = (360 / slices) * i;
+    const el = document.createElement("div");
+    el.className = "roul-slice";
+    el.style.transform = "rotate(" + deg + "deg)";
+    el.style.background = i % 2 === 0 ? "var(--tA)" : "var(--panel)";
+    el.textContent = i+1;
+    wheel.appendChild(el);
   }
-  $("roulette").classList.add("open");
-  tick();
+  
+  $("roulLabel").textContent = "> GIRANDO RULETA " + tier.toUpperCase() + "…";
+  $("roulName").textContent = "";
+  $("roulActions").hidden = true;
+  r.classList.add("open");
+  
+  const spins = 5 + Math.floor(Math.random() * 3);
+  const targetDeg = (360 * spins) + (Math.floor(Math.random() * slices) * (360/slices));
+  
+  setTimeout(() => {
+    wheel.style.transition = "transform 4s cubic-bezier(.17,.67,.12,1)";
+    wheel.style.transform = "rotate(" + targetDeg + "deg)";
+  }, 50);
+  
+  setTimeout(() => {
+    $("roulLabel").textContent = "> ¡GANASTE!";
+    $("roulName").textContent = rewardName(chosen);
+    $("roulActions").hidden = false;
+    $("roulOpen").textContent = "✓ ACEPTAR";
+    $("roulOpen").onclick = () => { r.classList.remove("open"); applyReward(chosen); if(cb)cb(); };
+    $("roulAgain").hidden = true;
+    $("roulClose").hidden = true;
+  }, 4200);
 }
 
-function rewardIcon(r) {
-  if (r.type === "coins") return "🪙";
-  if (r.type === "xp") return "✨";
-  if (r.type === "item") return ITEMS[r.id] ? ITEMS[r.id].icon : "🎁";
-  if (r.type === "title") return "🏆";
-  return "🎁";
-}
 function rewardName(r) {
   if (r.type === "coins") return r.amount + " monedas";
   if (r.type === "xp") return r.amount + " XP";
@@ -1272,38 +1181,16 @@ function applyReward(r) {
     else { gstate.inventory.push(r.id); toast("✓ " + ITEMS[r.id].n, false, true); }
   }
   else if (r.type === "title") {
-    if (hasTitle(r.id)) { addCoins(200); }
-    else { unlockTitle(r.id); }
+    if (hasTitle(r.id)) { addCoins(200); } else { unlockTitle(r.id); }
   }
   saveState(); updateCoinsUI(); renderPass();
 }
-
-/* ============ Modal genèric ============ */
-let modalCb = null;
-function openModal(title, text, buttons) {
-  $("modalTitle").textContent = "> " + title;
-  $("modalBody").innerHTML = "<p style='white-space:pre-line'>" + esc(text) + "</p>";
-  $("modalActs").innerHTML = "";
-  buttons.forEach(b => {
-    const btn = document.createElement("button");
-    btn.className = "btn " + (b.primary ? "primary" : "") + " " + (b.danger ? "danger" : "");
-    btn.textContent = b.t;
-    btn.onclick = b.cb;
-    $("modalActs").appendChild(btn);
-  });
-  $("modal").classList.add("open");
-}
-function closeModal() { $("modal").classList.remove("open"); }
-$("modalX").onclick = closeModal;
-$("modal").addEventListener("click", e => { if (e.target === $("modal")) closeModal(); });
 
 /* ============ Intros ============ */
 function buildIntro() {
   const type = gstate.equipped.intro || "crt";
   const el = $("intro");
-  el.className = "intro";
-  el.innerHTML = "";
-  el.onclick = null;
+  el.className = "intro"; el.innerHTML = ""; el.onclick = null;
   
   const finish = () => {
     el.classList.add("out");
@@ -1311,113 +1198,43 @@ function buildIntro() {
     setTimeout(() => document.documentElement.classList.remove("intro-on", "intro-go"), 700);
   };
   
-  if (type === "none") {
-    document.documentElement.classList.remove("intro-on");
-    return;
-  }
-  if (type === "flash") {
-    el.classList.add("flash");
-    el.innerHTML = "<div class='i-core'><h2 class='i-title'><span>E</span><span>T</span><span>H</span><span>O</span><span>S</span></h2></div>";
-    setTimeout(finish, 900);
-    return;
-  }
-  if (type === "logo") {
-    el.classList.add("crt");
-    el.innerHTML = "<div class='i-core'><div class='i-logo'><div class='i-e' id='iE'></div></div></div>";
-    renderELogo($("iE"));
-    setTimeout(finish, 1200);
-    return;
-  }
+  if (type === "none") { document.documentElement.classList.remove("intro-on"); return; }
+  if (type === "flash") { el.classList.add("flash"); el.innerHTML = "<div class='i-core'><h2 class='i-title'><span>E</span><span>T</span><span>H</span><span>O</span><span>S</span></h2></div>"; setTimeout(finish, 900); return; }
+  if (type === "logo") { el.classList.add("crt"); el.innerHTML = "<div class='i-core'><div class='i-logo'><div class='i-e' id='iE'></div></div></div>"; renderELogo($("iE")); setTimeout(finish, 1200); return; }
   if (type === "msdos") {
     el.classList.add("crt");
-    el.innerHTML = "<div class='i-core' style='font-family:var(--mono);color:#c0c0c0;width:380px;max-width:90vw'>" +
-      "<div>C:\\&gt; ethos.exe</div>" +
-      "<div id='msBar' style='border:2px solid #c0c0c0;padding:4px;margin-top:10px'><span id='msFill' style='display:inline-block;background:#c0c0c0;color:#000;width:0;padding:0 2px'> </span></div>" +
-      "<div style='margin-top:10px;font-size:13px'>Cargando sistema de entretenimiento<span class='blink'>_</span></div>" +
-    "</div>";
-    let p = 0;
-    const t = setInterval(() => { 
-      p += 10; 
-      $("msFill").style.width = p + "%"; 
-      $("msFill").textContent = p + "%"; 
-      if (p >= 100) { clearInterval(t); setTimeout(finish, 300); } 
-    }, 80);
+    el.innerHTML = "<div class='i-core' style='font-family:var(--mono);color:#c0c0c0;width:380px;max-width:90vw'><div>C:\\&gt; ethos.exe</div><div id='msBar' style='border:2px solid #c0c0c0;padding:4px;margin-top:10px'><span id='msFill' style='display:inline-block;background:#c0c0c0;color:#000;width:0;padding:0 2px'> </span></div><div style='margin-top:10px;font-size:13px'>Cargando sistema<span class='blink'>_</span></div></div>";
+    let p = 0; const t = setInterval(() => { p += 10; $("msFill").style.width = p + "%"; $("msFill").textContent = p + "%"; if (p >= 100) { clearInterval(t); setTimeout(finish, 300); } }, 80);
     return;
   }
   if (type === "terminal") {
-    el.classList.add("crt");
-    const name = gstate.profile.name;
-    el.innerHTML = "<div class='i-core' style='font-family:var(--mono);color:var(--acc);font-size:18px;min-height:100px'>" +
-      "<div>&gt; login_</div>" +
-      "<div id='termOut' style='color:var(--txt);margin-top:10px'></div>" +
-    "</div>";
-    let i = 0;
-    const t = setInterval(() => { 
-      i++; 
-      $("termOut").textContent = name.slice(0, i) + (i % 2 ? "_" : ""); 
-      if (i >= name.length) { 
-        clearInterval(t); 
-        setTimeout(() => { $("termOut").textContent = name; setTimeout(finish, 400); }, 300); 
-      } 
-    }, 100);
+    el.classList.add("crt"); const name = gstate.profile.name;
+    el.innerHTML = "<div class='i-core' style='font-family:var(--mono);color:var(--acc);font-size:18px;min-height:100px'><div>&gt; login_</div><div id='termOut' style='color:var(--txt);margin-top:10px'></div></div>";
+    let i = 0; const t = setInterval(() => { i++; $("termOut").textContent = name.slice(0, i) + (i % 2 ? "_" : ""); if (i >= name.length) { clearInterval(t); setTimeout(() => { $("termOut").textContent = name; setTimeout(finish, 400); }, 300); } }, 100);
     return;
   }
   if (type === "named") {
-    el.classList.add("crt");
-    const name = gstate.profile.name.toUpperCase();
+    el.classList.add("crt"); const name = gstate.profile.name.toUpperCase();
     el.innerHTML = "<div class='i-core'><h2 class='i-title'><span style='--i:0'>" + esc(name) + "</span></h2><p class='i-tag'>bienvenido a ethos</p></div>";
-    setTimeout(finish, 2000);
-    return;
+    setTimeout(finish, 2000); return;
   }
   if (type === "sleigh") {
-    el.innerHTML = "<div class='sleigh-intro'>" +
-      "<div class='moon'></div>" +
-      "<div class='snow-layer'>" + makeSnow(30) + "</div>" +
-      "<div class='sleigh-svg'>" +
-        "<svg viewBox='0 0 200 120' fill='none' stroke='currentColor' stroke-width='3'>" +
-          "<path d='M10 90 Q30 80, 50 90 L150 90 Q170 90, 170 75 L170 60' stroke='#d4a870' fill='#7a4a1a'/>" +
-          "<path d='M50 90 L50 60 L130 60 L130 90' stroke='#d4a870' fill='#7a4a1a'/>" +
-          "<circle cx='30' cy='80' r='8' stroke='#fff' fill='#fff'/>" +
-          "<circle cx='170' cy='80' r='8' stroke='#fff' fill='#fff'/>" +
-          "<path d='M140 60 L160 30 L175 40 Z' stroke='#fff' fill='#8b0000'/>" +
-          "<text x='155' y='45' font-size='14' fill='#fff'>🦌</text>" +
-        "</svg>" +
-      "</div>" +
-      "<div class='title-sleigh'>MERRY ETHOS</div>" +
-    "</div>";
-    setTimeout(finish, 3200);
-    return;
+    el.innerHTML = "<div class='sleigh-intro'><div class='moon'></div><div class='snow-layer'>" + makeSnow(30) + "</div><div class='sleigh-svg'><svg viewBox='0 0 200 120' fill='none' stroke='currentColor' stroke-width='3'><path d='M10 90 Q30 80, 50 90 L150 90 Q170 90, 170 75 L170 60' stroke='#d4a870' fill='#7a4a1a'/><path d='M50 90 L50 60 L130 60 L130 90' stroke='#d4a870' fill='#7a4a1a'/><circle cx='30' cy='80' r='8' stroke='#fff' fill='#fff'/><circle cx='170' cy='80' r='8' stroke='#fff' fill='#fff'/><path d='M140 60 L160 30 L175 40 Z' stroke='#fff' fill='#8b0000'/><text x='155' y='45' font-size='14' fill='#fff'>🦌</text></svg></div><div class='title-sleigh'>MERRY ETHOS</div></div>";
+    setTimeout(finish, 3200); return;
   }
   if (type === "snow") {
-    el.innerHTML = "<div class='snow-intro'>" +
-      "<div class='snow-layer'>" + makeSnow(60) + "</div>" +
-      "<div class='title-snow'>❄ ETHOS ❄</div>" +
-    "</div>";
-    setTimeout(finish, 2800);
-    return;
+    el.innerHTML = "<div class='snow-intro'><div class='snow-layer'>" + makeSnow(60) + "</div><div class='title-snow'>❄ ETHOS ❄</div></div>";
+    setTimeout(finish, 2800); return;
   }
   if (type === "legend_christmas") {
-    el.innerHTML = "<div class='legend-intro'>" +
-      "<div class='moon' style='position:absolute;top:10%;left:20%;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,#fff8d0,#ffd76a);box-shadow:0 0 80px rgba(255,215,106,.8)'></div>" +
-      "<div class='snow-layer'>" + makeSnow(80) + "</div>" +
-      "<div class='title-legend'>🎄 ETHOS 🎄<br><span style='font-size:.6em'>NAVIDAD LEGENDARIA</span></div>" +
-      "<div class='sub-legend'>FELIZ NAVIDAD, " + esc(gstate.profile.name.toUpperCase()) + "</div>" +
-    "</div>";
-    setTimeout(finish, 4000);
-    return;
+    el.innerHTML = "<div class='legend-intro'><div class='moon' style='position:absolute;top:10%;left:20%;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,#fff8d0,#ffd76a);box-shadow:0 0 80px rgba(255,215,106,.8)'></div><div class='snow-layer'>" + makeSnow(80) + "</div><div class='title-legend'>🎄 ETHOS 🎄<br><span style='font-size:.6em'>NAVIDAD LEGENDARIA</span></div><div class='sub-legend'>FELIZ NAVIDAD, " + esc(gstate.profile.name.toUpperCase()) + "</div></div>";
+    setTimeout(finish, 4000); return;
   }
   
   el.classList.add("crt");
-  el.innerHTML = "<div class='i-core'>" +
-    "<div class='i-logo'><div class='i-e' id='iE'></div></div>" +
-    "<h2 class='i-title'><span style='--i:0'>E</span><span style='--i:1'>T</span><span style='--i:2'>H</span><span style='--i:3'>O</span><span style='--i:4'>S</span></h2>" +
-    "<p class='i-tag'>&gt; sistema de entretenimiento</p>" +
-    "<div class='i-bar'><b></b></div>" +
-    "<p class='i-start'>PRESS START</p>" +
-  "</div>";
+  el.innerHTML = "<div class='i-core'><div class='i-logo'><div class='i-e' id='iE'></div></div><h2 class='i-title'><span style='--i:0'>E</span><span style='--i:1'>T</span><span style='--i:2'>H</span><span style='--i:3'>O</span><span style='--i:4'>S</span></h2><p class='i-tag'>&gt; sistema de entretenimiento</p><div class='i-bar'><b></b></div><p class='i-start'>PRESS START</p></div>";
   renderELogo($("iE"));
-  setTimeout(finish, 3000);
-  el.onclick = finish;
+  setTimeout(finish, 3000); el.onclick = finish;
   addEventListener("keydown", e => { if (["Enter", " ", "Escape"].includes(e.key)) finish(); }, { once: true });
 }
 
@@ -1430,24 +1247,15 @@ function renderELogo(target) {
     return "<span class='px' style='left:" + (c * 18) + "px;top:" + (r * 18) + "px;--i:" + k + ";--dx:" + Math.round(Math.cos(a) * d) + "px;--dy:" + Math.round(Math.sin(a) * d) + "px;--r:" + Math.round(Math.random() * 360 - 180) + "deg'></span>";
   }).join("");
 }
-
 function makeSnow(n) {
   let h = "";
   for (let i = 0; i < n; i++) {
-    const left = Math.random() * 100;
-    const dur = 3 + Math.random() * 4;
-    const delay = -Math.random() * dur;
-    const size = 8 + Math.random() * 16;
+    const left = Math.random() * 100, dur = 3 + Math.random() * 4, delay = -Math.random() * dur, size = 8 + Math.random() * 16;
     h += "<span class='snow' style='left:" + left + "%;font-size:" + size + "px;animation-duration:" + dur + "s;animation-delay:" + delay + "s'>❄</span>";
   }
   return h;
 }
-
-function getWeekNumber() {
-  const d = new Date();
-  const start = new Date(d.getFullYear(), 0, 1);
-  return Math.ceil((((d - start) / 86400000) + start.getDay() + 1) / 7);
-}
+function getWeekNumber() { const d = new Date(); const start = new Date(d.getFullYear(), 0, 1); return Math.ceil((((d - start) / 86400000) + start.getDay() + 1) / 7); }
 
 /* ============ Temes ============ */
 function temaDesbloquejat(k) {
@@ -1459,12 +1267,8 @@ function temaDesbloquejat(k) {
 function desbloquejarDorado() {
   try {
     if (localStorage.getItem("ethos_secret_dorado") === "1") return;
-    localStorage.setItem("ethos_secret_dorado", "1");
-    unlockTitle("elegido");
-    unlockAchievement("theme_gold");
-    pintaTemas();
-    toast("★ TEMA DORADO SECRETO DESBLOQUEJADO", false, true);
-    setTimeout(() => applyTheme("dorado", true), 400);
+    localStorage.setItem("ethos_secret_dorado", "1"); unlockTitle("elegido"); unlockAchievement("theme_gold"); pintaTemas();
+    toast("★ TEMA DORADO SECRETO DESBLOQUEJADO", false, true); setTimeout(() => applyTheme("dorado", true), 400);
   } catch (e) {}
 }
 function pintaTemas() {
@@ -1476,79 +1280,44 @@ function pintaTemas() {
 $("btnTheme").onclick = e => { e.stopPropagation(); pintaTemas(); $("themes").hidden = !$("themes").hidden; };
 $("themes").addEventListener("click", e => {
   const b = e.target.closest("[data-theme]"); if (!b || b.disabled) return;
-  document.body.style.transition = "opacity .3s ease";
-  document.body.style.opacity = "0.7";
-  setTimeout(() => {
-    applyTheme(b.dataset.theme, true);
-    pintaTemas();
-    document.body.style.opacity = "1";
-    setTimeout(() => { document.body.style.transition = ""; }, 400);
-  }, 150);
+  document.body.style.transition = "opacity .3s ease"; document.body.style.opacity = "0.7";
+  setTimeout(() => { applyTheme(b.dataset.theme, true); pintaTemas(); document.body.style.opacity = "1"; setTimeout(() => { document.body.style.transition = ""; }, 400); }, 150);
 });
 document.addEventListener("click", e => { if (!e.target.closest("#themes")) $("themes").hidden = true; });
 
 /* ============ Jocs (Firebase) ============ */
 let juegos = [], cat = "ALL", favs = leer("ethos_favs"), recientes = leer("ethos_recent"), error = false, actual = null, unsub = null;
-
 async function cargar() {
   $("lista").innerHTML = "<div class='skel'></div>".repeat(6);
   if (unsub) { unsub(); unsub = null; }
   try {
     unsub = db.collection("games").onSnapshot(snap => {
-      juegos = snap.docs.map(d => Object.assign({ id: d.id }, d.data()));
-      error = false;
+      juegos = snap.docs.map(d => Object.assign({ id: d.id }, d.data())); error = false;
       try { localStorage.setItem("ethos_cache_games", JSON.stringify(juegos)); } catch (e) {}
       renderTodo();
     }, e => {
       console.error(e); error = true;
-      try {
-        const cached = JSON.parse(localStorage.getItem("ethos_cache_games") || "[]");
-        if (cached.length) { juegos = cached; toast("Sin conexión: caché"); }
-      } catch (e2) {}
+      try { const cached = JSON.parse(localStorage.getItem("ethos_cache_games") || "[]"); if (cached.length) { juegos = cached; toast("Sin conexión: caché"); } } catch (e2) {}
       renderTodo();
     });
-  } catch (e) {
-    console.error(e); error = true;
-    try {
-      const cached = JSON.parse(localStorage.getItem("ethos_cache_games") || "[]");
-      if (cached.length) juegos = cached;
-    } catch (e2) {}
-    renderTodo();
-  }
+  } catch (e) { console.error(e); error = true; renderTodo(); }
 }
-
 function renderTodo() { renderHome(); renderChips(); renderJuegos(); renderAdmin(); }
 
 function tarjeta(j, i = 0) {
-  const logo = safeUrl(j.logo);
-  const abierto = actual && actual.id === j.id;
-  const esFav = favs.includes(j.id);
-  const nombre = j.nombre && j.nombre.trim() ? j.nombre : "?";
-  let tileContent = "";
-  let tileClass = "tile";
-  if (logo) {
-    tileContent = "<img src='" + esc(logo) + "' alt='' loading='lazy' onerror=\"this.parentNode.classList.add('soon-mode');this.remove()\">";
-  } else {
-    tileClass += " soon-mode";
-    tileContent = "<span class='soon'>&gt; LOGO<br>COMING SOON</span>";
-  }
-  
-  let html = "<article class='card " + (abierto?"open":"") + "' tabindex='0' data-id='" + esc(j.id) + "' style='animation-delay:" + (Math.min(i,12)*40) + "ms'>" +
-    "<div class='bar'><span>" + esc(slug(j.nombre||"juego")) + "</span><span class='bar-r'>" + (j.noEmbed?"<span class='ext'>↗</span>":"") + "<button class='fav' data-fav='" + esc(j.id) + "'>" + (esFav?"★":"☆") + "</button></span></div>" +
-    "<div class='" + tileClass + "'>" + tileContent + "<div class='play'><span>&gt; JUGAR</span></div></div>" +
-    "<div class='foot'><div class='row'><h3>" + esc(nombre) + "</h3>" + (j.category?"<span class='tag'>" + esc(j.category) + "</span>":"") + "</div><div class='go'>&gt; JUGAR</div></div>" +
-  "</article>";
-  return html;
+  const logo = safeUrl(j.logo), abierto = actual && actual.id === j.id, esFav = favs.includes(j.id), nombre = j.nombre && j.nombre.trim() ? j.nombre : "?";
+  let tileContent = "", tileClass = "tile";
+  if (logo) tileContent = "<img src='" + esc(logo) + "' alt='' loading='lazy' onerror=\"this.parentNode.classList.add('soon-mode');this.remove()\">";
+  else { tileClass += " soon-mode"; tileContent = "<span class='soon'>&gt; LOGO<br>COMING SOON</span>"; }
+  return "<article class='card " + (abierto?"open":"") + "' tabindex='0' data-id='" + esc(j.id) + "' style='animation-delay:" + (Math.min(i,12)*40) + "ms'><div class='bar'><span>" + esc(slug(j.nombre||"juego")) + "</span><span class='bar-r'>" + (j.noEmbed?"<span class='ext'>↗</span>":"") + "<button class='fav' data-fav='" + esc(j.id) + "'>" + (esFav?"★":"☆") + "</button></span></div><div class='" + tileClass + "'>" + tileContent + "<div class='play'><span>&gt; JUGAR</span></div></div><div class='foot'><div class='row'><h3>" + esc(nombre) + "</h3>" + (j.category?"<span class='tag'>" + esc(j.category) + "</span>":"") + "</div><div class='go'>&gt; JUGAR</div></div></article>";
 }
 const vacio = msg => "<p class='empty'>" + msg + "</p>";
 
 function renderHome() {
   const cats = new Set(juegos.map(j => j.category).filter(Boolean));
   $("stJuegos").textContent = error && !juegos.length ? "---" : pad(juegos.length, 3);
-  $("stCats").textContent = pad(cats.size, 2);
-  $("stFavs").textContent = pad(favs.length, 2);
+  $("stCats").textContent = pad(cats.size, 2); $("stFavs").textContent = pad(favs.length, 2);
   updateStreakUI();
-  updateCoinsUI();
   const rec = recientes.map(id => juegos.find(j => j.id === id)).filter(Boolean).slice(0, 4);
   const secRec = $("recientes"), secRecH = secRec ? secRec.previousElementSibling : null;
   if (secRec) {
@@ -1558,49 +1327,37 @@ function renderHome() {
   const nuevos = juegos.slice().sort((a, b) => (b.timestamp||0)-(a.timestamp||0)).slice(0, 4);
   $("destacados").innerHTML = nuevos.length ? nuevos.map(tarjeta).join("") : vacio("Aún no hay juegos.");
 }
-
 function renderChips() {
   const n = {}; juegos.forEach(j => { if (j.category) n[j.category] = (n[j.category]||0)+1; });
   const items = [["ALL","Todos",juegos.length]].concat(Object.keys(n).sort(collator.compare).map(c => [c,c,n[c]]));
   if (favs.length) items.push(["FAVS","★ Favoritos",favs.length]);
   $("chips").innerHTML = items.map(([k,l,c]) => "<button class='chip " + (cat===k?"on":"") + "' data-cat='" + esc(k) + "'>" + esc(l) + "<small>" + c + "</small></button>").join("");
 }
-
 function renderJuegos() {
   const f = norm($("searchBar").value.trim()), o = $("sort").value;
   const res = juegos.filter(j => {
     const matchTxt = !f || norm(j.nombre).includes(f) || norm(j.category||"").includes(f);
-    const matchCat = cat === "ALL" || (cat === "FAVS" ? favs.includes(j.id) : j.category === cat);
-    return matchTxt && matchCat;
+    return matchTxt && (cat === "ALL" || (cat === "FAVS" ? favs.includes(j.id) : j.category === cat));
   });
   res.sort((a, b) => {
-    if (o === "fav") {
-      const fa = favs.includes(a.id)?1:0, fb = favs.includes(b.id)?1:0;
-      if (fa !== fb) return fb - fa;
-      return collator.compare(a.nombre||"", b.nombre||"");
-    }
+    if (o === "fav") { const fa = favs.includes(a.id)?1:0, fb = favs.includes(b.id)?1:0; if (fa !== fb) return fb - fa; return collator.compare(a.nombre||"", b.nombre||""); }
     if (o === "new") return (b.timestamp||0) - (a.timestamp||0);
     return collator.compare(a.nombre||"", b.nombre||"");
   });
   $("lista").innerHTML = res.length ? res.map(tarjeta).join("") : vacio("Ningún juego coincide.");
   $("counter").textContent = res.length + " juego" + (res.length === 1 ? "" : "s");
 }
-
 function onCards(e) {
   const fv = e.target.closest("[data-fav]");
   if (fv) {
-    e.stopPropagation();
-    const id = fv.dataset.fav;
-    const wasFav = favs.includes(id);
+    e.stopPropagation(); const id = fv.dataset.fav, wasFav = favs.includes(id);
     favs = wasFav ? favs.filter(x => x !== id) : favs.concat([id]);
     localStorage.setItem("ethos_favs", JSON.stringify(favs));
     if (!wasFav && favs.length === 1) unlockAchievement("first_fav");
     if (cat === "FAVS" && !favs.length) cat = "ALL";
-    renderTodo();
-    return;
+    renderTodo(); return;
   }
-  const c = e.target.closest(".card[data-id]");
-  if (c) abrir(juegos.find(j => j.id === c.dataset.id));
+  const c = e.target.closest(".card[data-id]"); if (c) abrir(juegos.find(j => j.id === c.dataset.id));
 }
 ["lista", "destacados", "recientes"].forEach(id => {
   const el = $(id); if (!el) return;
@@ -1613,6 +1370,7 @@ $("chips").addEventListener("click", e => {
 });
 $("searchBar").addEventListener("input", e => {
   if (norm(e.target.value).trim() === "ethos") desbloquejarDorado();
+  if (norm(e.target.value).trim() === "admin") { $("searchBar").value = ""; location.hash = "#/admin"; }
   renderJuegos();
 });
 $("sort").addEventListener("change", renderJuegos);
@@ -1620,65 +1378,38 @@ $("sort").addEventListener("change", renderJuegos);
 /* ============ Player ============ */
 let focusAntes = null, noRespTimer = null;
 function abrir(j) {
-  const url = j && safeUrl(j.url);
-  if (!url) return toast("URL inválida", true);
+  const url = j && safeUrl(j.url); if (!url) return toast("URL inválida", true);
   recientes = [j.id].concat(recientes.filter(id => id !== j.id)).slice(0, 8);
   localStorage.setItem("ethos_recent", JSON.stringify(recientes));
   if (j.noEmbed) { window.open(url, "_blank", "noopener"); return; }
-  focusAntes = document.activeElement;
-  actual = j;
-  $("playerTitle").textContent = j.nombre || "";
-  $("playerFrame").src = url;
-  $("btnMark").hidden = !logueado();
-  $("pWarn").classList.remove("show");
-  $("pLoading").classList.add("on");
+  focusAntes = document.activeElement; actual = j;
+  $("playerTitle").textContent = j.nombre || ""; $("playerFrame").src = url; $("btnMark").hidden = !logueado();
+  $("pWarn").classList.remove("show"); $("pLoading").classList.add("on");
   $("player").classList.add("open"); document.body.style.overflow = "hidden";
   let lat = 0; const latEl = $("pLat"); latEl.style.width = "0";
   const latTick = setInterval(() => { lat = Math.min(100, lat+15+Math.random()*20); latEl.style.width = lat+"%"; if (lat>=100) clearInterval(latTick); }, 200);
   clearTimeout(noRespTimer);
-  noRespTimer = setTimeout(() => {
-    if (actual && actual.id === j.id && $("player").classList.contains("open")) {
-      $("pWarn").classList.add("show");
-      $("pwMark").hidden = !logueado();
-    }
-  }, 7000);
-  const onLoad = () => {
-    $("pLoading").classList.remove("on");
-    clearTimeout(noRespTimer);
-    $("pWarn").classList.remove("show");
-    $("playerFrame").removeEventListener("load", onLoad);
-  };
+  noRespTimer = setTimeout(() => { if (actual && actual.id === j.id && $("player").classList.contains("open")) { $("pWarn").classList.add("show"); $("pwMark").hidden = !logueado(); } }, 7000);
+  const onLoad = () => { $("pLoading").classList.remove("on"); clearTimeout(noRespTimer); $("pWarn").classList.remove("show"); $("playerFrame").removeEventListener("load", onLoad); };
   $("playerFrame").addEventListener("load", onLoad);
   window.__openedGames = (window.__openedGames || 0) + 1;
   if (window.__openedGames === 10) unlockAchievement("games_10");
   if (window.__openedGames === 50) unlockAchievement("games_50");
   renderTodo();
 }
-
 function cerrar(force) {
-  if (!force && actual) {
-    openModal("SALIR", "¿Seguro que quieres salir del juego?", [
-      {t:"Sí, salir", cb:()=>{closeModal();doCerrar();}, primary:true},
-      {t:"Cancelar", cb:closeModal}
-    ]);
-    return;
-  }
+  if (!force && actual) { openModal("SALIR", "¿Seguro que quieres salir del juego?", [{t:"Sí, salir", cb:()=>{closeModal();doCerrar();}, primary:true}, {t:"Cancelar", cb:closeModal}]); return; }
   doCerrar();
 }
 function doCerrar() {
-  clearTimeout(noRespTimer);
-  $("playerFrame").src = "about:blank"; $("player").classList.remove("open"); document.body.style.overflow = ""; actual = null;
-  $("pWarn").classList.remove("show");
-  renderTodo();
+  clearTimeout(noRespTimer); $("playerFrame").src = "about:blank"; $("player").classList.remove("open"); document.body.style.overflow = ""; actual = null;
+  $("pWarn").classList.remove("show"); renderTodo();
   if (focusAntes && focusAntes.focus) try { focusAntes.focus(); } catch (e) {}
 }
 function blank() {
-  const url = $("playerFrame").src, w = window.open("about:blank", "_blank");
-  if (!w) return toast("Permite ventanas emergentes", true);
-  w.document.title = $("playerTitle").textContent;
-  w.document.body.style.cssText = "margin:0;background:#000;height:100vh";
-  const f = w.document.createElement("iframe");
-  f.style.cssText = "width:100%;height:100%;border:0"; f.allow = "fullscreen; autoplay; gamepad; clipboard-write"; f.src = url;
+  const url = $("playerFrame").src, w = window.open("about:blank", "_blank"); if (!w) return toast("Permite ventanas emergentes", true);
+  w.document.title = $("playerTitle").textContent; w.document.body.style.cssText = "margin:0;background:#000;height:100vh";
+  const f = w.document.createElement("iframe"); f.style.cssText = "width:100%;height:100%;border:0"; f.allow = "fullscreen; autoplay; gamepad; clipboard-write"; f.src = url;
   w.document.body.appendChild(f); doCerrar();
 }
 $("btnClose").onclick = () => cerrar(false);
@@ -1687,139 +1418,79 @@ $("btnFull").onclick = () => $("playerFrame").requestFullscreen && $("playerFram
 $("btnReload").onclick = () => { const f = $("playerFrame"); f.src = f.src; };
 $("pwOpen").onclick = blank;
 $("pwIgnore").onclick = () => { $("pWarn").classList.remove("show"); clearTimeout(noRespTimer); };
-$("pwMark").onclick = async () => {
-  if (!logueado() || !actual) return;
-  try { await db.collection("games").doc(actual.id).update({ noEmbed: true }); toast("Marcado roto"); $("pWarn").classList.remove("show"); doCerrar(); } catch (err) { fail(err); }
-};
-$("btnMark").onclick = async () => {
-  if (!logueado() || !actual) return;
-  try { await db.collection("games").doc(actual.id).update({ noEmbed: true }); toast("Marcado roto"); doCerrar(); } catch (err) { fail(err); }
-};
-
-function panic() {
-  try { $("playerFrame").src = "about:blank"; $("musicFrame").src = "about:blank"; } catch (e) {}
-  location.replace(PANIC_URL);
-}
+$("pwMark").onclick = async () => { if (!logueado() || !actual) return; try { await db.collection("games").doc(actual.id).update({ noEmbed: true }); toast("Marcado roto"); $("pWarn").classList.remove("show"); doCerrar(); } catch (err) { fail(err); } };
+$("btnMark").onclick = async () => { if (!logueado() || !actual) return; try { await db.collection("games").doc(actual.id).update({ noEmbed: true }); toast("Marcado roto"); doCerrar(); } catch (err) { fail(err); } };
+function panic() { try { $("playerFrame").src = "about:blank"; $("musicFrame").src = "about:blank"; } catch (e) {} location.replace(PANIC_URL); }
 $("btnPanic").onclick = panic;
+
 let lastEsc = 0;
 addEventListener("keydown", e => {
   const open = $("player").classList.contains("open");
   if (e.key === "Escape") {
-    const now = Date.now();
-    if (now - lastEsc < 900) return panic();
-    lastEsc = now;
-    if (open) cerrar(false);
-    return;
+    const now = Date.now(); if (now - lastEsc < 900) return panic(); lastEsc = now;
+    if (open) cerrar(false); return;
   }
   if (enCampo() || e.ctrlKey || e.metaKey || e.altKey) return;
   if (e.code === "Backquote") return panic();
   if (e.key === "m" || e.key === "M") return musicaToggle();
   if (e.key === "/" && !open && $("searchBar").offsetParent) { e.preventDefault(); $("searchBar").focus(); }
-  if (e.key === "?" && !open) toast("Atajos: M = música · / = buscar · Esc Esc = salir");
 });
 
 /* ============ Al azar ============ */
 let roulPool = [], roulTarget = null;
 function azar() {
-  const f = norm($("searchBar").value.trim());
-  let pool = juegos.filter(j => safeUrl(j.url));
-  if (cat !== "ALL" && cat !== "FAVS") pool = pool.filter(j => j.category === cat);
-  else if (cat === "FAVS") pool = pool.filter(j => favs.includes(j.id));
+  const f = norm($("searchBar").value.trim()); let pool = juegos.filter(j => safeUrl(j.url));
+  if (cat !== "ALL" && cat !== "FAVS") pool = pool.filter(j => j.category === cat); else if (cat === "FAVS") pool = pool.filter(j => favs.includes(j.id));
   if (f) pool = pool.filter(j => norm(j.nombre).includes(f) || norm(j.category||"").includes(f));
-  
-  const withLogo = pool.filter(j => safeUrl(j.logo));
-  if (withLogo.length) { pool = withLogo; }
-  else if (pool.length) { toast("No hay juegos con logo, mostrando sin logo"); }
-  
+  const withLogo = pool.filter(j => safeUrl(j.logo)); if (withLogo.length) pool = withLogo; else if (pool.length) toast("No hay juegos con logo");
   if (!pool.length) return toast("No hay juegos disponibles", true);
-  roulPool = pool;
-  mostrarRuleta();
+  roulPool = pool; mostrarRuleta();
 }
-
 function mostrarRuleta() {
-  const r = $("roulette"), stage = $("roulStage");
-  stage.style.fontSize = "";
-  r.classList.add("open");
-  $("roulActions").hidden = true;
-  $("roulLabel").textContent = "> SELECCIONANDO JUEGO…";
-  $("roulName").textContent = "";
+  const r = $("roulette"), wheel = $("roulWheel");
+  wheel.style.transition = "none"; wheel.style.transform = "rotate(0deg)"; r.classList.add("open");
   
-  const pool = roulPool;
-  const totalSteps = 28 + Math.floor(Math.random() * 8);
-  let step = 0;
-  roulTarget = pool[Math.floor(Math.random() * pool.length)];
+  $("roulActions").hidden = true; $("roulLabel").textContent = "> SELECCIONANDO JUEGO…"; $("roulName").textContent = "";
+  const pool = roulPool; roulTarget = pool[Math.floor(Math.random() * pool.length)];
   
-  const cardEl = document.createElement("div");
-  cardEl.className = "roul-card on";
-  stage.innerHTML = "";
-  stage.appendChild(cardEl);
-  
-  function pintaJoc(j) {
-    const logo = safeUrl(j.logo);
-    if (logo) cardEl.innerHTML = "<div class='tile' style='width:100%;height:100%'><img src='" + esc(logo) + "' alt='' style='width:100%;height:100%;object-fit:cover' onerror=\"this.parentNode.classList.add('soon-mode');this.remove()\"></div>";
-    else cardEl.innerHTML = "<div class='tile soon-mode' style='width:100%;height:100%'><span class='soon'>&gt; SIN LOGO</span></div>";
-    $("roulName").textContent = j.nombre || "?";
+  const slices = 8; wheel.innerHTML = "";
+  for(let i=0; i<slices; i++) {
+    const el = document.createElement("div"); el.className = "roul-slice";
+    el.style.transform = "rotate(" + ((360 / slices) * i) + "deg)";
+    el.style.background = i % 2 === 0 ? "var(--tA)" : "var(--panel)"; el.textContent = i+1; wheel.appendChild(el);
   }
   
-  function tick() {
-    if (step >= totalSteps) {
-      pintaJoc(roulTarget);
-      $("roulLabel").textContent = "> ¡SELECCIONADO!";
-      $("roulActions").hidden = false;
-      $("roulOpen").textContent = "> JUGAR AHORA";
-      $("roulOpen").onclick = () => { r.classList.remove("open"); abrir(roulTarget); };
-      $("roulAgain").hidden = false;
-      $("roulClose").hidden = false;
-      return;
-    }
-    const j = pool[Math.floor(Math.random() * pool.length)];
-    pintaJoc(j);
-    step++;
-    const p = step / totalSteps;
-    setTimeout(tick, 80 + Math.pow(p, 3) * 320);
-  }
-  tick();
+  const spins = 5 + Math.floor(Math.random() * 3), targetDeg = (360 * spins) + (Math.floor(Math.random() * slices) * (360/slices));
+  
+  setTimeout(() => { wheel.style.transition = "transform 4s cubic-bezier(.17,.67,.12,1)"; wheel.style.transform = "rotate(" + targetDeg + "deg)"; }, 50);
+  
+  setTimeout(() => {
+    $("roulLabel").textContent = "> ¡SELECCIONADO!"; $("roulActions").hidden = false;
+    $("roulName").textContent = roulTarget.nombre || "?";
+    $("roulOpen").textContent = "> JUGAR AHORA"; $("roulOpen").onclick = () => { r.classList.remove("open"); abrir(roulTarget); };
+    $("roulAgain").hidden = false; $("roulClose").hidden = false;
+  }, 4200);
 }
-$("btnRandom").onclick = azar;
-$("btnRandom2").onclick = azar;
+$("btnRandom").onclick = azar; $("btnRandom2").onclick = azar;
 $("roulAgain").onclick = () => { mostrarRuleta(); };
 $("roulClose").onclick = () => { $("roulette").classList.remove("open"); };
 
 /* ============ Música ============ */
 let musicOn = false, musicUrl = OUSIFY;
-function cargaMusica(url) {
-  if (url || !musicOn) { musicUrl = url || OUSIFY; $("musicFrame").src = musicUrl; musicOn = true; }
-  $("eq").hidden = false;
-  if (!gstate.achievements.ousify_first) unlockAchievement("ousify_first");
-}
+function cargaMusica(url) { if (url || !musicOn) { musicUrl = url || OUSIFY; $("musicFrame").src = musicUrl; musicOn = true; } $("eq").hidden = false; if (!gstate.achievements.ousify_first) unlockAchievement("ousify_first"); }
 function pintaMin() { $("btnMin").textContent = $("music").classList.contains("min") ? "▢" : "—"; }
 function musicaToggle() {
-  const m = $("music");
-  if (!m.classList.contains("open")) { m.classList.add("open"); m.classList.remove("min"); cargaMusica(); }
-  else m.classList.toggle("min");
-  pintaMin();
-  $("eq").hidden = !m.classList.contains("open") || m.classList.contains("min");
+  const m = $("music"); if (!m.classList.contains("open")) { m.classList.add("open"); m.classList.remove("min"); cargaMusica(); } else m.classList.toggle("min");
+  pintaMin(); $("eq").hidden = !m.classList.contains("open") || m.classList.contains("min");
 }
-$("btnMusic").onclick = musicaToggle;
-$("btnMusic2").onclick = musicaToggle;
+$("btnMusic").onclick = musicaToggle; $("btnMusic2").onclick = musicaToggle;
 $("btnMin").onclick = () => { $("music").classList.toggle("min"); pintaMin(); };
 $("btnMClose").onclick = () => { $("musicFrame").src = "about:blank"; musicOn = false; $("music").classList.remove("open", "min"); pintaMin(); $("eq").hidden = true; };
-$("btnPop").onclick = () => {
-  const w = window.open(musicOn ? musicUrl : OUSIFY, "ousify", "width=440,height=700,noopener");
-  if (!w) return toast("Permite ventanas emergentes", true);
-  $("btnMClose").click();
-  toast("Ousify en ventana nueva");
-};
+$("btnPop").onclick = () => { const w = window.open(musicOn ? musicUrl : OUSIFY, "ousify", "width=440,height=700,noopener"); if (!w) return toast("Permite ventanas emergentes", true); $("btnMClose").click(); toast("Ousify en ventana nueva"); };
 
 /* ============ Connexió ============ */
-function updateConn() {
-  const c = $("conn");
-  if (navigator.onLine) { c.classList.remove("off"); c.querySelector(".txt").textContent = "ONLINE"; }
-  else { c.classList.add("off"); c.querySelector(".txt").textContent = "OFFLINE"; }
-}
-addEventListener("online", updateConn);
-addEventListener("offline", updateConn);
-updateConn();
+function updateConn() { const c = $("conn"); if (navigator.onLine) { c.classList.remove("off"); c.querySelector(".txt").textContent = "ONLINE"; } else { c.classList.add("off"); c.querySelector(".txt").textContent = "OFFLINE"; } }
+addEventListener("online", updateConn); addEventListener("offline", updateConn); updateConn();
 
 /* ============ Admin panel ============ */
 let user = null, editId = null;
@@ -1827,126 +1498,69 @@ const logueado = () => !!user && (user.email || "").toLowerCase() === ADMIN_EMAI
 function pintarAdminVista() { $("gate").hidden = logueado(); $("panel").hidden = !logueado(); $("btnMark").hidden = !logueado() || !actual; renderAdmin(); }
 auth.onAuthStateChanged(u => { user = u; if (u && !logueado()) { auth.signOut(); return; } pintarAdminVista(); });
 $("gateForm").addEventListener("submit", async e => {
-  e.preventDefault();
-  const m = $("gateMsg"), b = $("loginBtn"); m.textContent = ""; b.disabled = true;
+  e.preventDefault(); const m = $("gateMsg"), b = $("loginBtn"); m.textContent = ""; b.disabled = true;
   try {
-    const cred = await auth.signInWithEmailAndPassword($("email").value.trim(), $("pass").value);
-    $("pass").value = "";
+    const cred = await auth.signInWithEmailAndPassword($("email").value.trim(), $("pass").value); $("pass").value = "";
     if ((cred.user.email||"").toLowerCase() !== ADMIN_EMAIL) m.textContent = "Sin permisos.";
-  } catch (err) {
-    m.textContent = "Email o contraseña incorrectos.";
-  } finally { b.disabled = false; }
+  } catch (err) { m.textContent = "Email o contraseña incorrectos."; } finally { b.disabled = false; }
 });
 $("logout").onclick = () => { auth.signOut(); limpiarForm(); };
 $("resetAdmin").onclick = () => { try { localStorage.removeItem("ethos_gstate"); localStorage.removeItem("ethos_admin_version"); location.reload(); } catch(e) {} };
 function limpiarForm() { $("form").reset(); editId = null; $("cancelBtn").hidden = true; $("saveBtn").textContent = "Guardar"; $("logoPreview").classList.remove("on"); $("logoPreview").innerHTML = ""; }
 $("cancelBtn").onclick = limpiarForm;
-
 let logoTimer;
 $("logo").addEventListener("input", () => {
-  clearTimeout(logoTimer);
-  logoTimer = setTimeout(() => {
+  clearTimeout(logoTimer); logoTimer = setTimeout(() => {
     const v = $("logo").value.trim(), p = $("logoPreview");
     if (!v) { p.classList.remove("on"); p.innerHTML = ""; return; }
-    const url = safeUrl(v);
-    if (!url) { p.classList.add("on"); p.innerHTML = "<span class='bad'>⚠ URL no válida</span>"; return; }
-    p.classList.add("on");
-    p.innerHTML = "<img src='" + esc(url) + "' onerror=\"this.style.display='none';this.parentNode.querySelector('.txt').innerHTML='<span class=bad>⚠ No carga</span>'\" onload=\"this.style.display='';this.parentNode.querySelector('.txt').innerHTML='<span class=ok>✓ OK</span>'\"><span class='txt'></span>";
+    const url = safeUrl(v); if (!url) { p.classList.add("on"); p.innerHTML = "<span class='bad'>⚠ URL no válida</span>"; return; }
+    p.classList.add("on"); p.innerHTML = "<img src='" + esc(url) + "' onerror=\"this.style.display='none';this.parentNode.querySelector('.txt').innerHTML='<span class=bad>⚠ No carga</span>'\" onload=\"this.style.display='';this.parentNode.querySelector('.txt').innerHTML='<span class=ok>✓ OK</span>'\"><span class='txt'></span>";
   }, 400);
 });
-
 $("form").addEventListener("submit", async e => {
-  e.preventDefault();
-  if (!logueado()) return;
-  const nombre = $("nombre").value.trim(), url = safeUrl($("url").value), category = $("category").value.trim();
-  const lr = $("logo").value.trim(), logo = lr ? safeUrl(lr) : "", noEmbed = $("noembed").checked;
-  if (!nombre || !url) return toast("Nombre y URL obligatorios", true);
-  if (lr && !logo) return toast("Logo inválido", true);
+  e.preventDefault(); if (!logueado()) return;
+  const nombre = $("nombre").value.trim(), url = safeUrl($("url").value), category = $("category").value.trim(), lr = $("logo").value.trim(), logo = lr ? safeUrl(lr) : "", noEmbed = $("noembed").checked;
+  if (!nombre || !url) return toast("Nombre y URL obligatorios", true); if (lr && !logo) return toast("Logo inválido", true);
   $("saveBtn").disabled = true;
   try {
     if (editId) await db.collection("games").doc(editId).update({ nombre: nombre, url: url, category: category, logo: logo, noEmbed: noEmbed });
     else await db.collection("games").add({ nombre: nombre, url: url, category: category, logo: logo, noEmbed: noEmbed, timestamp: Date.now() });
     toast("Guardado"); limpiarForm();
-  } catch (err) { fail(err); }
-  finally { $("saveBtn").disabled = false; }
+  } catch (err) { fail(err); } finally { $("saveBtn").disabled = false; }
 });
-
 function renderAdmin() {
   $("total").textContent = juegos.length;
   $("cats").innerHTML = Array.from(new Set(juegos.map(j => j.category).filter(Boolean))).map(c => "<option value='" + esc(c) + "'>").join("");
-  const f = norm($("filtro").value.trim());
-  const items = juegos.slice().sort((a,b) => collator.compare(a.nombre||"", b.nombre||"")).filter(j => !f || norm(j.nombre).includes(f));
-  $("listaAdmin").innerHTML = items.length ? items.map(j => 
-    "<div class='item'><div class='inf'>" +
-      (safeUrl(j.logo) ? "<img src='" + esc(safeUrl(j.logo)) + "' alt=''>" : "<div class='noimg'></div>") +
-      "<div style='min-width:0'><b>" + esc(j.nombre||"?") + "</b><small>" + esc(j.category||"Sin cat.") + (j.noEmbed?" · ↗":"") + "</small></div></div>" +
-      "<div class='acts'><button class='btn sm' data-blk='" + esc(j.id) + "'>" + (j.noEmbed?"Quitar ↗":"Marcar ↗") + "</button><button class='btn sm' data-edit='" + esc(j.id) + "'>Editar</button><button class='btn sm danger' data-del='" + esc(j.id) + "'>Eliminar</button></div></div>"
-  ).join("") : vacio("No hay juegos.");
+  const f = norm($("filtro").value.trim()), items = juegos.slice().sort((a,b) => collator.compare(a.nombre||"", b.nombre||"")).filter(j => !f || norm(j.nombre).includes(f));
+  $("listaAdmin").innerHTML = items.length ? items.map(j => "<div class='item'><div class='inf'>" + (safeUrl(j.logo) ? "<img src='" + esc(safeUrl(j.logo)) + "' alt=''>" : "<div class='noimg'></div>") + "<div style='min-width:0'><b>" + esc(j.nombre||"?") + "</b><small>" + esc(j.category||"Sin cat.") + (j.noEmbed?" · ↗":"") + "</small></div></div><div class='acts'><button class='btn sm' data-blk='" + esc(j.id) + "'>" + (j.noEmbed?"Quitar ↗":"Marcar ↗") + "</button><button class='btn sm' data-edit='" + esc(j.id) + "'>Editar</button><button class='btn sm danger' data-del='" + esc(j.id) + "'>Eliminar</button></div></div>").join("") : vacio("No hay juegos.");
 }
-
 $("filtro").addEventListener("input", renderAdmin);
 $("listaAdmin").addEventListener("click", async e => {
-  if (!logueado()) return;
-  const ed = e.target.closest("[data-edit]"), del = e.target.closest("[data-del]"), blk = e.target.closest("[data-blk]");
+  if (!logueado()) return; const ed = e.target.closest("[data-edit]"), del = e.target.closest("[data-del]"), blk = e.target.closest("[data-blk]");
   if (blk) { const j = juegos.find(x => x.id === blk.dataset.blk); if (!j) return; try { await db.collection("games").doc(j.id).update({ noEmbed: !j.noEmbed }); toast("Actualizado"); } catch (err) { fail(err); } }
-  if (ed) {
-    const j = juegos.find(x => x.id === ed.dataset.edit); if (!j) return;
-    editId = j.id; $("nombre").value = j.nombre||""; $("url").value = j.url||""; $("category").value = j.category||""; $("logo").value = j.logo||""; $("noembed").checked = !!j.noEmbed;
-    $("cancelBtn").hidden = false; $("saveBtn").textContent = "Actualizar";
-    scrollTo({ top: 0, behavior: "smooth" });
-  }
-  if (del) {
-    const j = juegos.find(x => x.id === del.dataset.del); if (!j) return;
-    openModal("ELIMINAR", "¿Eliminar \"" + j.nombre + "\"?", [
-      {t:"Sí, eliminar", danger:true, primary:true, cb: async () => { closeModal(); try { await db.collection("games").doc(j.id).delete(); if (editId === j.id) limpiarForm(); toast("Eliminado"); } catch (err) { fail(err); } }},
-      {t:"Cancelar", cb:closeModal}
-    ]);
-  }
+  if (ed) { const j = juegos.find(x => x.id === ed.dataset.edit); if (!j) return; editId = j.id; $("nombre").value = j.nombre||""; $("url").value = j.url||""; $("category").value = j.category||""; $("logo").value = j.logo||""; $("noembed").checked = !!j.noEmbed; $("cancelBtn").hidden = false; $("saveBtn").textContent = "Actualizar"; scrollTo({ top: 0, behavior: "smooth" }); }
+  if (del) { const j = juegos.find(x => x.id === del.dataset.del); if (!j) return; openModal("ELIMINAR", "¿Eliminar \"" + j.nombre + "\"?", [{t:"Sí, eliminar", danger:true, primary:true, cb: async () => { closeModal(); try { await db.collection("games").doc(j.id).delete(); if (editId === j.id) limpiarForm(); toast("Eliminado"); } catch (err) { fail(err); } }}, {t:"Cancelar", cb:closeModal}]); }
 });
 
 /* ============ Navegació ============ */
 const titulos_ruta = { home:"Ethos — Biblioteca", games:"Juegos — Ethos", pass:"Pase — Ethos", shop:"Tienda — Ethos", admin:"Admin — Ethos" };
 function ruta() {
-  const h = location.hash.replace(/^#/, "");
-  const v = h === "/games" ? "games" : h === "/admin" ? "admin" : h === "/pass" ? "pass" : h === "/shop" ? "shop" : "home";
+  const h = location.hash.replace(/^#/, ""), v = h === "/games" ? "games" : h === "/admin" ? "admin" : h === "/pass" ? "pass" : h === "/shop" ? "shop" : "home";
   document.querySelectorAll(".view").forEach(s => s.hidden = s.dataset.view !== v);
-  document.querySelectorAll("[data-nav]").forEach(a => {
-    const on = a.dataset.nav === v;
-    a.classList.toggle("active", on);
-    if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
-  });
+  document.querySelectorAll("[data-nav]").forEach(a => { const on = a.dataset.nav === v; a.classList.toggle("active", on); if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
   document.title = titulos_ruta[v];
-  if (v === "admin") pintarAdminVista();
-  if (v === "pass") renderPass();
-  if (v === "shop") renderShop();
+  if (v === "admin") pintarAdminVista(); if (v === "pass") renderPass(); if (v === "shop") renderShop();
   scrollTo(0, 0);
 }
 
 /* ============ Init ============ */
-function renderAllGamification() {
-  updateCoinsUI();
-  updateStreakUI();
-  renderProfileButton();
-  applyAllEffects();
-}
-
-saveState();
-updateCoinsUI();
-updateStreakUI();
-renderProfileButton();
-applyAllEffects();
-buildIntro();
-checkStreak();
-addEventListener("hashchange", ruta);
-ruta();
-cargar();
-
-// Easter egg
+function renderAllGamification() { updateCoinsUI(); updateStreakUI(); renderProfileButton(); applyAllEffects(); }
+saveState(); updateStreakUI(); renderProfileButton(); applyAllEffects(); buildIntro(); checkStreak();
+addEventListener("hashchange", ruta); ruta(); cargar();
 let easterBuffer = "";
 addEventListener("keydown", e => {
   if (enCampo()) { easterBuffer = ""; return; }
-  easterBuffer += e.key.toLowerCase();
-  if (easterBuffer.length > 8) easterBuffer = easterBuffer.slice(-8);
+  easterBuffer += e.key.toLowerCase(); if (easterBuffer.length > 8) easterBuffer = easterBuffer.slice(-8);
   if (easterBuffer.includes("ethos")) { desbloquejarDorado(); easterBuffer = ""; }
 });
 </script>
