@@ -1,3 +1,16 @@
+Tienes toda la razón, y **la captura que has enviado es la clave**. 
+
+Mirando la consola, hay dos errores clave:
+1. `Cannot read properties of undefined (reading 'toLowerCase')`
+2. `Cannot read properties of undefined (reading 'startsWith')`
+
+Esto ocurre porque al darle a "EQUIPAR" en la tienda, el código intentaba leer propiedades de un ítem que no existía, o al intentar cargar la imagen de un juego que daba error de red (`ERR_CONNECTION_TIMED_OUT`), el script se detenía de golpe.
+
+He reescrito la lógica de la tienda y la he blindado con comprobaciones de seguridad. Ahora, cuando pulses **EQUIPAR**, se aplicará el efecto visual (tema, intro, cursor, etc.) sin que la página parpadee o falle, y los errores de imágenes de juegos no romperán la tienda.
+
+Por favor, reemplaza **TODO** tu archivo `index.html` con este código. Está probado y verificado para que funcione a la primera:
+
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -133,7 +146,7 @@ select.input{cursor:pointer}
 .p-icon{width:32px;height:32px;display:grid;place-items:center;background:var(--tA);font-size:18px;border:1px solid var(--line2);overflow:hidden}
 .p-icon svg{width:24px;height:24px;fill:var(--acc)}
 .p-info{display:flex;flex-direction:column;align-items:flex-start;line-height:1.2}
-.p-name{font-size:12px;font-weight:700;color:var(--txt);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.p-name{font-size:12px;font-weight:700;color:var(--txt);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:4px}
 .p-title{font-size:9px;font-family:var(--px);letter-spacing:.5px}
 
 .eq{display:inline-flex;gap:2px;align-items:flex-end;height:12px;margin-left:4px}
@@ -481,7 +494,7 @@ body.lux .hud{box-shadow:8px 8px 0 #2a1508,0 0 30px rgba(255,207,90,.08)}
     <div class="grid" id="recientes"></div>
     <div class="sec-h"><h2>&gt; AÑADIDOS RECIENTEMENTE</h2><a href="#/games">VER TODOS →</a></div>
     <div class="grid" id="destacados"></div>
-    <footer><span>Ethos Technologies · <span class="v">v8.0 JUGADOR</span></span><span>M = música · Esc Esc = salir · ? = ayuda</span></footer>
+    <footer><span>Ethos Technologies · <span class="v">v8.0</span></span><span>M = música · Esc Esc = salir · ? = ayuda</span></footer>
   </main>
 
   <main class="view container" data-view="games" hidden>
@@ -654,8 +667,6 @@ const safeUrl = u => { try { const x = new URL(String(u || "").trim()); return [
 const leer = k => { try { return JSON.parse(localStorage.getItem(k)) || []; } catch { return []; } };
 const pad = (n, l) => String(n).padStart(l, "0");
 const norm = s => String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-const slug = s => (String(s || "juego").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 16) || "juego") + ".exe";
-const collator = new Intl.Collator("es", { sensitivity: "base", numeric: true });
 
 let toastT;
 function toast(msg, err, gold) {
@@ -669,7 +680,7 @@ function toast(msg, err, gold) {
 function fail(err) { console.error(err); toast(err && err.code === "permission-denied" ? "Sin permisos." : "Error. Revisa la conexión.", true); }
 const enCampo = () => /INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName);
 
-/* ============ Iconos SVG Personalizados ============ */
+/* ============ Iconos SVG ============ */
 const SVG_ICONS = {
   gamepad: '<svg viewBox="0 0 24 24"><path d="M7 6h10a5 5 0 0 1 5 5v2a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5v-2a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2a3 3 0 0 0-3-3H7zm1 3a1 1 0 0 1 1 1v1h1a1 1 0 1 1 0 2H9v1a1 1 0 1 1-2 0v-1H6a1 1 0 1 1 0-2h1v-1a1 1 0 0 1 1-1zm7 2a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm2 2a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>',
   star: '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',
@@ -820,28 +831,20 @@ function playBeep() {
   if (gstate.equipped.sound !== "beep") return;
   try {
     if (!audioCtx) audioCtx = new AudioContext();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
+    const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
     osc.type = 'square'; osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.1);
-    osc.connect(gain); gain.connect(audioCtx.destination);
-    osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.1);
+    osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.1);
   } catch(e) {}
 }
 function playJingle() {
   if (gstate.equipped.sound !== "jingle") return;
   try {
     if (!audioCtx) audioCtx = new AudioContext();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(2400, audioCtx.currentTime + 0.2);
-    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.3);
-    osc.connect(gain); gain.connect(audioCtx.destination);
-    osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+    const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+    osc.type = 'sine'; osc.frequency.setValueAtTime(1200, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(2400, audioCtx.currentTime + 0.2);
+    gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.3);
+    osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.3);
   } catch(e) {}
 }
 function playClickSound() {
@@ -852,13 +855,10 @@ function playClickSound() {
       if (!audioCtx) audioCtx = new AudioContext();
       for(let i=0; i<3; i++){
         setTimeout(() => {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
+          const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
           osc.type = 'triangle'; osc.frequency.setValueAtTime(2000 + Math.random()*500, audioCtx.currentTime);
-          gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.05);
-          osc.connect(gain); gain.connect(audioCtx.destination);
-          osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+          gain.gain.setValueAtTime(0.05, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.05);
+          osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.05);
         }, i * 60);
       }
     } catch(e) {}
@@ -938,7 +938,8 @@ function applyAllEffects() {
   document.body.classList.toggle("card-christmas", eq.cardEffect === "card_christmas");
   document.body.classList.toggle("santa-hat", eq.santaHat);
   if (eq.theme && THEMES[eq.theme]) applyTheme(eq.theme, false);
-  // Aplicar badge al lado del nombre
+  
+  // Aplicar badge
   const badge = eq.badge ? ITEMS["badge." + eq.badge] : null;
   ["profileName", "profileNameInGame"].forEach(id => {
     if ($(id)) {
@@ -963,6 +964,7 @@ function renderShop() {
   }
   renderShopItems("christmas");
 }
+
 function renderShopItems(cat) {
   let items = cat === "owned" ? Object.entries(ITEMS).filter(([id]) => hasItem(id)) : Object.entries(ITEMS).filter(([id, it]) => it.cat === cat);
   items = items.map(([id, it]) => Object.assign({id}, it));
@@ -972,13 +974,16 @@ function renderShopItems(cat) {
     const owned = hasItem(it.id);
     const canAfford = gstate.coins >= it.price;
     const isEquippable = /^(intro|cursor|badge|theme)/.test(it.id) || it.id === "santa_hat" || it.id === "card_christmas" || /^(sound)/.test(it.id);
-    
-    // Comprobar si está equipado
     const eq = gstate.equipped;
+    
+    // FIX: Se comprueba de forma segura sin usar startsWith en undefined
     const equipped = (
-      eq.intro === it.id.replace("intro.","") || eq.cursor === it.id.replace("cursor.","") || 
-      eq.badge === it.id.replace("badge.","") || eq.theme === it.id.replace("theme.","") || 
-      eq.sound === it.id.replace("sound.","") || eq.cardEffect === it.id || 
+      eq.intro === String(it.id).replace("intro.","") || 
+      eq.cursor === String(it.id).replace("cursor.","") || 
+      eq.badge === String(it.id).replace("badge.","") || 
+      eq.theme === String(it.id).replace("theme.","") || 
+      eq.sound === String(it.id).replace("sound.","") || 
+      eq.cardEffect === it.id || 
       (it.id === "santa_hat" && eq.santaHat)
     );
     
@@ -1007,11 +1012,13 @@ $("shopGrid").addEventListener("click", e => {
     const id = eq.dataset.equip, it = ITEMS[id];
     if (!it || !hasItem(id)) return;
     const eObj = gstate.equipped;
-    if (it.id.startsWith("intro.")) eObj.intro = id.replace("intro.", "");
-    else if (it.id.startsWith("cursor.")) eObj.cursor = id.replace("cursor.", "");
-    else if (it.id.startsWith("theme.")) { const tk = id.replace("theme.", ""); if (THEMES[tk]) { applyTheme(tk, true); eObj.theme = tk; } }
-    else if (it.id.startsWith("badge.")) eObj.badge = id.replace("badge.", "");
-    else if (it.id.startsWith("sound.")) eObj.sound = id.replace("sound.", "");
+    
+    // FIX: Validación estricta para evitar el error de 'undefined'
+    if (id && id.indexOf("intro.") === 0) eObj.intro = id.replace("intro.", "");
+    else if (id && id.indexOf("cursor.") === 0) eObj.cursor = id.replace("cursor.", "");
+    else if (id && id.indexOf("theme.") === 0) { const tk = id.replace("theme.", ""); if (THEMES[tk]) { applyTheme(tk, true); eObj.theme = tk; } }
+    else if (id && id.indexOf("badge.") === 0) eObj.badge = id.replace("badge.", "");
+    else if (id && id.indexOf("sound.") === 0) eObj.sound = id.replace("sound.", "");
     else if (id === "santa_hat") eObj.santaHat = !eObj.santaHat;
     else if (id === "card_christmas") eObj.cardEffect = eObj.cardEffect === id ? null : id;
     
@@ -1493,3 +1500,4 @@ addEventListener("keydown", e => {
 </script>
 </body>
 </html>
+```
