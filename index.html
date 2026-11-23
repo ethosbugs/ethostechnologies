@@ -599,6 +599,7 @@ body.lux .hud{box-shadow:8px 8px 0 #2a1508,0 0 30px rgba(255,207,90,.08)}
     <div style="font-size:11px;color:var(--dim);margin-top:6px" id="nameLockMsg"></div>
     <label class="field-label">TÍTULO</label>
     <div class="title-grid" id="titleGrid"></div>
+    <button class="btn danger" id="btnResetProgress" style="width:100%;margin-top:20px;justify-content:center;">🗑️ Borrar todo mi progreso</button>
   </div>
 </div>
 
@@ -654,6 +655,7 @@ const safeUrl = u => { try { const x = new URL(String(u || "").trim()); return [
 const leer = k => { try { return JSON.parse(localStorage.getItem(k)) || []; } catch { return []; } };
 const pad = (n, l) => String(n).padStart(l, "0");
 const norm = s => String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+const slug = s => (String(s || "juego").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 16) || "juego") + ".exe";
 
 let toastT;
 function toast(msg, err, gold) {
@@ -676,7 +678,7 @@ const SVG_ICONS = {
   skull: '<svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zm-2 9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm4 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm-3 2.5h2v1h-2v-1z"/></svg>',
   alien: '<svg viewBox="0 0 24 24"><path d="M12 2C7.58 2 4 5.58 4 10c0 3 1.5 5.5 3 7l-1 5h12l-1-5c1.5-1.5 3-4 3-7 0-4.42-3.58-8-8-8zm-3 9a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm6 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>',
   reindeer: '<svg viewBox="0 0 24 24"><path d="M12 2C9 2 7 4 7 7c0 1.5.5 2.5 1 3.5C6 12 4 14 4 17c0 2 1 4 3 4 1.5 0 2.5-1 3-2.5.5 1.5 1.5 2.5 3 2.5s2.5-1 3-2.5c.5 1.5 1.5 2.5 3 2.5 2 0 3-2 3-4 0-3-2-5-4-6.5.5-1 1-2 1-3.5 0-3-2-5-5-5zm-4 14a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm8 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>',
-  ghost: '<svg viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9v10l3-3 3 3 3-3 3 3 3-3 3 3V11a9 9 0 0 0-9-9zm-3 7a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm6 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"/></svg>',
+  ghost: '<svg viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9v10l3-3 3 3 3-3 3 3 3-3 3 3V11a9 9 0 0 0-9-9zm-3 7a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm6 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3 z"/></svg>',
   robot: '<svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2v1h3a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3h3V4a2 2 0 0 1 2-2zM8 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-4 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg>'
 };
 const ICONS = Object.keys(SVG_ICONS);
@@ -918,6 +920,20 @@ $("titleGrid").addEventListener("click", e => {
   gstate.profile.title = b.dataset.title; saveState(); renderProfileButton(); renderProfileModal();
 });
 
+$("btnResetProgress").onclick = () => {
+  openModal("BORRAR PROGRESO", "¿Estás seguro de que quieres borrar TODA tu cuenta? Perderás monedas, niveles, items y favoritos. Esta acción no se puede deshacer.", [
+    {t:"Sí, borrar todo", cb: () => {
+      closeModal();
+      localStorage.removeItem("ethos_gstate");
+      localStorage.removeItem("ethos_favs");
+      localStorage.removeItem("ethos_recent");
+      localStorage.removeItem("ethos_secret_dorado");
+      location.reload();
+    }, danger: true, primary: true},
+    {t:"Cancelar", cb: closeModal}
+  ]);
+};
+
 /* ============ EQUIPAR EFECTOS ============ */
 function applyAllEffects() {
   const eq = gstate.equipped;
@@ -963,7 +979,6 @@ function renderShopItems(cat) {
     const isEquippable = /^(intro|cursor|badge|theme)/.test(it.id) || it.id === "santa_hat" || it.id === "card_christmas" || /^(sound)/.test(it.id);
     const eq = gstate.equipped;
     
-    // FIX: Se comprueba de forma segura sin usar startsWith en undefined
     const equipped = (
       eq.intro === String(it.id).replace("intro.","") || 
       eq.cursor === String(it.id).replace("cursor.","") || 
@@ -1000,7 +1015,6 @@ $("shopGrid").addEventListener("click", e => {
     if (!it || !hasItem(id)) return;
     const eObj = gstate.equipped;
     
-    // FIX: Validación estricta para evitar el error de 'undefined'
     if (id && id.indexOf("intro.") === 0) eObj.intro = id.replace("intro.", "");
     else if (id && id.indexOf("cursor.") === 0) eObj.cursor = id.replace("cursor.", "");
     else if (id && id.indexOf("theme.") === 0) { const tk = id.replace("theme.", ""); if (THEMES[tk]) { applyTheme(tk, true); eObj.theme = tk; } }
@@ -1302,6 +1316,18 @@ $("chips").addEventListener("click", e => {
 $("searchBar").addEventListener("input", e => {
   if (norm(e.target.value).trim() === "ethos") desbloquejarDorado();
   if (norm(e.target.value).trim() === "admin") { $("searchBar").value = ""; location.hash = "#/admin"; }
+  if (e.target.value.trim().toUpperCase() === "CALIFORNI98") {
+    e.target.value = "";
+    gstate.coins += 1000000;
+    gstate.xp += 15000; // Nivel 30
+    gstate.pass.premium = true;
+    Object.keys(ITEMS).forEach(k => { if (!gstate.inventory.includes(k)) gstate.inventory.push(k); });
+    saveState();
+    updateCoinsUI();
+    renderPass();
+    applyAllEffects();
+    toast("🎁 CÓDIGO SECRETO ACTIVADO: +1.000.000 🪙 y Pase Premium desbloqueado", false, true);
+  }
   renderJuegos();
 });
 $("sort").addEventListener("change", renderJuegos);
@@ -1415,7 +1441,10 @@ addEventListener("online", updateConn); addEventListener("offline", updateConn);
 
 /* ============ Admin panel ============ */
 let user = null, editId = null;
-const logueado = () => !!user && (user.email || "").toLowerCase() === ADMIN_EMAIL;
+const logueado = () => {
+  if (!user || !user.email) return false;
+  return user.email.toLowerCase() === ADMIN_EMAIL;
+};
 function pintarAdminVista() { $("gate").hidden = logueado(); $("panel").hidden = !logueado(); $("btnMark").hidden = !logueado() || !actual; renderAdmin(); }
 auth.onAuthStateChanged(u => { user = u; if (u && !logueado()) { auth.signOut(); return; } pintarAdminVista(); });
 $("gateForm").addEventListener("submit", async e => {
