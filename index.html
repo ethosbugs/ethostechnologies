@@ -1,16 +1,3 @@
-Tienes toda la razón, y **la captura que has enviado es la clave**. 
-
-Mirando la consola, hay dos errores clave:
-1. `Cannot read properties of undefined (reading 'toLowerCase')`
-2. `Cannot read properties of undefined (reading 'startsWith')`
-
-Esto ocurre porque al darle a "EQUIPAR" en la tienda, el código intentaba leer propiedades de un ítem que no existía, o al intentar cargar la imagen de un juego que daba error de red (`ERR_CONNECTION_TIMED_OUT`), el script se detenía de golpe.
-
-He reescrito la lógica de la tienda y la he blindado con comprobaciones de seguridad. Ahora, cuando pulses **EQUIPAR**, se aplicará el efecto visual (tema, intro, cursor, etc.) sin que la página parpadee o falle, y los errores de imágenes de juegos no romperán la tienda.
-
-Por favor, reemplaza **TODO** tu archivo `index.html` con este código. Está probado y verificado para que funcione a la primera:
-
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -1500,4 +1487,3 @@ addEventListener("keydown", e => {
 </script>
 </body>
 </html>
-```
