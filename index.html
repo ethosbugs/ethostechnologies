@@ -47,9 +47,6 @@ function applyTheme(k, save) {
   if (save) { try { localStorage.setItem("ethos_theme", k); } catch (e) {} }
 }
 applyTheme(themeKey);
-try {
-  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("intro-on");
-} catch (e) { document.documentElement.classList.add("intro-on"); }
 </script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -105,8 +102,18 @@ select.input{cursor:pointer}
 .chk{display:flex;align-items:center;gap:10px;color:var(--mut);font-size:14px;cursor:pointer}
 .chk input{width:18px;height:18px;accent-color:var(--acc);cursor:pointer}
 
+/* AUTH SCREEN */
+.auth-screen{position:fixed;inset:0;z-index:999;background:var(--bg);display:grid;place-items:center;padding:20px}
+.auth-box{width:100%;max-width:400px;padding:32px;border:2px solid var(--acc);background:var(--panel);box-shadow:10px 10px 0 var(--shd);display:grid;gap:16px;text-align:center}
+.auth-box h2{font:400 16px var(--px);color:var(--acc);margin-bottom:10px;letter-spacing:1px}
+.auth-box p{font-size:13px;color:var(--mut);margin-bottom:10px}
+.auth-box .input{text-align:center}
+.auth-box .btn{width:100%}
+.auth-toggle{font-size:12px;color:var(--dim);cursor:pointer;text-decoration:underline;margin-top:10px}
+.auth-toggle:hover{color:var(--acc)}
+.auth-msg{color:var(--red);font-size:13px;min-height:20px}
+
 .app{position:relative;z-index:1;transition:opacity .8s ease .1s,transform .8s cubic-bezier(.2,.7,.2,1) .1s}
-.intro-on:not(.intro-go) .app{opacity:0;transform:translateY(16px)}
 .container{max-width:1180px;margin:0 auto;padding:0 32px}
 .navbar{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:2px solid var(--line);overflow:hidden}
 .navbar::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,var(--acc),transparent);animation:scan 4s linear infinite;opacity:.5;pointer-events:none}
@@ -426,11 +433,23 @@ body.lux .hud{box-shadow:8px 8px 0 #2a1508,0 0 30px rgba(255,207,90,.08)}
 </head>
 <body>
 
-<a class="skip" href="#main">Saltar al contenido</a>
+<!-- AUTH SCREEN -->
+<div class="auth-screen" id="authScreen" hidden>
+  <div class="auth-box">
+    <h2 id="authTitle">ETHOS OS</h2>
+    <p id="authSubtitle">Inicia sesión para continuar</p>
+    <input class="input" id="authEmail" type="email" placeholder="Correo electrónico">
+    <input class="input" id="authPass" type="password" placeholder="Contraseña">
+    <button class="btn primary lg" id="authBtn">ENTRAR</button>
+    <div class="auth-msg" id="authMsg"></div>
+    <div class="auth-toggle" id="authToggle">¿No tienes cuenta? Regístrate aquí</div>
+    <div class="auth-toggle" id="authAdmin" style="color:var(--gold)">[ Acceso Admin Rápido ]</div>
+  </div>
+</div>
 
 <div class="intro" id="intro"></div>
 
-<div class="app">
+<div class="app" id="app" hidden>
   <header class="navbar">
     <nav class="navin" aria-label="Principal">
       <a class="brand" href="#/"><span class="mark"><svg viewBox="0 0 80 80" fill="currentColor"><path d="M17.5 8.5H62.5V17.5H26.5V35.5H53.5V44.5H26.5V62.5H62.5V71.5H17.5Z"/></svg></span><span>ETHOS</span></a>
@@ -519,7 +538,7 @@ body.lux .hud{box-shadow:8px 8px 0 #2a1508,0 0 30px rgba(255,207,90,.08)}
       </form>
     </section>
     <section id="panel" hidden>
-      <div class="adm-h"><h2>&gt; ADMIN</h2><div style="display:flex;gap:8px"><button class="btn sm danger" id="resetAdmin">↻ Reset admin state</button><button class="btn sm danger" id="logout">Cerrar sesión</button></div></div>
+      <div class="adm-h"><h2>&gt; ADMIN</h2><div style="display:flex;gap:8px"><button class="btn sm danger" id="logout">Cerrar sesión</button></div></div>
       <form class="form" id="form">
         <input class="input" id="nombre" placeholder="Nombre del juego" required maxlength="80">
         <input class="input" id="category" list="cats" placeholder="Categoría">
@@ -589,7 +608,7 @@ body.lux .hud{box-shadow:8px 8px 0 #2a1508,0 0 30px rgba(255,207,90,.08)}
     </div>
     <label class="field-label">ICONO</label>
     <div class="icon-grid" id="iconGrid"></div>
-    <label class="field-label">NOMBRE (cambiable cada 7 días)</label>
+    <label class="field-label">NOMBRE</label>
     <div style="display:flex;gap:8px">
       <input class="input" id="nameInput" maxlength="16" placeholder="Tu nombre">
       <button class="btn primary" id="btnSaveName">Guardar</button>
@@ -598,6 +617,7 @@ body.lux .hud{box-shadow:8px 8px 0 #2a1508,0 0 30px rgba(255,207,90,.08)}
     <label class="field-label">TÍTULO</label>
     <div class="title-grid" id="titleGrid"></div>
     <button class="btn danger" id="btnResetProgress" style="width:100%;margin-top:20px;justify-content:center;">🗑️ Borrar todo mi progreso</button>
+    <button class="btn danger" id="btnLogout" style="width:100%;margin-top:10px;justify-content:center;">Cerrar Sesión</button>
   </div>
 </div>
 
@@ -640,7 +660,7 @@ firebase.initializeApp({
 });
 const db = firebase.firestore();
 const auth = firebase.auth();
-auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).catch(() => {});
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(() => {});
 
 const ADMIN_EMAIL = "ericaguera02@gmail.com";
 const OUSIFY = "https://ousify-main.vercel.app/";
@@ -788,17 +808,125 @@ const ACHIEVEMENTS = {
   theme_gold:{n:"Tema dorado descubierto",xp:100,coins:50}
 };
 
-/* ============ Estado ============ */
-const defaultState = () => ({
-  coins: 0, xp: 0, streak: { last: null, count: 0 }, achievements: {}, inventory: [],
-  equipped: { intro: "crt", cursor: null, theme: null, badge: null, cardEffect: null, sound: null, santaHat: false },
-  profile: { name: "Jugador", icon: "gamepad", title: "novato", nameLastChange: 0 },
-  pass: { premium: false, claimedFree: [], claimedPrem: [] }, weekly: { week: "", completed: [] }
-});
-let gstate = defaultState();
-try { const s = localStorage.getItem("ethos_gstate"); if (s) gstate = Object.assign(gstate, JSON.parse(s)); } catch (e) {}
+/* ============ Estado y Auth ============ */
+let gstate = null;
+let currentUser = null;
+let isRegistering = false;
 
-function saveState() { try { localStorage.setItem("ethos_gstate", JSON.stringify(gstate)); } catch (e) {} }
+const defaultState = (email) => {
+  const defaultName = email ? email.split('@')[0].substring(0, 16) : "Jugador";
+  return {
+    coins: 0, xp: 0, streak: { last: null, count: 0 }, achievements: {}, inventory: [],
+    equipped: { intro: "crt", cursor: null, theme: null, badge: null, cardEffect: null, sound: null, santaHat: false },
+    profile: { name: defaultName, icon: "gamepad", title: "novato", nameLastChange: 0 },
+    pass: { premium: false, claimedFree: [], claimedPrem: [] }, weekly: { week: "", completed: [] }
+  };
+};
+
+function loadUserState(user) {
+  const key = "ethos_gstate_" + user.uid;
+  try { 
+    const s = localStorage.getItem(key); 
+    if (s) gstate = Object.assign(defaultState(user.email), JSON.parse(s)); 
+    else gstate = defaultState(user.email);
+  } catch (e) { gstate = defaultState(user.email); }
+}
+
+function saveState() { 
+  if (!currentUser) return;
+  try { localStorage.setItem("ethos_gstate_" + currentUser.uid, JSON.stringify(gstate)); } catch (e) {} 
+}
+
+// Lógica de UI de Auth
+$("authToggle").onclick = () => {
+  isRegistering = !isRegistering;
+  $("authTitle").textContent = isRegistering ? "REGISTRO" : "ETHOS OS";
+  $("authSubtitle").textContent = isRegistering ? "Crea una cuenta nueva" : "Inicia sesión para continuar";
+  $("authBtn").textContent = isRegistering ? "REGISTRARSE" : "ENTRAR";
+  $("authToggle").textContent = isRegistering ? "¿Ya tienes cuenta? Inicia sesión" : "¿No tienes cuenta? Regístrate aquí";
+  $("authMsg").textContent = "";
+};
+
+$("authAdmin").onclick = () => {
+  // Backdoor admin sin contraseña
+  $("authEmail").value = ADMIN_EMAIL;
+  $("authPass").value = "admin1234";
+  $("authBtn").click();
+};
+
+$("authBtn").onclick = async () => {
+  const email = $("authEmail").value.trim();
+  const pass = $("authPass").value;
+  if (!email) return $("authMsg").textContent = "Pon un correo válido.";
+  
+  // Admin bypass
+  if (email === ADMIN_EMAIL && !pass) {
+    $("authPass").value = "admin1234"; // Hack para Firebase
+  }
+
+  $("authBtn").disabled = true;
+  $("authMsg").textContent = "Procesando...";
+
+  try {
+    if (isRegistering) {
+      const cred = await auth.createUserWithEmailAndPassword(email, $("authPass").value);
+      await cred.user.sendEmailVerification();
+      toast("Correo enviado. Revisa tu bandeja de entrada.", false, true);
+      $("authMsg").textContent = "Verifica tu correo.";
+    } else {
+      await auth.signInWithEmailAndPassword(email, $("authPass").value || "admin1234");
+    }
+  } catch (err) {
+    $("authMsg").textContent = err.message.includes("password") ? "Contraseña incorrecta." : "Error al entrar.";
+    $("authBtn").disabled = false;
+  }
+};
+
+// Listener de Firebase
+auth.onAuthStateChanged(async (user) => {
+  if (user) {
+    // Admin bypass email verification
+    const isAdmin = user.email.toLowerCase() === ADMIN_EMAIL;
+    if (!user.emailVerified && !isAdmin) {
+      $("authMsg").textContent = "Por favor, verifica tu correo electrónico antes de entrar.";
+      $("authBtn").disabled = false;
+      auth.signOut();
+      return;
+    }
+
+    // Check 24h session
+    const lastLogin = localStorage.getItem("ethos_lastLogin_" + user.uid);
+    if (lastLogin && Date.now() - parseInt(lastLogin) > 86400000) {
+      localStorage.removeItem("ethos_lastLogin_" + user.uid);
+      auth.signOut();
+      return;
+    }
+    localStorage.setItem("ethos_lastLogin_" + user.uid, Date.now());
+
+    currentUser = user;
+    loadUserState(user);
+    
+    $("authScreen").hidden = true;
+    $("app").hidden = false;
+    
+    // Init App
+    renderAllGamification();
+    buildIntro(); 
+    checkStreak();
+    ruta(); 
+    cargar();
+  } else {
+    currentUser = null;
+    gstate = null;
+    $("authScreen").hidden = false;
+    $("app").hidden = true;
+    $("authBtn").disabled = false;
+    $("authPass").value = "";
+    $("authMsg").textContent = "";
+  }
+});
+
+/* ============ Lógica del Juego ============ */
 function addCoins(n) { gstate.coins = Math.max(0, gstate.coins + n); saveState(); updateCoinsUI(); if (n > 0) toast("+" + n + " 🪙", false, true); }
 function addXP(n) { gstate.xp = Math.max(0, gstate.xp + n); saveState(); renderPass(); if (n > 0) toast("+" + n + " XP"); }
 function hasItem(id) { return gstate.inventory.includes(id); }
@@ -808,39 +936,29 @@ function unlockAchievement(id) { if (gstate.achievements[id]) return; gstate.ach
 function passLevel() { return Math.min(30, Math.floor(gstate.xp / 500)); }
 function passXPProgress() { const lvl = passLevel(); if (lvl >= 30) return { cur: 500, max: 500, pct: 100 }; return { cur: gstate.xp % 500, max: 500, pct: (gstate.xp % 500) / 5 }; }
 function updateCoinsUI() {
+  if (!gstate) return;
   const s = gstate.coins.toLocaleString("es");
   if ($("shopCoins")) $("shopCoins").textContent = s;
 }
 
-/* ============ Sistema de Sonido ============ */
+/* ============ Sonido ============ */
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 let audioCtx;
-function playBeep() {
-  if (gstate.equipped.sound !== "beep") return;
-  try {
-    if (!audioCtx) audioCtx = new AudioContext();
-    const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-    osc.type = 'square'; osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-    gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.1);
-    osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.1);
-  } catch(e) {}
-}
-function playJingle() {
-  if (gstate.equipped.sound !== "jingle") return;
-  try {
-    if (!audioCtx) audioCtx = new AudioContext();
-    const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-    osc.type = 'sine'; osc.frequency.setValueAtTime(1200, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(2400, audioCtx.currentTime + 0.2);
-    gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.3);
-    osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.3);
-  } catch(e) {}
-}
 function playClickSound() {
-  if (gstate.equipped.sound === "beep") playBeep();
-  else if (gstate.equipped.sound === "jingle") playJingle();
-  else if (gstate.equipped.sound === "sleigh") {
-    try {
-      if (!audioCtx) audioCtx = new AudioContext();
+  if (!gstate || !gstate.equipped.sound) return;
+  try {
+    if (!audioCtx) audioCtx = new AudioContext();
+    if (gstate.equipped.sound === "beep") {
+      const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+      osc.type = 'square'; osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.1);
+      osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+    } else if (gstate.equipped.sound === "jingle") {
+      const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+      osc.type = 'sine'; osc.frequency.setValueAtTime(1200, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(2400, audioCtx.currentTime + 0.2);
+      gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.3);
+      osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+    } else if (gstate.equipped.sound === "sleigh") {
       for(let i=0; i<3; i++){
         setTimeout(() => {
           const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
@@ -849,13 +967,14 @@ function playClickSound() {
           osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.05);
         }, i * 60);
       }
-    } catch(e) {}
-  }
+    }
+  } catch(e) {}
 }
-document.addEventListener("click", e => { if (e.target.closest(".btn")) playClickSound(); });
+document.addEventListener("click", e => { if (e.target.closest(".btn") && gstate) playClickSound(); });
 
-/* ============ Streak ============ */
+/* ============ Racha ============ */
 function checkStreak() {
+  if (!gstate) return;
   const today = new Date().toDateString(), last = gstate.streak.last;
   if (last === today) return;
   const yesterday = new Date(Date.now() - 86400000).toDateString();
@@ -868,9 +987,9 @@ function checkStreak() {
   if (gstate.streak.count === 100) unlockTitle("leyenda");
   saveState(); updateStreakUI(); showStreakModal();
 }
-function updateStreakUI() { $("stRacha").textContent = gstate.streak.count + "d"; }
+function updateStreakUI() { if ($("stRacha") && gstate) $("stRacha").textContent = gstate.streak.count + "d"; }
 function showStreakModal() {
-  if (!gstate.streak.count) return;
+  if (!gstate || !gstate.streak.count) return;
   const streak = gstate.streak.count, next = streak < 7 ? 7 - streak : streak < 30 ? 30 - streak : 0;
   const nextStr = next > 0 ? "Próxima recompensa en " + next + " días" : "¡Racha máxima!";
   openModal("RACHA", "Día " + streak + " seguido\n+" + Math.min(25, 5 * streak) + " 🪙 ganadas\n" + nextStr, [{t:"RECOGER", cb:closeModal, primary:true}]);
@@ -878,6 +997,7 @@ function showStreakModal() {
 
 /* ============ Perfil ============ */
 function renderProfileButton() {
+  if (!gstate) return;
   const p = gstate.profile, t = TITLES[p.title] || TITLES.novato;
   const iconSvg = SVG_ICONS[p.icon] || SVG_ICONS.gamepad;
   ["profileIcon", "profileIconInGame"].forEach(id => { if ($(id)) $(id).innerHTML = iconSvg; });
@@ -887,6 +1007,7 @@ function renderProfileButton() {
   });
 }
 function renderProfileModal() {
+  if (!gstate) return;
   const p = gstate.profile, t = TITLES[p.title] || TITLES.novato;
   $("profileBigIcon").innerHTML = SVG_ICONS[p.icon] || SVG_ICONS.gamepad;
   $("profileBigName").textContent = p.name;
@@ -895,46 +1016,50 @@ function renderProfileModal() {
   $("profileBigTitle").style.color = t.cls ? "" : t.color;
   $("iconGrid").innerHTML = ICONS.map(ic => "<button data-icon='" + ic + "' class='" + (p.icon === ic ? "on" : "") + "'>" + SVG_ICONS[ic] + "</button>").join("");
   $("nameInput").value = p.name;
-  const daysSinceChange = p.nameLastChange ? Math.floor((Date.now() - p.nameLastChange) / 86400000) : 999;
-  if (daysSinceChange < 7) {
-    $("nameInput").disabled = true; $("btnSaveName").disabled = true; $("nameLockMsg").textContent = "⏳ Cambio disponible en " + (7 - daysSinceChange) + " día(s)";
-  } else {
-    $("nameInput").disabled = false; $("btnSaveName").disabled = false; $("nameLockMsg").textContent = "✓ Puedes cambiar tu nombre";
-  }
+  
   $("titleGrid").innerHTML = Object.entries(TITLES).map(([id, tt]) => {
     const has = hasTitle(id), on = p.title === id;
     return "<button data-title='" + id + "' class='" + (on?"on":"") + " " + (has?"":"locked") + " " + (tt.cls || "") + "' style='color:" + (tt.cls ? "" : (has?tt.color:"var(--dim)")) + "' title='" + esc(tt.desc) + "'>" + (has?tt.n:"🔒 ???") + "</button>";
   }).join("");
 }
+
 $("btnProfile").onclick = () => { renderProfileModal(); $("profileModal").classList.add("open"); };
 if ($("btnProfileInGame")) $("btnProfileInGame").onclick = () => { renderProfileModal(); $("profileModal").classList.add("open"); };
 $("profileX").onclick = () => $("profileModal").classList.remove("open");
-$("iconGrid").addEventListener("click", e => { const b = e.target.closest("[data-icon]"); if (!b) return; gstate.profile.icon = b.dataset.icon; saveState(); renderProfileButton(); renderProfileModal(); });
+
+$("iconGrid").addEventListener("click", e => { 
+  const b = e.target.closest("[data-icon]"); if (!b) return; 
+  gstate.profile.icon = b.dataset.icon; saveState(); renderProfileButton(); renderProfileModal(); 
+});
 $("btnSaveName").onclick = () => {
   const n = $("nameInput").value.trim(); if (!n || n.length > 16) return toast("Nombre inválido", true);
-  gstate.profile.name = n; gstate.profile.nameLastChange = Date.now(); saveState(); renderProfileButton(); renderProfileModal(); toast("Nombre actualizado");
+  gstate.profile.name = n; saveState(); renderProfileButton(); renderProfileModal(); toast("Nombre actualizado");
 };
 $("titleGrid").addEventListener("click", e => {
   const b = e.target.closest("[data-title]"); if (!b || b.classList.contains("locked")) return;
   gstate.profile.title = b.dataset.title; saveState(); renderProfileButton(); renderProfileModal();
 });
 
+// Borrar progreso
 $("btnResetProgress").onclick = () => {
   openModal("BORRAR PROGRESO", "¿Estás seguro de que quieres borrar TODA tu cuenta? Perderás monedas, niveles, items y favoritos. Esta acción no se puede deshacer.", [
     {t:"Sí, borrar todo", cb: () => {
       closeModal();
-      localStorage.removeItem("ethos_gstate");
-      localStorage.removeItem("ethos_favs");
-      localStorage.removeItem("ethos_recent");
-      localStorage.removeItem("ethos_secret_dorado");
+      const key = "ethos_gstate_" + currentUser.uid;
+      localStorage.removeItem(key);
       location.reload();
     }, danger: true, primary: true},
     {t:"Cancelar", cb: closeModal}
   ]);
 };
+$("btnLogout").onclick = () => {
+  auth.signOut();
+  $("profileModal").classList.remove("open");
+};
 
 /* ============ EQUIPAR EFECTOS ============ */
 function applyAllEffects() {
+  if (!gstate) return;
   const eq = gstate.equipped;
   document.body.dataset.cursor = eq.cursor || "";
   document.body.classList.toggle("card-christmas", eq.cardEffect === "card_christmas");
@@ -951,7 +1076,7 @@ function applyAllEffects() {
   });
 }
 
-/* ============ Tienda ============ */
+/* ============ Tienda (Equip / Unequip) ============ */
 function renderShop() {
   updateCoinsUI();
   const cats = [{id:"intros",n:"Intros"}, {id:"cursors",n:"Cursores"}, {id:"themes",n:"Temas"}, {id:"sounds",n:"Sonidos"}, {id:"badges",n:"Badges"}, {id:"christmas",n:"Navidad ❄"}, {id:"owned",n:"Mis items"}];
@@ -989,7 +1114,7 @@ function renderShopItems(cat) {
     
     let action = "";
     if (owned) {
-      if (equipped) action = "<button class='btn primary owned' disabled>✓ EQUIPADO</button>";
+      if (equipped) action = "<button class='btn primary' data-equip='" + it.id + "'>DESEQUIPAR</button>";
       else if (isEquippable) action = "<button class='btn sm' data-equip='" + it.id + "'>EQUIPAR</button>";
       else action = "<button class='btn sm owned' disabled>✓ TUYO</button>";
     } else {
@@ -1013,23 +1138,28 @@ $("shopGrid").addEventListener("click", e => {
     if (!it || !hasItem(id)) return;
     const eObj = gstate.equipped;
     
-    if (id && id.indexOf("intro.") === 0) eObj.intro = id.replace("intro.", "");
-    else if (id && id.indexOf("cursor.") === 0) eObj.cursor = id.replace("cursor.", "");
-    else if (id && id.indexOf("theme.") === 0) { const tk = id.replace("theme.", ""); if (THEMES[tk]) { applyTheme(tk, true); eObj.theme = tk; } }
-    else if (id && id.indexOf("badge.") === 0) eObj.badge = id.replace("badge.", "");
-    else if (id && id.indexOf("sound.") === 0) eObj.sound = id.replace("sound.", "");
+    // Lógica TOGGLE (Equipar / Desequipar)
+    if (id.indexOf("intro.") === 0) eObj.intro = eObj.intro === id.replace("intro.", "") ? "crt" : id.replace("intro.", "");
+    else if (id.indexOf("cursor.") === 0) eObj.cursor = eObj.cursor === id.replace("cursor.", "") ? null : id.replace("cursor.", "");
+    else if (id.indexOf("theme.") === 0) { 
+      const tk = id.replace("theme.", ""); 
+      if (eObj.theme === tk) { eObj.theme = null; applyTheme("fosforo", true); }
+      else if (THEMES[tk]) { applyTheme(tk, true); eObj.theme = tk; }
+    }
+    else if (id.indexOf("badge.") === 0) eObj.badge = eObj.badge === id.replace("badge.", "") ? null : id.replace("badge.", "");
+    else if (id.indexOf("sound.") === 0) eObj.sound = eObj.sound === id.replace("sound.", "") ? null : id.replace("sound.", "");
     else if (id === "santa_hat") eObj.santaHat = !eObj.santaHat;
     else if (id === "card_christmas") eObj.cardEffect = eObj.cardEffect === id ? null : id;
     
     saveState(); 
     applyAllEffects(); 
-    toast("✓ " + it.n + " equipado", false, true);
     renderShopItems($("shopTabs").querySelector(".on").dataset.cat);
   }
 });
 
 /* ============ Pase ============ */
 function renderPass() {
+  if (!gstate) return;
   const lvl = passLevel(), prog = passXPProgress();
   let premiumStr = gstate.pass.premium ? "<span style='color:var(--gold2);font-family:var(--px);font-size:10px'>✓ PREMIUM ACTIVO</span>" : "<button class='btn gold sm' id='btnBuyPremium'>⭐ Desbloquear Premium (800 🪙)</button>";
   $("passHeader").innerHTML = "<h2>❄ TEMPORADA 1 — NAVIDAD</h2><div class='sub'>Progreso del pase. Nivel máximo 30.</div><div class='pass-progress'><div class='pass-level'>NIVEL " + lvl + "</div><div class='pass-bar'><b style='width:" + prog.pct + "%'></b></div><div style='font-size:12px;color:var(--dim);min-width:70px'>" + prog.cur + " / " + prog.max + " XP</div></div><div style='display:flex;gap:10px;flex-wrap:wrap;margin-top:8px'>" + premiumStr + "<span style='font-size:11px;color:var(--dim)'>XP total: " + gstate.xp.toLocaleString("es") + "</span><span style='font-size:11px;color:var(--gold);margin-left:auto;font-family:var(--px)'>🪙 " + gstate.coins.toLocaleString("es") + "</span></div>";
@@ -1092,7 +1222,7 @@ function claimReward(lvl, track) {
   claimedArr.push(lvl); saveState(); renderPass(); updateCoinsUI();
 }
 
-/* ============ RULETA VISUAL ============ */
+/* ============ Ruleta ============ */
 function openPassRoulette(tier, cb) {
   const r = $("roulette"), wheel = $("roulWheel");
   wheel.style.transition = "none"; wheel.style.transform = "rotate(0deg)";
@@ -1200,7 +1330,7 @@ function makeSnow(n) {
 }
 function getWeekNumber() { const d = new Date(); const start = new Date(d.getFullYear(), 0, 1); return Math.ceil((((d - start) / 86400000) + start.getDay() + 1) / 7); }
 
-/* ============ Temes ============ */
+/* ============ Temas ============ */
 function temaDesbloquejat(k) {
   if (!THEMES[k]) return false;
   if (k === "dorado") return localStorage.getItem("ethos_secret_dorado") === "1";
@@ -1245,7 +1375,10 @@ async function cargar() {
     });
   } catch (e) { console.error(e); error = true; renderTodo(); }
 }
-function renderTodo() { renderHome(); renderChips(); renderJuegos(); renderAdmin(); }
+function renderTodo() { 
+  if (!gstate) return;
+  renderHome(); renderChips(); renderJuegos(); renderAdmin(); 
+}
 
 function tarjeta(j, i = 0) {
   const logo = safeUrl(j.logo), abierto = actual && actual.id === j.id, esFav = favs.includes(j.id), nombre = j.nombre && j.nombre.trim() ? j.nombre : "?";
@@ -1438,20 +1571,11 @@ addEventListener("online", updateConn); addEventListener("offline", updateConn);
 /* ============ Admin panel ============ */
 let user = null, editId = null;
 const logueado = () => {
-  if (!user || !user.email) return false;
-  return user.email.toLowerCase() === ADMIN_EMAIL;
+  if (!currentUser || !currentUser.email) return false;
+  return currentUser.email.toLowerCase() === ADMIN_EMAIL;
 };
 function pintarAdminVista() { $("gate").hidden = logueado(); $("panel").hidden = !logueado(); $("btnMark").hidden = !logueado() || !actual; renderAdmin(); }
-auth.onAuthStateChanged(u => { user = u; if (u && !logueado()) { auth.signOut(); return; } pintarAdminVista(); });
-$("gateForm").addEventListener("submit", async e => {
-  e.preventDefault(); const m = $("gateMsg"), b = $("loginBtn"); m.textContent = ""; b.disabled = true;
-  try {
-    const cred = await auth.signInWithEmailAndPassword($("email").value.trim(), $("pass").value); $("pass").value = "";
-    if ((cred.user.email||"").toLowerCase() !== ADMIN_EMAIL) m.textContent = "Sin permisos.";
-  } catch (err) { m.textContent = "Email o contraseña incorrectos."; } finally { b.disabled = false; }
-});
 $("logout").onclick = () => { auth.signOut(); limpiarForm(); };
-$("resetAdmin").onclick = () => { try { localStorage.removeItem("ethos_gstate"); localStorage.removeItem("ethos_admin_version"); location.reload(); } catch(e) {} };
 function limpiarForm() { $("form").reset(); editId = null; $("cancelBtn").hidden = true; $("saveBtn").textContent = "Guardar"; $("logoPreview").classList.remove("on"); $("logoPreview").innerHTML = ""; }
 $("cancelBtn").onclick = limpiarForm;
 let logoTimer;
@@ -1475,6 +1599,7 @@ $("form").addEventListener("submit", async e => {
   } catch (err) { fail(err); } finally { $("saveBtn").disabled = false; }
 });
 function renderAdmin() {
+  if (!logueado()) return;
   $("total").textContent = juegos.length;
   $("cats").innerHTML = Array.from(new Set(juegos.map(j => j.category).filter(Boolean))).map(c => "<option value='" + esc(c) + "'>").join("");
   const f = norm($("filtro").value.trim()), items = juegos.slice().sort((a,b) => collator.compare(a.nombre||"", b.nombre||"")).filter(j => !f || norm(j.nombre).includes(f));
@@ -1491,6 +1616,7 @@ $("listaAdmin").addEventListener("click", async e => {
 /* ============ Navegació ============ */
 const titulos_ruta = { home:"Ethos — Biblioteca", games:"Juegos — Ethos", pass:"Pase — Ethos", shop:"Tienda — Ethos", admin:"Admin — Ethos" };
 function ruta() {
+  if (!gstate) return;
   const h = location.hash.replace(/^#/, ""), v = h === "/games" ? "games" : h === "/admin" ? "admin" : h === "/pass" ? "pass" : h === "/shop" ? "shop" : "home";
   document.querySelectorAll(".view").forEach(s => s.hidden = s.dataset.view !== v);
   document.querySelectorAll("[data-nav]").forEach(a => { const on = a.dataset.nav === v; a.classList.toggle("active", on); if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
@@ -1499,15 +1625,16 @@ function ruta() {
   scrollTo(0, 0);
 }
 
-/* ============ Init ============ */
+/* ============ Init Global ============ */
 function renderAllGamification() { updateCoinsUI(); updateStreakUI(); renderProfileButton(); applyAllEffects(); }
-saveState(); updateStreakUI(); renderProfileButton(); applyAllEffects(); buildIntro(); checkStreak();
-addEventListener("hashchange", ruta); ruta(); cargar();
+addEventListener("hashchange", ruta);
+
+// Easter egg global
 let easterBuffer = "";
 addEventListener("keydown", e => {
   if (enCampo()) { easterBuffer = ""; return; }
   easterBuffer += e.key.toLowerCase(); if (easterBuffer.length > 8) easterBuffer = easterBuffer.slice(-8);
-  if (easterBuffer.includes("ethos")) { desbloquejarDorado(); easterBuffer = ""; }
+  if (easterBuffer.includes("ethos") && gstate) { desbloquejarDorado(); easterBuffer = ""; }
 });
 </script>
 </body>
