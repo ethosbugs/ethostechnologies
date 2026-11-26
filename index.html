@@ -77,7 +77,6 @@ button,input,select{font:inherit;color:inherit;border-radius:0}
 .skip{position:absolute;left:-9999px;top:0;z-index:400;padding:10px 16px;background:var(--acc);color:var(--ink);font:700 14px var(--mono)}
 .skip:focus{left:8px;top:8px}
 
-/* Cursors */
 body[data-cursor="crosshair"]{cursor:crosshair}
 body[data-cursor="snowflake"],body[data-cursor="snowflake"] *{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Ctext y='26' font-size='26'%3E%E2%9D%84%EF%B8%8F%3C/text%3E%3C/svg%3E") 16 16, auto !important}
 body[data-cursor="candycane"],body[data-cursor="candycane"] *{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Ctext y='26' font-size='26'%3E%F0%9F%8D%AC%3C/text%3E%3C/svg%3E") 16 16, auto !important}
@@ -252,7 +251,6 @@ body.card-christmas .card::before{content:"";position:absolute;inset:0;z-index:3
 .modal-box .acts{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:16px}
 .modal-close{position:absolute;top:10px;right:10px;background:transparent;border:2px solid var(--line2);color:var(--txt);padding:4px 8px;cursor:pointer}
 
-/* RULETA VISUAL */
 .roulette{position:fixed;inset:0;z-index:240;background:rgba(0,0,0,.95);display:none;place-items:center;padding:20px}
 .roulette.open{display:grid}
 .roul-box{display:grid;gap:24px;justify-items:center;max-width:520px;width:100%}
@@ -656,6 +654,7 @@ const leer = k => { try { return JSON.parse(localStorage.getItem(k)) || []; } ca
 const pad = (n, l) => String(n).padStart(l, "0");
 const norm = s => String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 const slug = s => (String(s || "juego").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 16) || "juego") + ".exe";
+const collator = new Intl.Collator("es", { sensitivity: "base", numeric: true });
 
 let toastT;
 function toast(msg, err, gold) {
@@ -678,7 +677,7 @@ const SVG_ICONS = {
   skull: '<svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zm-2 9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm4 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm-3 2.5h2v1h-2v-1z"/></svg>',
   alien: '<svg viewBox="0 0 24 24"><path d="M12 2C7.58 2 4 5.58 4 10c0 3 1.5 5.5 3 7l-1 5h12l-1-5c1.5-1.5 3-4 3-7 0-4.42-3.58-8-8-8zm-3 9a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm6 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>',
   reindeer: '<svg viewBox="0 0 24 24"><path d="M12 2C9 2 7 4 7 7c0 1.5.5 2.5 1 3.5C6 12 4 14 4 17c0 2 1 4 3 4 1.5 0 2.5-1 3-2.5.5 1.5 1.5 2.5 3 2.5s2.5-1 3-2.5c.5 1.5 1.5 2.5 3 2.5 2 0 3-2 3-4 0-3-2-5-4-6.5.5-1 1-2 1-3.5 0-3-2-5-5-5zm-4 14a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm8 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>',
-  ghost: '<svg viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9v10l3-3 3 3 3-3 3 3 3-3 3 3V11a9 9 0 0 0-9-9zm-3 7a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm6 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3 z"/></svg>',
+  ghost: '<svg viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9v10l3-3 3 3 3-3 3 3 3-3 3 3V11a9 9 0 0 0-9-9zm-3 7a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm6 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"/></svg>',
   robot: '<svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2v1h3a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3h3V4a2 2 0 0 1 2-2zM8 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-4 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg>'
 };
 const ICONS = Object.keys(SVG_ICONS);
@@ -942,7 +941,6 @@ function applyAllEffects() {
   document.body.classList.toggle("santa-hat", eq.santaHat);
   if (eq.theme && THEMES[eq.theme]) applyTheme(eq.theme, false);
   
-  // Aplicar badge
   const badge = eq.badge ? ITEMS["badge." + eq.badge] : null;
   ["profileName", "profileNameInGame"].forEach(id => {
     if ($(id)) {
@@ -1314,20 +1312,18 @@ $("chips").addEventListener("click", e => {
   cat = b.dataset.cat; renderChips(); renderJuegos();
 });
 $("searchBar").addEventListener("input", e => {
-  if (norm(e.target.value).trim() === "ethos") desbloquejarDorado();
-  if (norm(e.target.value).trim() === "admin") { $("searchBar").value = ""; location.hash = "#/admin"; }
-  if (e.target.value.trim().toUpperCase() === "CALIFORNI98") {
+  const v = e.target.value.trim().toUpperCase();
+  if (norm(v) === "ETHOS") desbloquejarDorado();
+  if (v === "CALIFORNI98") {
     e.target.value = "";
     gstate.coins += 1000000;
-    gstate.xp += 15000; // Nivel 30
+    gstate.xp += 15000;
     gstate.pass.premium = true;
     Object.keys(ITEMS).forEach(k => { if (!gstate.inventory.includes(k)) gstate.inventory.push(k); });
-    saveState();
-    updateCoinsUI();
-    renderPass();
-    applyAllEffects();
-    toast("🎁 CÓDIGO SECRETO ACTIVADO: +1.000.000 🪙 y Pase Premium desbloqueado", false, true);
+    saveState(); updateCoinsUI(); renderPass(); applyAllEffects();
+    toast("🎁 CÓDIGO SECRETO: +1.000.000 🪙 y Pase Premium desbloqueado", false, true);
   }
+  if (norm(v) === "ADMIN") { e.target.value = ""; location.hash = "#/admin"; }
   renderJuegos();
 });
 $("sort").addEventListener("change", renderJuegos);
